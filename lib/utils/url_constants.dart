@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const baseUrl = "https://visit.bjbraila.ro";
-const apiUrl = "https://visit.bjbraila.ro/api";
+const baseUrl = "https://cb.bjbraila.ro";
+const apiUrl = "https://cb.bjbraila.ro/api";
 const obiectivUrl = "https://obiectivbr.ro";
 const authorFacebookUrl = "https://www.facebook.com/mario.vlaviano.75";
 const authorInstagramUrl = "https://www.instagram.com/mario.vlv";
