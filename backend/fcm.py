@@ -12,7 +12,7 @@ client = MongoClient(os.getenv("MONGO_URL"))
 db = client.visitbraila
 
 # authorize firebase project use
-cred = credentials.Certificate(os.getenv("VB_FIREBASE_CREDENTIALS")) 
+cred = credentials.Certificate(os.getenv("CB_FIREBASE_CREDENTIALS")) 
 firebase_app = firebase_admin.initialize_app(cred)
 
 def sendDailyNotification():
