@@ -44,7 +44,7 @@ def root():
 def master_login_required(f):
     @wraps(f)
     def checkForMasterUser(*args, **kwargs):
-        if session['username'] == "admin":
+        if session['admin'] == True:
             return f(*args, **kwargs) 
         else:
             return redirect("/login")
@@ -73,8 +73,8 @@ def login():
 
     if user is not None:
         session['logged_in'] = True 
-        session['username'] = username
         session['fullname'] = user['fullname']
+        session['admin'] = user['admin']
 
         return make_response(json.dumps({"url": "/admin"}), 200)
     else:
@@ -88,7 +88,7 @@ def logout():
 
 @app.route("/api/currentUser")
 def getCurrentUserFullname():
-    return make_response(json.dumps({"fullname": session['fullname'], "username": session['username']}), 200)    
+    return make_response(json.dumps({"fullname": session['fullname'], "is_admin": session['admin']}), 200)    
 
 # --- CMS ROUTES --- 
 

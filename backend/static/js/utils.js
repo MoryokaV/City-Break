@@ -29,7 +29,7 @@ const getCurrentUserFullname = async () => {
 
   $("#user-fullname").text(data.fullname);
 
-  if (data.username === "admin") {
+  if (data.is_admin === true) {
     $("aside > nav").append(
       `<a href="/master" class="${window.location.pathname === "/master" ? "active" : ""} nav-item group">
         <ion-icon name="people-outline"></ion-icon>
