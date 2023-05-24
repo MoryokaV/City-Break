@@ -19,6 +19,7 @@ class AboutView extends StatefulWidget {
 
 class _AboutViewState extends State<AboutView> with TickerProviderStateMixin {
   Map<String, dynamic> data = {
+    "heading1": "",
     "paragraph1": "",
     "paragraph2": "",
     "oraganization": "",
@@ -130,7 +131,7 @@ class _AboutViewState extends State<AboutView> with TickerProviderStateMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Biblioteca Județeană \"Panait Istrati\" Brăila",
+                              data["heading1"]!,
                               style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: 14),

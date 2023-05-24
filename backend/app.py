@@ -23,7 +23,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 client = MongoClient(os.getenv("MONGO_URL"))
-db = client.visitbraila
+db = client.citybreak
 
 # --- ICONS --- 
 
@@ -606,9 +606,9 @@ def filterTrendingByItemId(_id):
 def fetchAboutData():
     return json.dumps(db.about.find_one(), default=str);
 
-@app.route("/api/updateAboutParagraphs", methods=["PUT"])
+@app.route("/api/updateAboutParagraph", methods=["PUT"])
 @login_required
-def updateAboutParagraphs():
+def updateAboutParagraph():
     updatedContent = request.get_json()
 
     db.about.update_one({"name": "about"}, {"$set": updatedContent})

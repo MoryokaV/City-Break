@@ -7,7 +7,6 @@ import {
 } from './utils.js';
 
 let paragraph1 = undefined;
-let paragraph2 = undefined;
 
 const LIMIT = 500;
 
@@ -17,7 +16,10 @@ let current_image = undefined;
 $(document).ready(async function() {
   const data = await $.getJSON("/api/fetchAboutData")
 
-  // PARAGRAPHS
+  // PARAGRAPH
+
+  $("#paragraph-1-heading").val(data.heading1);
+
   paragraph1 = new Quill("#paragraph-1-content", {
     theme: "snow",
     placeholder: "Type something here...",
@@ -30,18 +32,6 @@ $(document).ready(async function() {
     }
   });
 
-  paragraph2 = new Quill("#paragraph-2-content", {
-    theme: "snow",
-    placeholder: "Type something here...",
-  });
-  $("#paragraph-2-content .ql-editor").html(data.paragraph2);
-
-  paragraph2.on('text-change', function() {
-    if (paragraph2.getLength() > LIMIT) {
-      paragraph2.deleteText(LIMIT, paragraph2.getLength());
-    }
-  });
-
   $("#paragraphs-form").submit(async function(e) {
     e.preventDefault();
 
@@ -49,8 +39,8 @@ $(document).ready(async function() {
 
     await $.ajax({
       type: "PUT",
-      url: "/api/updateAboutParagraphs",
-      data: JSON.stringify({ "paragraph1": paragraph1.root.innerHTML, "paragraph2": paragraph2.root.innerHTML }),
+      url: "/api/updateAboutParagraph",
+      data: JSON.stringify({ "paragraph1": paragraph1.root.innerHTML, "heading1": $("#paragraph-1-heading").val() }),
       processData: false,
       contentType: "application/json; charset=UTF-8",
     });
