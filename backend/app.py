@@ -44,12 +44,22 @@ def root():
 def master_login_required(f):
     @wraps(f)
     def checkForMasterUser(*args, **kwargs):
-        if session['admin'] == True:
+        if session['username'] == "master":
             return f(*args, **kwargs) 
         else:
             return redirect("/login")
 
     return checkForMasterUser
+
+def admin_login_required(f):
+    @wraps(f)
+    def checkForAdminUser(*args, **kwargs):
+        if session['admin'] == True:
+            return f(*args, **kwargs) 
+        else:
+            return redirect("/login")
+
+    return checkForAdminUser
 
 def login_required(f):
     @wraps(f)
@@ -73,8 +83,12 @@ def login():
 
     if user is not None:
         session['logged_in'] = True 
+        session['username'] = username
         session['fullname'] = user['fullname']
         session['admin'] = user['admin']
+
+        if username == "master":
+            return make_response(json.dumps({"url": "/master"}), 200)
 
         return make_response(json.dumps({"url": "/admin"}), 200)
     else:
@@ -97,6 +111,12 @@ def getCurrentUserFullname():
 @master_login_required
 def master():
     return render_template("master.html")
+
+@app.route("/users")
+@login_required
+@admin_login_required
+def users():
+    return render_template("users.html")
 
 @app.route("/admin")
 @login_required
@@ -143,11 +163,18 @@ def trending():
 def about():
     return render_template("about.html")
 
+# --- CITES ---
+@app.route("/api/fetchAdminUsers")
+@login_required
+@master_login_required
+def fetchAdminUsers():
+    return json.dumps(list(db.login.find({"admin": True})), default=str);
+
 # --- USERS --- 
 
 @app.route("/api/insertUser", methods=["POST"])
 @login_required
-@master_login_required
+@admin_login_required
 def insertUser():
     user = request.get_json()
 
@@ -168,7 +195,7 @@ def deleteUser(_id):
 
 @app.route("/api/editUserPassword/<_id>", methods=["PUT"])
 @login_required
-@master_login_required
+@admin_login_required
 def editUserPassword(_id):
     data = request.get_json()
 

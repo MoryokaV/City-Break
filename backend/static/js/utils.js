@@ -31,7 +31,7 @@ const getCurrentUserFullname = async () => {
 
   if (data.is_admin === true) {
     $("aside > nav").append(
-      `<a href="/master" class="${window.location.pathname === "/master" ? "active" : ""} nav-item group">
+      `<a href="/users" class="${window.location.pathname === "/users" ? "active" : ""} nav-item group">
         <ion-icon name="people-outline"></ion-icon>
         <p>Users</p>
       </a>`

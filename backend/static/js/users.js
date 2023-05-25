@@ -9,7 +9,7 @@ const getRecords = (data) => {
 };
 
 const fetchUsers = async () => {
-  users = await $.getJSON("/api/fetchAdminUsers");
+  users = await $.getJSON("/api/fetchUsers");
 
   $("#users-records").text(getRecords(users));
   $("#users-table tbody").empty();
@@ -18,11 +18,10 @@ const fetchUsers = async () => {
     $("#users-table").append(
       `<tr>
         <td class="small-cell">${index + 1}</td>
+        <td>${user.fullname}</td>
         <td>${user.username}</td>
-        <td>Braila</td>
-        <td>Braila</td>
         <td class="small-cell text-center" id=${user._id}>
-          <button class="btn-icon action-delete-user"><ion-icon class="edit-icon" name="remove-circle-outline"></ion-icon></button>
+          ${user.username === "admin" ? `` : `<button class="btn-icon action-delete-user"><ion-icon class="edit-icon" name="remove-circle-outline"></ion-icon></button>`}
           <button class="btn-icon action-edit-user" data-bs-toggle="modal" data-bs-target="#edit-user-modal"><ion-icon class="edit-icon" name="create-outline"></ion-icon></button>
         </td>
       </tr>`
@@ -44,6 +43,10 @@ $(document).ready(async function() {
     }
   });
 
+  $("#users-table").on('click', ".action-edit-user", async function() {
+    $("#edit-user-modal").attr("data-id", $(this).parent().attr("id"));
+  });
+
   $(".eye-icon").on("click", function() {
     const passwordField = $(this).siblings();
 
@@ -56,11 +59,11 @@ $(document).ready(async function() {
     }
   });
 
-  $("#edit-master-modal").on("hidden.bs.modal", function() {
-    $("#edit-master-form")[0].reset();
+  $("#edit-user-modal").on("hidden.bs.modal", function() {
+    $("#edit-user-form")[0].reset();
   });
 
-  $("#edit-master-form").submit(async function(e) {
+  $("#edit-user-form").submit(async function(e) {
     e.preventDefault();
 
     startLoadingAnimation($(this));
@@ -68,7 +71,7 @@ $(document).ready(async function() {
 
     await $.ajax({
       type: "PUT",
-      url: "/api/editMasterPassword",
+      url: "/api/editUserPassword/" + $("#edit-user-modal").attr("data-id"),
       contentType: "application/json; charset=UTF-8",
       processData: false,
       data: JSON.stringify({ "new_password": $("#new-password").val() }),
@@ -76,13 +79,14 @@ $(document).ready(async function() {
 
     endLoadingAnimation($(this));
     $(this)[0].reset();
-    $("#edit-master-modal").modal("hide");
+    $("#edit-user-modal").modal("hide");
   });
 
   $("#insert-user-form").submit(async function(e) {
     e.preventDefault();
 
     const user = {
+      "fullname": $("#fullname").val(),
       "username": $("#username").val(),
       "password": $("#password").val(),
     };

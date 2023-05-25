@@ -15,6 +15,14 @@ body > header {
     padding: 0.75rem 1rem;
 }
 
+body.no-sidebar {
+    grid-template-columns: 1fr;
+}
+
+body.no-sidebar > header {
+    grid-column: 1;
+}
+
 .title {
     font-weight: 200;
     letter-spacing: -0.5px;
