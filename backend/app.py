@@ -21,6 +21,8 @@ app.config["MEDIA_FOLDER"] = os.path.join(app.root_path, "static/media")
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_COOKIE_SECURE"] = True 
+app.config["SESSION_COOKIE_HTTPONLY"] = True 
 Session(app)
 
 client = MongoClient(os.getenv("MONGO_URL"))
@@ -87,11 +89,15 @@ def login():
         session['username'] = username
         session['fullname'] = user['fullname']
         session['admin'] = user['admin']
+        session['city_id'] = user['city_id']
 
         if username == "master":
             return make_response(json.dumps({"url": "/master"}), 200)
 
-        return make_response(json.dumps({"url": "/admin"}), 200)
+        res = make_response(json.dumps({"url": "/admin"}), 200)
+        res.set_cookie("cityId", user['city_id'])
+
+        return res
     else:
         return make_response("Wrong user or password!", 401)
 
@@ -206,8 +212,10 @@ def deleteCity(id):
 @admin_login_required
 def insertUser():
     user = request.get_json()
+    user['password'] = hashlib.sha256(user['password'].encode("utf-8")).hexdigest()
+    user['admin'] = False
 
-    db.login.insert_one({"fullname": user['fullname'], "username": user['username'], "password": hashlib.sha256(user['password'].encode("utf-8")).hexdigest(), "admin": False})
+    db.login.insert_one(user)
     
     return make_response("New entry has been inserted", 200)
 
@@ -242,6 +250,7 @@ def insertSight():
     sight['latitude'] = float(sight['latitude'])
     sight['longitude'] = float(sight['longitude'])
     sight['primary_image_blurhash'] = getBlurhash(sight['images'][sight['primary_image'] - 1])
+    sight['city_id'] = session['city_id']
 
     db.sights.insert_one(sight)
     
@@ -249,7 +258,9 @@ def insertSight():
 
 @app.route("/api/fetchSights")
 def fetchSights():
-    return json.dumps(list(db.sights.find()), default=str)
+    city_id = request.args.get("city_id", default="",  type=str)
+
+    return json.dumps(list(db.sights.find({"city_id": city_id})), default=str)
 
 @app.route("/api/deleteSight/<_id>", methods=["DELETE"])
 @login_required
@@ -298,6 +309,7 @@ def insertTour():
     tour = request.get_json()
 
     tour['length'] = float(tour['length'])
+    tour['city_id'] = session['city_id']
     
     db.tours.insert_one(tour)
 
@@ -305,7 +317,9 @@ def insertTour():
 
 @app.route("/api/fetchTours")
 def fetchTours():
-    return json.dumps(list(db.tours.find()), default=str)
+    city_id = request.args.get("city_id", default="",  type=str)
+
+    return json.dumps(list(db.tours.find({"city_id": city_id})), default=str)
 
 @app.route("/api/deleteTour/<_id>", methods=["DELETE"])
 @login_required
@@ -351,6 +365,7 @@ def insertRestaurant():
     restaurant['latitude'] = float(restaurant['latitude'])
     restaurant['longitude'] = float(restaurant['longitude'])
     restaurant['primary_image_blurhash'] = getBlurhash(restaurant['images'][restaurant['primary_image'] - 1])
+    restaurant['city_id'] = session['city_id']
 
     db.restaurants.insert_one(restaurant)
     
@@ -358,7 +373,9 @@ def insertRestaurant():
 
 @app.route("/api/fetchRestaurants")
 def fetchRestaurants():
-    return json.dumps(list(db.restaurants.find()), default=str)
+    city_id = request.args.get("city_id", default="",  type=str)
+
+    return json.dumps(list(db.restaurants.find({"city_id": city_id})), default=str)
 
 @app.route("/api/deleteRestaurant/<_id>", methods=["DELETE"])
 @login_required
@@ -408,6 +425,7 @@ def insertHotel():
 
     hotel['latitude'] = float(hotel['latitude'])
     hotel['longitude'] = float(hotel['longitude'])
+    hotel['city_id'] = session['city_id']
 
     db.hotels.insert_one(hotel)
     
@@ -415,7 +433,9 @@ def insertHotel():
 
 @app.route("/api/fetchHotels")
 def fetchHotels():
-    return json.dumps(list(db.hotels.find()), default=str)
+    city_id = request.args.get("city_id", default="", type=str)
+
+    return json.dumps(list(db.hotels.find({"city_id": city_id})), default=str)
 
 @app.route("/api/deleteHotel/<_id>", methods=["DELETE"])
 @login_required
@@ -478,6 +498,7 @@ def insertEvent():
     event['end_date_time'] = end_date_time
     event['expire_at'] = expire_at
     event['primary_image_blurhash'] = getBlurhash(event['images'][event['primary_image'] - 1])
+    event['city_id'] = session['city_id']
         
     record = db.events.insert_one(event)
     
@@ -490,7 +511,9 @@ def insertEvent():
 
 @app.route("/api/fetchEvents")
 def fetchEvents():
-    return json.dumps(list(db.events.find().sort("date_time", 1)), default=str)
+    city_id = request.args.get("city_id", default="", type=str)
+
+    return json.dumps(list(db.events.find({"city_id": city_id}).sort("date_time", 1)), default=str)
 
 @app.route("/api/deleteEvent/<_id>", methods=["DELETE"])
 @login_required

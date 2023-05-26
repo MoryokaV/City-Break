@@ -7,7 +7,7 @@ const getRecords = (data) => {
 };
 
 export const fetchSights = async () => {
-  const data = await $.getJSON("/api/fetchSights");
+  const data = await $.getJSON("/api/fetchSights?city_id=" + Cookies.get("cityId"));
 
   $("#sights-records").text(getRecords(data));
   $("#sights-table tbody").empty();
@@ -33,7 +33,7 @@ export const fetchSights = async () => {
 };
 
 export const fetchTours = async () => {
-  const data = await $.getJSON("/api/fetchTours");
+  const data = await $.getJSON("/api/fetchTours?city_id=" + Cookies.get("cityId"));
 
   $("#tours-records").text(getRecords(data));
   $("#tours-table tbody").empty();
@@ -59,7 +59,7 @@ export const fetchTours = async () => {
 }
 
 export const fetchRestaurants = async () => {
-  const data = await $.getJSON("/api/fetchRestaurants");
+  const data = await $.getJSON("/api/fetchRestaurants?city_id=" + Cookies.get("cityId"));
 
   $("#restaurants-records").text(getRecords(data));
   $("#restaurants-table tbody").empty();
@@ -85,7 +85,7 @@ export const fetchRestaurants = async () => {
 };
 
 export const fetchHotels = async () => {
-  const data = await $.getJSON("/api/fetchHotels");
+  const data = await $.getJSON("/api/fetchHotels?city_id=" + Cookies.get("cityId"));
 
   $("#hotels-records").text(getRecords(data));
   $("#hotels-table tbody").empty();
@@ -119,7 +119,7 @@ const convert2LocalDate = (iso_date) => {
 }
 
 export const fetchEvents = async () => {
-  const data = await $.getJSON("/api/fetchEvents");
+  const data = await $.getJSON("/api/fetchEvents?city_id=" + Cookies.get("cityId"));
 
   $("#events-records").text(getRecords(data));
   $("#events-table tbody").empty();
