@@ -29,12 +29,12 @@
               <h5 class="card-header">Insert city</h5>
               <form id="insert-city-form" class="card-body row g-3">
                 <section class="col-12">
-                  <label for="city" class="form-label">City</label>
-                  <input type="text" id="city" class="form-control" name="city" required />
+                  <label for="city-name" class="form-label">Name</label>
+                  <input type="text" id="city-name" class="form-control" name="city-name" required />
                 </section>
                 <section class="col-12">
-                  <label for="state" class="form-label">State/Province</label>
-                  <input type="text" id="state" class="form-control" name="state" required />
+                  <label for="city-state" class="form-label">State/Province</label>
+                  <input type="text" id="city-state" class="form-control" name="city-state" required />
                 </section>
                 <section class="col-12 form-text"><hr>Administrator account:</section>
                 <section class="col-12">
@@ -62,16 +62,17 @@
             <div class="card shadow-sm">
               <h5 class="card-header d-flex justify-content-between align-items-baseline">
                 Cities list
-                <p id="users-records"></p>
+                <p id="cities-records"></p>
               </h5>
               <div class="card-body table-card-body">
-                <table id="users-table">
+                <table id="cities-table">
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>Full name</th>
                       <th>Username</th>
-                      <th>State</th>
                       <th>City</th>
+                      <th>State</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -84,14 +85,14 @@
       </div>
     </main>  
 
-    <div class="modal fade" id="edit-master-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="edit-user-modal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit master account</h5>
+            <h5 class="modal-title">Edit user account</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form id="edit-master-form" class="modal-body row g-3">
+          <form id="edit-user-form" class="modal-body row g-3">
             <section class="col-12">
               <label for="new-password" class="form-label">New password</label>
               <div class="input-group">

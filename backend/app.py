@@ -14,6 +14,7 @@ from dateutil import parser
 from dateutil.relativedelta import relativedelta
 from fcm import sendNewEventNotification
 import blurhash
+import uuid
 
 app = Flask(__name__)
 app.config["MEDIA_FOLDER"] = os.path.join(app.root_path, "static/media")
@@ -164,11 +165,39 @@ def about():
     return render_template("about.html")
 
 # --- CITES ---
+
 @app.route("/api/fetchAdminUsers")
 @login_required
 @master_login_required
 def fetchAdminUsers():
     return json.dumps(list(db.login.find({"admin": True})), default=str);
+
+@app.route("/api/insertCity", methods=["POST"])
+@login_required
+@master_login_required
+def insertCity():
+    city = request.get_json()
+    city_id = uuid.uuid4().hex
+    
+    db.cities.insert_one({"name": city['name'], "state": city['state'], "city_id": city_id}) 
+    db.login.insert_one({"fullname": city['fullname'], "username": city['username'], "password": hashlib.sha256(city['password'].encode("utf-8")).hexdigest(), "city_id": city_id, "admin": True})
+    
+    return make_response("New entry has been inserted", 200)
+
+@app.route("/api/findCity/<id>")
+@login_required
+def findCity(id):
+    return json.dumps(db.cities.find_one({"city_id": id}), default=str) 
+
+@app.route("/api/deleteCity/<id>", methods=["DELETE"])
+@login_required
+@master_login_required
+def deleteCity(id):
+    db.cities.delete_one({"city_id": id})
+    db.login.delete_one({"city_id": id})
+    # TODO: delete all entries for that city
+
+    return make_response("Successfully deleted document", 200)
 
 # --- USERS --- 
 
@@ -178,7 +207,7 @@ def fetchAdminUsers():
 def insertUser():
     user = request.get_json()
 
-    db.login.insert_one({"fullname": user['fullname'], "username": user['username'], "password": hashlib.sha256(user['password'].encode("utf-8")).hexdigest()})
+    db.login.insert_one({"fullname": user['fullname'], "username": user['username'], "password": hashlib.sha256(user['password'].encode("utf-8")).hexdigest(), "admin": False})
     
     return make_response("New entry has been inserted", 200)
 

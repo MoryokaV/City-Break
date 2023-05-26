@@ -1,6 +1,14 @@
 import { endLoadingAnimation, startLoadingAnimation } from "./utils.js";
 
 let users = [];
+let cities = [];
+let city = {
+  "name": "",
+  "state": "",
+  "fullname": "",
+  "username": "",
+  "password": "",
+};
 
 const getRecords = (data) => {
   if (data.length === 0) return "No records";
@@ -8,21 +16,23 @@ const getRecords = (data) => {
   else return `${data.length} records`;
 };
 
-const fetchUsers = async () => {
+const fetchCities = async () => {
   users = await $.getJSON("/api/fetchAdminUsers");
+  cities = await Promise.all(users.map(user => $.getJSON(`/api/findCity/${user.city_id}`)));
 
-  $("#users-records").text(getRecords(users));
-  $("#users-table tbody").empty();
+  $("#cities-records").text(getRecords(users));
+  $("#cities-table tbody").empty();
 
   users.map((user, index) => {
-    $("#users-table").append(
+    $("#cities-table").append(
       `<tr>
         <td class="small-cell">${index + 1}</td>
+        <td>${user.fullname}</td>
         <td>${user.username}</td>
-        <td>Braila</td>
-        <td>Braila</td>
-        <td class="small-cell text-center" id=${user._id}>
-          <button class="btn-icon action-delete-user"><ion-icon class="edit-icon" name="remove-circle-outline"></ion-icon></button>
+        <td>${cities[index].name}</td>
+        <td>${cities[index].state}</td>
+        <td class="small-cell text-center" id=${user.city_id}>
+          <button class="btn-icon action-delete-city"><ion-icon class="edit-icon" name="remove-circle-outline"></ion-icon></button>
           <button class="btn-icon action-edit-user" data-bs-toggle="modal" data-bs-target="#edit-user-modal"><ion-icon class="edit-icon" name="create-outline"></ion-icon></button>
         </td>
       </tr>`
@@ -31,16 +41,16 @@ const fetchUsers = async () => {
 };
 
 $(document).ready(async function() {
-  await fetchUsers();
+  await fetchCities();
 
-  $("#users-table").on('click', ".action-delete-user", async function() {
+  $("#cities-table").on('click', ".action-delete-city", async function() {
     if (confirm("Are you sure you want to delete the entry?")) {
       await $.ajax({
         type: "DELETE",
-        url: "/api/deleteUser/" + $(this).parent().attr("id"),
+        url: "/api/deleteCity/" + $(this).parent().attr("id"),
       });
 
-      await fetchUsers();
+      await fetchCities();
     }
   });
 
@@ -56,11 +66,12 @@ $(document).ready(async function() {
     }
   });
 
-  $("#edit-master-modal").on("hidden.bs.modal", function() {
-    $("#edit-master-form")[0].reset();
+
+  $("#edit-user-modal").on("hidden.bs.modal", function() {
+    $("#edit-user-form")[0].reset();
   });
 
-  $("#edit-master-form").submit(async function(e) {
+  $("#edit-user-form").submit(async function(e) {
     e.preventDefault();
 
     startLoadingAnimation($(this));
@@ -68,7 +79,7 @@ $(document).ready(async function() {
 
     await $.ajax({
       type: "PUT",
-      url: "/api/editMasterPassword",
+      url: "/api/editUserPassword/" + $("#edit-user-modal").attr("data-id"),
       contentType: "application/json; charset=UTF-8",
       processData: false,
       data: JSON.stringify({ "new_password": $("#new-password").val() }),
@@ -76,37 +87,28 @@ $(document).ready(async function() {
 
     endLoadingAnimation($(this));
     $(this)[0].reset();
-    $("#edit-master-modal").modal("hide");
+    $("#edit-user-modal").modal("hide");
   });
 
-  $("#insert-user-form").submit(async function(e) {
+  $("#insert-city-form").submit(async function(e) {
     e.preventDefault();
 
-    const user = {
-      "username": $("#username").val(),
-      "password": $("#password").val(),
-    };
+    startLoadingAnimation($(this))
 
-    if (users.filter((stored_user) => stored_user.username === user.username).length > 0) {
-      alert("User already exists");
-      return;
-    }
-
-    startLoadingAnimation($(this));
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    city.name = $("#city-name").val();
+    city.state = $("#city-state").val();
+    city.fullname = $("#fullname").val();
+    city.username = $("#username").val();
+    city.password = $("#password").val();
 
     await $.ajax({
       type: "POST",
-      url: "/api/insertUser",
+      url: "/api/insertCity",
       contentType: "application/json; charset=UTF-8",
       processData: false,
-      data: JSON.stringify(user),
+      data: JSON.stringify(city),
     });
 
-    await fetchUsers();
-
-    endLoadingAnimation($(this));
-
-    $(this)[0].reset();
+    location.reload();
   });
 });
