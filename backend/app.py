@@ -567,55 +567,53 @@ def editEvent():
 
 @app.route("/api/fetchTags/<used_for>")
 def fetchTags(used_for):
-    if used_for == "all":
-        return json.dumps(list(db.tags.find()), default=str)
+    city_id = request.args.get("city_id", default="",  type=str)
 
-    return json.dumps(list(db.tags.find({"used_for": used_for})), default=str)
+    if used_for == "all":
+        return json.dumps(list(db.tags.find({"city_id": city_id})), default=str)
+
+    return json.dumps(list(db.tags.find({"used_for": used_for, "city_id": city_id})), default=str)
 
 @app.route("/api/insertTag", methods=["POST"])
 @login_required
 def insertTag():
     tag = request.get_json()
+    tag['city_id'] = session['city_id']
 
     db.tags.insert_one(tag) 
 
     return make_response("New entry inserted", 200)
 
-@app.route("/api/deleteTag/<name>", methods=["DELETE"])
+@app.route("/api/deleteTag/<_id>", methods=["DELETE"])
 @login_required
-def deleteTag(name):
-    tags = json.loads(fetchTags("all"))
+def deleteTag(_id):
+    city_id = request.args.get("city_id", default="", type=str)
+    tag = db.tags.find_one({"_id": ObjectId(_id)})
 
     # Remove this tag from all occurrences 
-    used_for = ""
-    for tag in tags:
-        if tag['name'] == name:
-            used_for = tag['used_for']
-            break
-
-    if used_for == "sights":
-        sights = json.loads(fetchSights())
+    if tag['used_for'] == "sights":
+        sights = list(db.sights.find({"city_id": city_id}))
          
         for sight in sights:
-            if name in sight['tags']:
-                sight['tags'].remove(name)
+            if tag['name'] in sight['tags']:
+                sight['tags'].remove(tag['name'])
                 db.sights.update_one({"_id": ObjectId(sight['_id'])}, {"$set": {"tags": sight['tags']}})
-    elif used_for == "restaurants":
-        restaurants = json.loads(fetchRestaurants())
+    elif tag['used_for'] == "restaurants":
+        restaurants = list(db.restaurants.find({"city_id": city_id}))
          
         for restaurant in restaurants:
-            if name in restaurant['tags']:
-                restaurant['tags'].remove(name)
+            if tag['name'] in restaurant['tags']:
+                restaurant['tags'].remove(tag['name'])
                 db.restaurants.update_one({"_id": ObjectId(restaurant['_id'])}, {"$set": {"tags": restaurant['tags']}})
     else:
-        hotels = json.loads(fetchHotels())
+        hotels = list(db.hotels.find({"city_id": city_id}))
          
         for hotel in hotels:
-            if name in hotel['tags']:
-                hotel['tags'].remove(name)
+            if tag['name'] in hotel['tags']:
+                hotel['tags'].remove(tag['name'])
                 db.hotels.update_one({"_id": ObjectId(hotel['_id'])}, {"$set": {"tags": hotel['tags']}})
          
-    db.tags.delete_one({"name": name})
+    db.tags.delete_one({"_id": ObjectId(_id)})
 
     return make_response("Successfully deleted document", 200)
 

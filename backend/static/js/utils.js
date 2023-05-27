@@ -148,7 +148,7 @@ export const removeImage = (elem, preview, current_images, formData, primary_ele
 // TAGS
 
 export const initializeTags = async (collection, activeTags, preview, modal) => {
-  const tags = await $.getJSON(`/api/fetchTags/${collection}`);
+  const tags = await $.getJSON(`/api/fetchTags/${collection}?city_id=${Cookies.get("cityId")}`);
   tags.map((tag) => $(`${modal} #tags`).append(`<option value="${tag.name}">${tag.name}</option>`));
 
   $(`${modal} #tags`).change(function() {
