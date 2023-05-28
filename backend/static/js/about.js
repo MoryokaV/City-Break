@@ -14,7 +14,7 @@ let formData = new FormData();
 let current_image = undefined;
 
 $(document).ready(async function() {
-  const data = await $.getJSON("/api/fetchAboutData")
+  const data = await $.getJSON("/api/fetchAboutData?city_id=" + Cookies.get("cityId"))
 
   // PARAGRAPH
 
@@ -39,7 +39,7 @@ $(document).ready(async function() {
 
     await $.ajax({
       type: "PUT",
-      url: "/api/updateAboutParagraph",
+      url: "/api/updateAboutParagraph?city_id=" + Cookies.get("cityId"),
       data: JSON.stringify({ "paragraph1": paragraph1.root.innerHTML, "heading1": $("#paragraph-1-heading").val() }),
       processData: false,
       contentType: "application/json; charset=UTF-8",
@@ -72,7 +72,7 @@ $(document).ready(async function() {
 
     await $.ajax({
       type: "PUT",
-      url: "/api/updateContactDetails",
+      url: "/api/updateContactDetails?city_id=" + Cookies.get("cityId"),
       data: JSON.stringify({ "organization": organization, "phone": phone, "email": email, "website": website, "facebook": facebook }),
       processData: false,
       contentType: "application/json; charset=UTF-8",
@@ -136,8 +136,8 @@ $(document).ready(async function() {
 
       await $.ajax({
         type: "PUT",
-        url: "/api/updateCoverImage",
-        data: JSON.stringify({ "cover_image": current_image }),
+        url: "/api/updateCoverImage?city_id=" + Cookies.get("cityId"),
+        data: JSON.stringify({ "path": current_image }),
         processData: false,
         contentType: "application/json; charset=UTF-8",
       });

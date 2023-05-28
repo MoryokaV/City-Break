@@ -187,6 +187,7 @@ def insertCity():
     
     db.cities.insert_one({"name": city['name'], "state": city['state'], "city_id": city_id}) 
     db.login.insert_one({"fullname": city['fullname'], "username": city['username'], "password": hashlib.sha256(city['password'].encode("utf-8")).hexdigest(), "city_id": city_id, "admin": True})
+    db.about.insert_one({"paragraph1": "", "paragraph2": "", "phone": "", "email": "", "cover_image": "", "organization": "", "website": "", "facebook": "", "cover_image_blurhash": "", "heading1": "", "city_id": city_id})
     
     return make_response("New entry has been inserted", 200)
 
@@ -681,36 +682,40 @@ def filterTrendingByItemId(_id):
 
 @app.route("/api/fetchAboutData")
 def fetchAboutData():
-    return json.dumps(db.about.find_one(), default=str);
+    city_id = request.args.get("city_id", default="", type=str)
+
+    return json.dumps(db.about.find_one({"city_id": city_id}), default=str);
 
 @app.route("/api/updateAboutParagraph", methods=["PUT"])
 @login_required
 def updateAboutParagraph():
+    city_id = request.args.get("city_id", default="", type=str)
     updatedContent = request.get_json()
 
-    db.about.update_one({"name": "about"}, {"$set": updatedContent})
+    db.about.update_one({"city_id": city_id}, {"$set": updatedContent})
 
     return make_response("Entry has been updated", 200)
 
 @app.route("/api/updateContactDetails", methods=["PUT"])
 @login_required
 def updateContactDetails():
+    city_id = request.args.get("city_id", default="", type=str)
     details = request.get_json()
 
-    db.about.update_one({"name": "about"}, {"$set": details})
+    db.about.update_one({"city_id": city_id}, {"$set": details})
 
     return make_response("Entry has been updated", 200)
 
 @app.route("/api/updateCoverImage", methods=["PUT"])
 @login_required
 def updateCoverImage():
+    city_id = request.args.get("city_id", default="", type=str)
     new_img = request.get_json()
-    about = db.about.find_one()
+    about = db.about.find_one({"city_id": city_id})
 
     deleteImages([about['cover_image']], "about")
 
-    db.about.update_one({"name": "about"}, {"$set": new_img})
-    db.about.update_one({"name": "about"}, {"$set": {"cover_image_blurhash": getBlurhash(new_img['cover_image'])}})
+    db.about.update_one({"city_id": city_id}, {"$set": {"cover_image": new_img['path'], "cover_image_blurhash": getBlurhash(new_img['path'])}})
 
     return make_response("Entry has been updated", 200)
 
