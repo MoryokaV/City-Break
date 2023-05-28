@@ -215,6 +215,7 @@ def insertUser():
     user = request.get_json()
     user['password'] = hashlib.sha256(user['password'].encode("utf-8")).hexdigest()
     user['admin'] = False
+    user['city_id'] = session['city_id']
 
     db.login.insert_one(user)
     
@@ -222,7 +223,7 @@ def insertUser():
 
 @app.route("/api/fetchUsers")
 def fetchUsers():
-    return json.dumps(list(db.login.find()), default=str)
+    return json.dumps(list(db.login.find({"city_id": session['city_id']})), default=str)
 
 @app.route("/api/deleteUser/<_id>", methods=["DELETE"])
 @login_required

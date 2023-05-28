@@ -21,7 +21,7 @@ const fetchUsers = async () => {
         <td>${user.fullname}</td>
         <td>${user.username}</td>
         <td class="small-cell text-center" id=${user._id}>
-          ${user.username === "admin" ? `` : `<button class="btn-icon action-delete-user"><ion-icon class="edit-icon" name="remove-circle-outline"></ion-icon></button>`}
+          ${user.admin === true ? `` : `<button class="btn-icon action-delete-user"><ion-icon class="edit-icon" name="remove-circle-outline"></ion-icon></button>`}
           <button class="btn-icon action-edit-user" data-bs-toggle="modal" data-bs-target="#edit-user-modal"><ion-icon class="edit-icon" name="create-outline"></ion-icon></button>
         </td>
       </tr>`
