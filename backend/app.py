@@ -625,6 +625,7 @@ def deleteTag(_id):
 @login_required
 def insertTrendingItem():
     item = request.get_json()
+    item['city_id'] = session['city_id']
 
     db.trending.insert_one(item) 
 
@@ -632,7 +633,9 @@ def insertTrendingItem():
 
 @app.route("/api/fetchTrendingItems")
 def fetchTrendingItems():
-    return json.dumps(list(db.trending.find().sort("index", 1)), default=str)
+    city_id = request.args.get("city_id", default="", type=str)
+
+    return json.dumps(list(db.trending.find({"city_id": city_id}).sort("index", 1)), default=str)
 
 @app.route("/api/deleteTrendingItem", methods=["DELETE"])
 @login_required
@@ -640,7 +643,7 @@ def deleteTrendingItem():
     _id = request.args.get("_id")
     index = int(request.args.get("index"))
 
-    items = json.loads(fetchTrendingItems())
+    items = list(db.trending.find({"city_id": session['city_id']}))
     
     # Decrease indexes when deleting
     for item in items:
@@ -662,22 +665,15 @@ def updateTrendingItemIndex():
 
 def filterTrendingByItemId(_id):
     # delete corresponding trending item
-    trending = json.loads(fetchTrendingItems())
-    trending_item_id = ""
-    trending_item_index = 0
+    trending = db.trending.find({"city_id": session['city_id']})
+    item = db.trending.find_one({"item_id": _id})
 
-    for item in trending:
-        if _id in item['item_id']:    
-            trending_item_id = item['_id']
-            trending_item_index = item['index']
-            break
-    
-    if trending_item_id != "":
-        for item in trending:
-            if item['index'] > trending_item_index:
-                db.trending.update_one({"_id": ObjectId(item['_id'])}, {"$set": {"index": item['index'] - 1}})
+    if item is not None:
+        for trending_item in trending:
+            if trending_item['index'] > item['index']:
+                db.trending.update_one({"_id": ObjectId(trending_item['_id'])}, {"$set": {"index": trending_item['index'] - 1}})
               
-        db.trending.delete_one({"_id": ObjectId(trending_item_id)})
+        db.trending.delete_one({"_id": ObjectId(item['_id'])})
 
 # --- ABOUT DATA ---
 

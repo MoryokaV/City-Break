@@ -3,7 +3,7 @@ import { idRegExp, idRegExpTitle } from './utils.js';
 let items = [];
 
 const appendElements = async () => {
-  items = await $.getJSON("/api/fetchTrendingItems");
+  items = await $.getJSON("/api/fetchTrendingItems?city_id=" + Cookies.get("cityId"));
 
   if (items.length === 0) {
     $(".trending-container")
