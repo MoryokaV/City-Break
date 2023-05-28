@@ -39,7 +39,7 @@ $(document).ready(async function() {
 
     await $.ajax({
       type: "PUT",
-      url: "/api/updateAboutParagraph?city_id=" + Cookies.get("cityId"),
+      url: "/api/updateAboutParagraph",
       data: JSON.stringify({ "paragraph1": paragraph1.root.innerHTML, "heading1": $("#paragraph-1-heading").val() }),
       processData: false,
       contentType: "application/json; charset=UTF-8",
@@ -72,7 +72,7 @@ $(document).ready(async function() {
 
     await $.ajax({
       type: "PUT",
-      url: "/api/updateContactDetails?city_id=" + Cookies.get("cityId"),
+      url: "/api/updateContactDetails",
       data: JSON.stringify({ "organization": organization, "phone": phone, "email": email, "website": website, "facebook": facebook }),
       processData: false,
       contentType: "application/json; charset=UTF-8",
@@ -136,7 +136,7 @@ $(document).ready(async function() {
 
       await $.ajax({
         type: "PUT",
-        url: "/api/updateCoverImage?city_id=" + Cookies.get("cityId"),
+        url: "/api/updateCoverImage",
         data: JSON.stringify({ "path": current_image }),
         processData: false,
         contentType: "application/json; charset=UTF-8",

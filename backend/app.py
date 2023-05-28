@@ -690,33 +690,30 @@ def fetchAboutData():
 @app.route("/api/updateAboutParagraph", methods=["PUT"])
 @login_required
 def updateAboutParagraph():
-    city_id = request.args.get("city_id", default="", type=str)
     updatedContent = request.get_json()
 
-    db.about.update_one({"city_id": city_id}, {"$set": updatedContent})
+    db.about.update_one({"city_id": session['city_id']}, {"$set": updatedContent})
 
     return make_response("Entry has been updated", 200)
 
 @app.route("/api/updateContactDetails", methods=["PUT"])
 @login_required
 def updateContactDetails():
-    city_id = request.args.get("city_id", default="", type=str)
     details = request.get_json()
 
-    db.about.update_one({"city_id": city_id}, {"$set": details})
+    db.about.update_one({"city_id": session['city_id']}, {"$set": details})
 
     return make_response("Entry has been updated", 200)
 
 @app.route("/api/updateCoverImage", methods=["PUT"])
 @login_required
 def updateCoverImage():
-    city_id = request.args.get("city_id", default="", type=str)
     new_img = request.get_json()
-    about = db.about.find_one({"city_id": city_id})
+    about = db.about.find_one({"city_id": session['city_id']})
 
     deleteImages([about['cover_image']], "about")
 
-    db.about.update_one({"city_id": city_id}, {"$set": {"cover_image": new_img['path'], "cover_image_blurhash": getBlurhash(new_img['path'])}})
+    db.about.update_one({"city_id": session['city_id']}, {"$set": {"cover_image": new_img['path'], "cover_image_blurhash": getBlurhash(new_img['path'])}})
 
     return make_response("Entry has been updated", 200)
 
