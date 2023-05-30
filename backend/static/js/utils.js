@@ -1,27 +1,28 @@
-export const getFilename = path => path.substring(path.lastIndexOf('/') + 1);
+export const getFilename = (path) => path.substring(path.lastIndexOf("/") + 1);
 const diacritice = "ĂăÂâÎîȘșȚț";
 const diacritice_mari = "ĂÂÎȘȚ";
 
 // Loading animation
-export const startLoadingAnimation = container => container.find(`button[type="submit"]`).addClass("loading-btn");
-export const endLoadingAnimation = container => container.find(`button[type="submit"]`).removeClass("loading-btn");
+export const startLoadingAnimation = (container) => container.find(`button[type="submit"]`).addClass("loading-btn");
+export const endLoadingAnimation = (container) => container.find(`button[type="submit"]`).removeClass("loading-btn");
 
 // Form Validation
-export const nameRegExp = `^[A-Za-z${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`
-export const addressRegExp = `^[A-Za-z0-9${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`
-export const tagRegExp = `^[A-Z${diacritice_mari}][A-Za-z${diacritice} \\-&]*$`
-export const idRegExp = "^[0-9a-fA-F]{24}$"
-export const phoneRegExp = "^(\\+4|)?(07[0-8]{1}[0-9]{1}|02[0-9]{2}|03[0-9]{2}){1}?([0-9]{3}){2}$"
-export const latitudeRegExp = "^(\\+|-)?(?:90(?:(?:\\.0{1,15})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,15})?))$"
-export const longitudeRegExp = "^(\\+|-)?(?:180(?:(?:\\.0{1,15})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,15})?))$"
+export const nameRegExp = `^[A-Za-z${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`;
+export const addressRegExp = `^[A-Za-z0-9${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`;
+export const tagRegExp = `^[A-Z${diacritice_mari}][A-Za-z${diacritice} \\-&]*$`;
+export const idRegExp = "^[0-9a-fA-F]{24}$";
+export const phoneRegExp = "^(\\+4|)?(07[0-8]{1}[0-9]{1}|02[0-9]{2}|03[0-9]{2}){1}?([0-9]{3}){2}$";
+export const latitudeRegExp = "^(\\+|-)?(?:90(?:(?:\\.0{1,15})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,15})?))$";
+export const longitudeRegExp =
+  "^(\\+|-)?(?:180(?:(?:\\.0{1,15})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,15})?))$";
 
-export const nameRegExpTitle = "Name should start with a letter. Allowed characters: a-z A-Z 0-9 ,.\"'() -&"
-export const addressRegExpTitle = "Name shouldn't start with a symbol. Allowed characters: a-z A-Z 0-9 ,.\"'() -&/"
-export const tagRegExpTitle = "Name should start with a capital letter. Allowed characters: a-z A-Z -&"
-export const idRegExpTitle = "Please enter a valid id"
-export const phoneRegExpTitle = "Please enter a valid RO phone number (no spaces allowed)"
-export const latitudeRegExpTitle = "Invalid latitude coordinates"
-export const longitudeRegExpTitle = "Invalid longitude coordinates"
+export const nameRegExpTitle = "Name should start with a letter. Allowed characters: a-z A-Z 0-9 ,.\"'() -&";
+export const addressRegExpTitle = "Name shouldn't start with a symbol. Allowed characters: a-z A-Z 0-9 ,.\"'() -&/";
+export const tagRegExpTitle = "Name should start with a capital letter. Allowed characters: a-z A-Z -&";
+export const idRegExpTitle = "Please enter a valid id";
+export const phoneRegExpTitle = "Please enter a valid RO phone number (no spaces allowed)";
+export const latitudeRegExpTitle = "Invalid latitude coordinates";
+export const longitudeRegExpTitle = "Invalid longitude coordinates";
 
 // User fullname
 const getCurrentUserFullname = async () => {
@@ -37,24 +38,28 @@ const getCurrentUserFullname = async () => {
       </a>`
     );
   }
-}
+};
 
-// Server storage info  
+// Server storage info
 const getStorageInfo = async () => {
   const disk_usage = await $.getJSON("/api/serverStorage");
 
   $("#space-used").text(disk_usage.used + " GB");
   $("#space-total").text(disk_usage.total + " GB");
 
-  $("#storage-bar").css("width", disk_usage.used * 100 / disk_usage.total + "%");
-}
+  $("#storage-bar").css("width", (disk_usage.used * 100) / disk_usage.total + "%");
+};
 
 // Images
 export const appendImageElement = (image, uploaded = false) => {
   $(".img-container").append(
     `<li class="highlight-onhover">
         <a ${uploaded ? `href="${image}" target="_blank"` : ``} class="group">
-          ${uploaded ? `<ion-icon name="image-outline"></ion-icon>` : `<ion-icon name="cloud-upload-outline"></ion-icon>`}
+          ${
+            uploaded
+              ? `<ion-icon name="image-outline"></ion-icon>`
+              : `<ion-icon name="cloud-upload-outline"></ion-icon>`
+          }
           ${getFilename(image)}
         </a>
         <button type="button" class="btn btn-icon remove-img-btn">
@@ -62,33 +67,33 @@ export const appendImageElement = (image, uploaded = false) => {
         </button>
       </li>`
   );
-}
+};
 
 const addPreviewImages = async (images) => {
   function getBase64(image) {
     const reader = new FileReader();
 
-    return new Promise(resolve => {
-      reader.onload = e => {
-        resolve(e.target.result)
+    return new Promise((resolve) => {
+      reader.onload = (e) => {
+        resolve(e.target.result);
       };
 
       reader.readAsDataURL(image);
     });
   }
 
-  const blobs = await Promise.all(images.map(image => getBase64(image)));
+  const blobs = await Promise.all(images.map((image) => getBase64(image)));
 
   blobs.map((blob) => $("#preview-images").append(`<img src="${blob}">`));
 
   if ($("#preview-primary-image").attr("src") === undefined) {
     $("#preview-primary-image").prop("src", $("#preview-images img").eq(0).prop("src"));
   }
-}
+};
 
 export const addImages = (filelist, path, preview, current_images, formData, primary_elem) => {
   const images = Array.from(filelist).filter((image) => {
-    if (current_images.includes(path + image.name)) {
+    if (current_images.includes(`${path + Cookies.get("cityId")}/${image.name}`)) {
       alert(`'${image.name}' is already present in list!`);
       return false;
     }
@@ -102,13 +107,13 @@ export const addImages = (filelist, path, preview, current_images, formData, pri
 
   images.map((image) => {
     formData.append("files[]", image);
-    current_images.push(path + image.name);
+    current_images.push(`${path + Cookies.get("cityId")}/${image.name}`);
 
     appendImageElement(image.name);
   });
 
   primary_elem.attr("max", current_images.length);
-}
+};
 
 const removePreviewImage = (elem, images) => {
   if (images.length === 1) {
@@ -116,7 +121,7 @@ const removePreviewImage = (elem, images) => {
   }
 
   $("#preview-images img").eq(elem.parent().index()).remove();
-}
+};
 
 export const removeImage = (elem, preview, current_images, formData, primary_elem, input_elem) => {
   if (parseInt(primary_elem.val()) === current_images.length) {
@@ -143,7 +148,7 @@ export const removeImage = (elem, preview, current_images, formData, primary_ele
   primary_elem.attr("max", current_images.length);
 
   elem.parent().remove();
-}
+};
 
 // TAGS
 
@@ -151,13 +156,13 @@ export const initializeTags = async (collection, activeTags, preview, modal) => 
   const tags = await $.getJSON(`/api/fetchTags/${collection}?city_id=${Cookies.get("cityId")}`);
   tags.map((tag) => $(`${modal} #tags`).append(`<option value="${tag.name}">${tag.name}</option>`));
 
-  $(`${modal} #tags`).change(function() {
+  $(`${modal} #tags`).change(function () {
     if (!activeTags.includes($(this).val())) {
       $(`${modal} #tag-btn`)
         .removeClass("text-danger")
         .text("Add")
         .off("click")
-        .click(function() {
+        .click(function () {
           if (activeTags.length === 3) {
             alert("You cannot use more than 3 tags!");
             return;
@@ -175,7 +180,7 @@ export const initializeTags = async (collection, activeTags, preview, modal) => 
         .addClass("text-danger")
         .text("Remove")
         .off("click")
-        .click(function() {
+        .click(function () {
           const index = activeTags.indexOf($(`${modal} #tags`).val());
           activeTags.splice(index, 1);
 
@@ -186,7 +191,7 @@ export const initializeTags = async (collection, activeTags, preview, modal) => 
         });
     }
   });
-}
+};
 
 export const appendActiveTags = (activeTags, preview, modal) => {
   $(`${modal} #active-tags`).empty();
@@ -198,21 +203,24 @@ export const appendActiveTags = (activeTags, preview, modal) => {
     $(`${modal} #active-tags`).append(`<span class="badge bg-primary">${tag}</span>`);
 
     if (preview) {
-      $("#preview-tags").append(`<p>${tag}</p>${index != activeTags.length - 1 ? ", " : " "}`)
+      $("#preview-tags").append(`<p>${tag}</p>${index != activeTags.length - 1 ? ", " : " "}`);
     }
   });
-}
+};
 
-$(document).ready(function() {
+$(document).ready(function () {
   getStorageInfo();
   getCurrentUserFullname();
 
   $(".menu-btn").click(() => $("aside").toggleClass("show"));
 
-  $("body").click(function(e) {
+  $("body").click(function (e) {
     if (document.querySelector("aside") !== null) {
-      if (!document.querySelector("aside").contains(e.target) && !document.querySelector(".menu-btn").contains(e.target)) {
-        $('aside').removeClass("show");
+      if (
+        !document.querySelector("aside").contains(e.target) &&
+        !document.querySelector(".menu-btn").contains(e.target)
+      ) {
+        $("aside").removeClass("show");
       }
     }
   });

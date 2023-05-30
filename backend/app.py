@@ -188,6 +188,8 @@ def insertCity():
     db.cities.insert_one({"name": city['name'], "state": city['state'], "city_id": city_id}) 
     db.login.insert_one({"fullname": city['fullname'], "username": city['username'], "password": hashlib.sha256(city['password'].encode("utf-8")).hexdigest(), "city_id": city_id, "admin": True})
     db.about.insert_one({"paragraph1": "", "paragraph2": "", "phone": "", "email": "", "cover_image": "", "organization": "", "website": "", "facebook": "", "cover_image_blurhash": "", "heading1": "", "city_id": city_id})
+   
+    createMediaDirectories(city_id)
     
     return make_response("New entry has been inserted", 200)
 
@@ -754,7 +756,7 @@ def resizeImage(image):
 @login_required
 def uploadImages(folder):
     for image in request.files.getlist('files[]'):
-        path = folder + "/" + image.filename 
+        path = folder + "/" + session['city_id'] + "/" + image.filename 
 
         compressed = Image.open(image)        
         
@@ -808,14 +810,13 @@ def getBlurhash(image):
     
     return blur
 
-@app.route("/api/serverStorage")
-def serverStorage():
-    ssd = disk_usage("/")
-
-    return json.dumps({
-        "total": round(ssd.total / (2**30), 1), 
-        "used": round(ssd.used / (2**30), 1)
-    })
+def createMediaDirectories(city_id):
+    os.mkdir(app.config["MEDIA_FOLDER"] + "/sights/" + city_id)
+    os.mkdir(app.config["MEDIA_FOLDER"] + "/tours/" + city_id)
+    os.mkdir(app.config["MEDIA_FOLDER"] + "/restaurants/" + city_id)
+    os.mkdir(app.config["MEDIA_FOLDER"] + "/hotels/" + city_id)
+    os.mkdir(app.config["MEDIA_FOLDER"] + "/events/" + city_id)
+    os.mkdir(app.config["MEDIA_FOLDER"] + "/about/" + city_id)
 
 def init_dir():
     if not os.path.exists(app.config["MEDIA_FOLDER"] + "/sights"):
@@ -830,6 +831,15 @@ def init_dir():
         os.makedirs(app.config["MEDIA_FOLDER"] + "/events")
     if not os.path.exists(app.config["MEDIA_FOLDER"] + "/about"):
         os.makedirs(app.config["MEDIA_FOLDER"] + "/about")
+
+@app.route("/api/serverStorage")
+def serverStorage():
+    ssd = disk_usage("/")
+
+    return json.dumps({
+        "total": round(ssd.total / (2**30), 1), 
+        "used": round(ssd.used / (2**30), 1)
+    })
 
 if __name__ == '__main__':
     init_dir()

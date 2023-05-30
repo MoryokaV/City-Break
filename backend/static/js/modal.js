@@ -1,10 +1,4 @@
-import {
-  fetchEvents,
-  fetchHotels,
-  fetchRestaurants,
-  fetchSights,
-  fetchTours,
-} from "./dashboard.js";
+import { fetchEvents, fetchHotels, fetchRestaurants, fetchSights, fetchTours } from "./dashboard.js";
 import {
   startLoadingAnimation,
   endLoadingAnimation,
@@ -46,12 +40,8 @@ const appendStages = () => {
   tour.stages.map((stage, index) => {
     $("#stages").append(
       `<div class="stage">
-        <input type="text" size="${
-          stage.text.length
-        }" class="form-control" maxlength="55" required /> 
-        <ion-icon name="link-outline" class="stage-input-icon ${
-          stage.sight_link !== "" ? "active" : ""
-        }"></ion-icon>
+        <input type="text" size="${stage.text.length}" class="form-control" maxlength="55" required /> 
+        <ion-icon name="link-outline" class="stage-input-icon ${stage.sight_link !== "" ? "active" : ""}"></ion-icon>
       </div>
       ${stage.sight_link !== "" ? linkInputElement(stage.sight_link) : ``}
       ${
@@ -66,25 +56,19 @@ const appendStages = () => {
     $("#stages > div").eq(index).find(" > input").val(stage.text);
   });
 
-  $("#tour-modal #stages .stage input")
-    .attr("pattern", addressRegExp)
-    .attr("title", addressRegExpTitle);
+  $("#tour-modal #stages .stage input").attr("pattern", addressRegExp).attr("title", addressRegExpTitle);
 };
 
 const getOffsettedDate = (timestamp) => {
   const date = new Date(timestamp);
-  const localDate = new Date(
-    date.getTime() - date.getTimezoneOffset() * 1000 * 60
-  );
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 1000 * 60);
 
   return localDate.toISOString().slice(0, -8);
 };
 
 const convert2LocalDate = (iso_date) => {
   const date = new Date(iso_date);
-  const localDate = new Date(
-    date.getTime() - 2 * (date.getTimezoneOffset() * 1000 * 60)
-  );
+  const localDate = new Date(date.getTime() - 2 * (date.getTimezoneOffset() * 1000 * 60));
 
   return localDate.toISOString().slice(0, -8);
 };
@@ -316,23 +300,12 @@ $(document).ready(async function () {
       images_to_delete.push(current_images[$(this).parent().index()]);
     }
 
-    removeImage(
-      $(this),
-      false,
-      current_images,
-      formData,
-      $("#sight-primary-image"),
-      $("#sight-images")
-    );
+    removeImage($(this), false, current_images, formData, $("#sight-primary-image"), $("#sight-images"));
   });
 
   // SIGHT COORDINATES
-  $("#sight-latitude")
-    .attr("pattern", latitudeRegExp)
-    .attr("title", latitudeRegExpTitle);
-  $("#sight-longitude")
-    .attr("pattern", longitudeRegExp)
-    .attr("title", longitudeRegExpTitle);
+  $("#sight-latitude").attr("pattern", latitudeRegExp).attr("title", latitudeRegExpTitle);
+  $("#sight-longitude").attr("pattern", longitudeRegExp).attr("title", longitudeRegExpTitle);
 
   // SIGHT SUBMIT
   $("#sight-modal form").submit(async function (e) {
@@ -449,14 +422,7 @@ $(document).ready(async function () {
   $("#tour-images").change(function () {
     $(this).prop("required", false);
 
-    addImages(
-      $(this).prop("files"),
-      "/static/media/tours/",
-      false,
-      tour.images,
-      formData,
-      $("#tour-primary-image")
-    );
+    addImages($(this).prop("files"), "/static/media/tours/", false, tour.images, formData, $("#tour-primary-image"));
 
     $(this).val(null);
   });
@@ -467,14 +433,7 @@ $(document).ready(async function () {
       images_to_delete.push(current_images[$(this).parent().index()]);
     }
 
-    removeImage(
-      $(this),
-      false,
-      current_images,
-      formData,
-      $("#tour-primary-image"),
-      $("#tour-images")
-    );
+    removeImage($(this), false, current_images, formData, $("#tour-primary-image"), $("#tour-images"));
   });
 
   // TOUR SUBMIT
@@ -537,9 +496,7 @@ $(document).ready(async function () {
   });
 
   // RESTAURANT NAME
-  $("#restaurant-name")
-    .attr("pattern", nameRegExp)
-    .attr("title", nameRegExpTitle);
+  $("#restaurant-name").attr("pattern", nameRegExp).attr("title", nameRegExpTitle);
 
   // RESTAURANT IMAGES
   $("#restaurant-images").change(function () {
@@ -557,35 +514,18 @@ $(document).ready(async function () {
     $(this).val(null);
   });
 
-  $("#restaurant-modal .img-container").on(
-    "click",
-    ".remove-img-btn",
-    function () {
-      //mark for deletion
-      if (
-        restaurant.images.includes(current_images[$(this).parent().index()])
-      ) {
-        images_to_delete.push(current_images[$(this).parent().index()]);
-      }
-
-      removeImage(
-        $(this),
-        false,
-        current_images,
-        formData,
-        $("#restaurant-primary-image"),
-        $("#restaurant-images")
-      );
+  $("#restaurant-modal .img-container").on("click", ".remove-img-btn", function () {
+    //mark for deletion
+    if (restaurant.images.includes(current_images[$(this).parent().index()])) {
+      images_to_delete.push(current_images[$(this).parent().index()]);
     }
-  );
+
+    removeImage($(this), false, current_images, formData, $("#restaurant-primary-image"), $("#restaurant-images"));
+  });
 
   // RESTAURANT COORDINATES
-  $("#restaurant-latitude")
-    .attr("pattern", latitudeRegExp)
-    .attr("title", latitudeRegExpTitle);
-  $("#restaurant-longitude")
-    .attr("pattern", longitudeRegExp)
-    .attr("title", longitudeRegExpTitle);
+  $("#restaurant-latitude").attr("pattern", latitudeRegExp).attr("title", latitudeRegExpTitle);
+  $("#restaurant-longitude").attr("pattern", longitudeRegExp).attr("title", longitudeRegExpTitle);
 
   // RESTAURANT SUBMIT
   $("#restaurant-modal form").submit(async function (e) {
@@ -661,9 +601,7 @@ $(document).ready(async function () {
   });
 
   // PHONE
-  $("#hotel-phone")
-    .attr("pattern", phoneRegExp)
-    .attr("title", phoneRegExpTitle);
+  $("#hotel-phone").attr("pattern", phoneRegExp).attr("title", phoneRegExpTitle);
 
   // HOTEL IMAGES
   $("#hotel-images").change(function () {
@@ -687,23 +625,12 @@ $(document).ready(async function () {
       images_to_delete.push(current_images[$(this).parent().index()]);
     }
 
-    removeImage(
-      $(this),
-      false,
-      current_images,
-      formData,
-      $("#hotel-primary-image"),
-      $("#hotel-images")
-    );
+    removeImage($(this), false, current_images, formData, $("#hotel-primary-image"), $("#hotel-images"));
   });
 
   // HOTEL COORDINATES
-  $("#hotel-latitude")
-    .attr("pattern", latitudeRegExp)
-    .attr("title", latitudeRegExpTitle);
-  $("#hotel-longitude")
-    .attr("pattern", longitudeRegExp)
-    .attr("title", longitudeRegExpTitle);
+  $("#hotel-latitude").attr("pattern", latitudeRegExp).attr("title", latitudeRegExpTitle);
+  $("#hotel-longitude").attr("pattern", longitudeRegExp).attr("title", longitudeRegExpTitle);
 
   // HOTEL SUBMIT
   $("#hotel-modal form").submit(async function (e) {
@@ -814,14 +741,7 @@ $(document).ready(async function () {
       images_to_delete.push(current_images[$(this).parent().index()]);
     }
 
-    removeImage(
-      $(this),
-      false,
-      current_images,
-      formData,
-      $("#event-primary-image"),
-      $("#event-images")
-    );
+    removeImage($(this), false, current_images, formData, $("#event-primary-image"), $("#event-images"));
   });
 
   //EVENT SUBMIT

@@ -18,9 +18,7 @@ const getRecords = (data) => {
 
 const fetchCities = async () => {
   users = await $.getJSON("/api/fetchAdminUsers");
-  cities = await Promise.all(
-    users.map((user) => $.getJSON(`/api/findCity/${user.city_id}`))
-  );
+  cities = await Promise.all(users.map((user) => $.getJSON(`/api/findCity/${user.city_id}`)));
 
   $("#cities-records").text(getRecords(users));
   $("#cities-table tbody").empty();
@@ -102,10 +100,7 @@ $(document).ready(async function () {
     city.username = $("#username").val();
     city.password = $("#password").val();
 
-    if (
-      cities.filter((c) => c.name == city.name && c.state == city.state)
-        .length > 0
-    ) {
+    if (cities.filter((c) => c.name == city.name && c.state == city.state).length > 0) {
       alert("City already exists");
       endLoadingAnimation($(this));
       return;

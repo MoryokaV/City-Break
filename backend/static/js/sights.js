@@ -10,7 +10,7 @@ import {
   addImages,
   removeImage,
   initializeTags,
-} from './utils.js';
+} from "./utils.js";
 
 let quill = undefined;
 let formData = new FormData();
@@ -25,10 +25,10 @@ let sight = {
   external_link: "",
 };
 
-$(document).ready(async function() {
+$(document).ready(async function () {
   // NAME
   $("#sight-name").attr("pattern", nameRegExp).attr("title", nameRegExpTitle);
-  $("#sight-name").on('input', function() {
+  $("#sight-name").on("input", function () {
     $("#preview-name").text($(this).val());
   });
 
@@ -41,34 +41,38 @@ $(document).ready(async function() {
     placeholder: "Type something here...",
   });
 
-  quill.on('text-change', function() {
+  quill.on("text-change", function () {
     $("#preview-description").html(quill.root.innerHTML);
   });
 
-  // IMAGES 
-  $("#sight-images").change(function() {
+  // IMAGES
+  $("#sight-images").change(function () {
     $(this).prop("required", false);
 
-    addImages($(this).prop('files'), "/static/media/sights/", true, sight.images, formData, $("#sight-primary-image"));
+    addImages($(this).prop("files"), "/static/media/sights/", true, sight.images, formData, $("#sight-primary-image"));
 
     $(this).val(null);
   });
 
-  $(".img-container").on("click", ".remove-img-btn", function() {
+  $(".img-container").on("click", ".remove-img-btn", function () {
     removeImage($(this), true, sight.images, formData, $("#sight-primary-image"), $("#sight-images"));
   });
 
-  $("#sight-primary-image").on('change', function() {
-    $("#preview-primary-image").prop("src", $("#preview-images img").eq($(this).val() - 1).prop("src"));
+  $("#sight-primary-image").on("change", function () {
+    $("#preview-primary-image").prop(
+      "src",
+      $("#preview-images img")
+        .eq($(this).val() - 1)
+        .prop("src")
+    );
   });
 
   // COORDINATES
   $("#sight-latitude").attr("pattern", latitudeRegExp).attr("title", latitudeRegExpTitle);
   $("#sight-longitude").attr("pattern", longitudeRegExp).attr("title", longitudeRegExpTitle);
 
-
   // SUBMIT
-  $("#insert-sight-form").submit(async function(e) {
+  $("#insert-sight-form").submit(async function (e) {
     e.preventDefault();
 
     startLoadingAnimation($(this));
@@ -89,9 +93,9 @@ $(document).ready(async function() {
         cache: false,
         processData: false,
         statusCode: {
-          413: function() {
-            alert("Files size should be less than 15MB")
-          }
+          413: function () {
+            alert("Files size should be less than 15MB");
+          },
         },
       });
 
