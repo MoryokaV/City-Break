@@ -3,11 +3,11 @@ import { endLoadingAnimation, startLoadingAnimation } from "./utils.js";
 let users = [];
 let cities = [];
 let city = {
-  "name": "",
-  "state": "",
-  "fullname": "",
-  "username": "",
-  "password": "",
+  name: "",
+  state: "",
+  fullname: "",
+  username: "",
+  password: "",
 };
 
 const getRecords = (data) => {
@@ -18,7 +18,9 @@ const getRecords = (data) => {
 
 const fetchCities = async () => {
   users = await $.getJSON("/api/fetchAdminUsers");
-  cities = await Promise.all(users.map(user => $.getJSON(`/api/findCity/${user.city_id}`)));
+  cities = await Promise.all(
+    users.map((user) => $.getJSON(`/api/findCity/${user.city_id}`))
+  );
 
   $("#cities-records").text(getRecords(users));
   $("#cities-table tbody").empty();
@@ -40,10 +42,10 @@ const fetchCities = async () => {
   });
 };
 
-$(document).ready(async function() {
+$(document).ready(async function () {
   await fetchCities();
 
-  $("#cities-table").on('click', ".action-delete-city", async function() {
+  $("#cities-table").on("click", ".action-delete-city", async function () {
     if (confirm("Are you sure you want to delete the entry?")) {
       await $.ajax({
         type: "DELETE",
@@ -54,7 +56,7 @@ $(document).ready(async function() {
     }
   });
 
-  $(".eye-icon").on("click", function() {
+  $(".eye-icon").on("click", function () {
     const passwordField = $(this).siblings();
 
     if (passwordField.attr("type") === "password") {
@@ -66,12 +68,11 @@ $(document).ready(async function() {
     }
   });
 
-
-  $("#edit-user-modal").on("hidden.bs.modal", function() {
+  $("#edit-user-modal").on("hidden.bs.modal", function () {
     $("#edit-user-form")[0].reset();
   });
 
-  $("#edit-user-form").submit(async function(e) {
+  $("#edit-user-form").submit(async function (e) {
     e.preventDefault();
 
     startLoadingAnimation($(this));
@@ -82,7 +83,7 @@ $(document).ready(async function() {
       url: "/api/editUserPassword/" + $("#edit-user-modal").attr("data-id"),
       contentType: "application/json; charset=UTF-8",
       processData: false,
-      data: JSON.stringify({ "new_password": $("#new-password").val() }),
+      data: JSON.stringify({ new_password: $("#new-password").val() }),
     });
 
     endLoadingAnimation($(this));
@@ -90,16 +91,25 @@ $(document).ready(async function() {
     $("#edit-user-modal").modal("hide");
   });
 
-  $("#insert-city-form").submit(async function(e) {
+  $("#insert-city-form").submit(async function (e) {
     e.preventDefault();
 
-    startLoadingAnimation($(this))
+    startLoadingAnimation($(this));
 
     city.name = $("#city-name").val();
     city.state = $("#city-state").val();
     city.fullname = $("#fullname").val();
     city.username = $("#username").val();
     city.password = $("#password").val();
+
+    if (
+      cities.filter((c) => c.name == city.name && c.state == city.state)
+        .length > 0
+    ) {
+      alert("City already exists");
+      endLoadingAnimation($(this));
+      return;
+    }
 
     await $.ajax({
       type: "POST",
