@@ -187,7 +187,7 @@ def insertCity():
     
     db.cities.insert_one({"name": city['name'], "state": city['state'], "city_id": city_id}) 
     db.login.insert_one({"fullname": city['fullname'], "username": city['username'], "password": hashlib.sha256(city['password'].encode("utf-8")).hexdigest(), "city_id": city_id, "admin": True})
-    db.about.insert_one({"paragraph1": "", "paragraph2": "", "phone": "", "email": "", "cover_image": "", "organization": "", "website": "", "facebook": "", "cover_image_blurhash": "", "heading1": "", "city_id": city_id})
+    db.about.insert_one({"paragraph1": "", "phone": "", "email": "", "cover_image": "", "organization": "", "website": "", "facebook": "", "cover_image_blurhash": "", "heading1": "", "city_id": city_id})
    
     createMediaDirectories(city_id)
     

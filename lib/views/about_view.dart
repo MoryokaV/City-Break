@@ -10,6 +10,11 @@ import 'package:city_break/widgets/error_dialog.dart';
 import 'package:city_break/widgets/html_description.dart';
 import 'package:city_break/widgets/loading_spinner.dart';
 
+const String paragraph2 =
+    """<p><strong>City Break</strong> este o aplicație de mobil care va revoluționa felul în care turismul de tip "city break" se desfășoară. 
+    Se identifică drept o platformă națională centralizată de turism menită să faciliteze vizita în orașele României. 
+    Atracții istorice, tururi pietonale, restaurante, cazări și multe altele sunt disponibile acum într-o singură aplicație.</p>""";
+
 class AboutView extends StatefulWidget {
   const AboutView({super.key});
 
@@ -21,7 +26,6 @@ class _AboutViewState extends State<AboutView> with TickerProviderStateMixin {
   Map<String, dynamic> data = {
     "heading1": "",
     "paragraph1": "",
-    "paragraph2": "",
     "oraganization": "",
     "phone": "",
     "email": "",
@@ -148,8 +152,8 @@ class _AboutViewState extends State<AboutView> with TickerProviderStateMixin {
                               style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: 14),
-                            HtmlDescription(
-                              data: data["paragraph2"]!,
+                            const HtmlDescription(
+                              data: paragraph2,
                               shrink: false,
                             ),
                             const Padding(
