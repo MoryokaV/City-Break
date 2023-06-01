@@ -202,9 +202,18 @@ def findCity(id):
 @login_required
 @master_login_required
 def deleteCity(id):
+    db.sights.delete_many({"city_id": id})
+    db.tours.delete_many({"city_id": id})
+    db.restaurants.delete_many({"city_id": id})
+    db.hotels.delete_many({"city_id": id})
+    db.events.delete_many({"city_id": id})
+    db.tags.delete_many({"city_id": id})
+    db.trending.delete_many({"city_id": id})
+    db.about.delete_one({"city_id": id})
+    db.login.delete_many({"city_id": id})
     db.cities.delete_one({"city_id": id})
-    db.login.delete_one({"city_id": id})
-    # TODO: delete all entries for that city
+
+    #delete media folders
 
     return make_response("Successfully deleted document", 200)
 
@@ -817,6 +826,17 @@ def createMediaDirectories(city_id):
     os.mkdir(app.config["MEDIA_FOLDER"] + "/hotels/" + city_id)
     os.mkdir(app.config["MEDIA_FOLDER"] + "/events/" + city_id)
     os.mkdir(app.config["MEDIA_FOLDER"] + "/about/" + city_id)
+
+def deleteMediaDirectories(city_id):
+    try:
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/sights/" + city_id)
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/tours/" + city_id)
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/restaurants/" + city_id)
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/hotels/" + city_id)
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/events/" + city_id)
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/about/" + city_id)
+    except:
+        pass
 
 def init_dir():
     if not os.path.exists(app.config["MEDIA_FOLDER"] + "/sights"):
