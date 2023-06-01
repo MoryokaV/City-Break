@@ -102,7 +102,7 @@ $(document).ready(async function () {
     city.state = $("#city-state").val();
     city.fullname = $("#fullname").val();
     city.username = $("#username").val();
-    city.password = $("#password").val();master
+    city.password = $("#password").val();
 
     if (cities.filter((c) => c.name == city.name && c.state == city.state).length > 0) {
       alert("City already exists");

@@ -5,7 +5,7 @@ from flask_session import Session
 from functools import wraps
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from shutil import disk_usage
+import shutil
 from PIL import Image
 import os
 import json
@@ -223,7 +223,7 @@ def deleteCity(id):
     db.login.delete_many({"city_id": id})
     db.cities.delete_one({"city_id": id})
 
-    #delete media folders
+    deleteMediaDirectories(id)
 
     return make_response("Successfully deleted document", 200)
 
@@ -838,12 +838,12 @@ def createMediaDirectories(city_id):
 
 def deleteMediaDirectories(city_id):
     try:
-        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/sights/" + city_id)
-        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/tours/" + city_id)
-        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/restaurants/" + city_id)
-        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/hotels/" + city_id)
-        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/events/" + city_id)
-        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/about/" + city_id)
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/sights/" + city_id + "/")
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/tours/" + city_id + "/")
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/restaurants/" + city_id + "/")
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/hotels/" + city_id + "/")
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/events/" + city_id + "/")
+        shutil.rmtree(app.config["MEDIA_FOLDER"] + "/about/" + city_id + "/")
     except:
         pass
 
@@ -863,7 +863,7 @@ def init_dir():
 
 @app.route("/api/serverStorage")
 def serverStorage():
-    ssd = disk_usage("/")
+    ssd = shutil.disk_usage("/")
 
     return json.dumps({
         "total": round(ssd.total / (2**30), 1), 
