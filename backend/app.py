@@ -64,6 +64,16 @@ def admin_login_required(f):
 
     return checkForAdminUser
 
+def admin_or_master_login_required(f):
+    @wraps(f)
+    def checkForAdminOrMasterUser(*args, **kwargs):
+        if session['admin'] == True or session['username'] == "master": 
+            return f(*args, **kwargs) 
+        else:
+            return redirect("/login")
+
+    return checkForAdminOrMasterUser
+
 def login_required(f):
     @wraps(f)
     def checkLoginStatus(*args, **kwargs):
@@ -245,7 +255,7 @@ def deleteUser(_id):
 
 @app.route("/api/editUserPassword/<_id>", methods=["PUT"])
 @login_required
-@admin_login_required
+@admin_or_master_login_required
 def editUserPassword(_id):
     data = request.get_json()
 

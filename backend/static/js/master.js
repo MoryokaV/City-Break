@@ -31,7 +31,7 @@ const fetchCities = async () => {
         <td>${user.username}</td>
         <td>${cities[index].name}</td>
         <td>${cities[index].state}</td>
-        <td class="small-cell text-center" id=${user.city_id}>
+        <td class="small-cell text-center" id=${user.city_id} data-user-id=${user._id}>
           <button class="btn-icon action-delete-city"><ion-icon class="edit-icon" name="remove-circle-outline"></ion-icon></button>
           <button class="btn-icon action-edit-user" data-bs-toggle="modal" data-bs-target="#edit-user-modal"><ion-icon class="edit-icon" name="create-outline"></ion-icon></button>
         </td>
@@ -52,6 +52,10 @@ $(document).ready(async function () {
 
       await fetchCities();
     }
+  });
+
+  $("#cities-table").on('click', ".action-edit-user", async function() {
+    $("#edit-user-modal").attr("data-id", $(this).parent().attr("data-user-id"));
   });
 
   $(".eye-icon").on("click", function () {
@@ -98,7 +102,7 @@ $(document).ready(async function () {
     city.state = $("#city-state").val();
     city.fullname = $("#fullname").val();
     city.username = $("#username").val();
-    city.password = $("#password").val();
+    city.password = $("#password").val();master
 
     if (cities.filter((c) => c.name == city.name && c.state == city.state).length > 0) {
       alert("City already exists");
