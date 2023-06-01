@@ -99,10 +99,12 @@ def login():
         session['username'] = username
         session['fullname'] = user['fullname']
         session['admin'] = user['admin']
-        session['city_id'] = user['city_id']
 
         if username == "master":
             return make_response(json.dumps({"url": "/master"}), 200)
+
+        session['city_id'] = user['city_id']
+        session['city_name'] = db.cities.find_one({"city_id": user['city_id']})['name']
 
         res = make_response(json.dumps({"url": "/admin"}), 200)
         res.set_cookie("cityId", user['city_id'])
@@ -181,6 +183,11 @@ def about():
     return render_template("about.html")
 
 # --- CITES ---
+
+@app.route("/api/currentCityName")
+@login_required
+def currentCityName():
+    return json.dumps({"name": session['city_name']}, default=str)
 
 @app.route("/api/fetchAdminUsers")
 @login_required

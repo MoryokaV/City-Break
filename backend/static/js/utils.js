@@ -25,7 +25,7 @@ export const latitudeRegExpTitle = "Invalid latitude coordinates";
 export const longitudeRegExpTitle = "Invalid longitude coordinates";
 
 // User fullname
-const getCurrentUserFullname = async () => {
+const getCurrentUser = async () => {
   const data = await $.getJSON("/api/currentUser");
 
   $("#user-fullname").text(data.fullname);
@@ -39,6 +39,12 @@ const getCurrentUserFullname = async () => {
     );
   }
 };
+
+const getCityName = async () => {
+  const name = (await $.getJSON("/api/currentCityName")).name;
+
+  $(".title-long").html(`City Break &nbsp;&ndash;&nbsp; ${name}`); 
+} 
 
 // Server storage info
 const getStorageInfo = async () => {
@@ -210,7 +216,12 @@ export const appendActiveTags = (activeTags, preview, modal) => {
 
 $(document).ready(function () {
   getStorageInfo();
-  getCurrentUserFullname();
+
+  getCurrentUser();
+
+  if(window.location.pathname !== "/master"){
+    getCityName();
+  }
 
   $(".menu-btn").click(() => $("aside").toggleClass("show"));
 
