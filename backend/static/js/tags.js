@@ -41,7 +41,7 @@ $(document).ready(async function() {
   $("#tags-table").on('click', ".remove-tag-btn", async function() {
     await $.ajax({
       type: "DELETE",
-      url: "/api/deleteTag/" + $(this).parent().attr("id") + "?city_id=" + Cookies.get("cityId"),
+      url: "/api/deleteTag/" + $(this).parent().attr("id"),
     });
 
     await fetchTags();

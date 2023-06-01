@@ -600,26 +600,25 @@ def insertTag():
 @app.route("/api/deleteTag/<_id>", methods=["DELETE"])
 @login_required
 def deleteTag(_id):
-    city_id = request.args.get("city_id", default="", type=str)
     tag = db.tags.find_one({"_id": ObjectId(_id)})
 
     # Remove this tag from all occurrences 
     if tag['used_for'] == "sights":
-        sights = list(db.sights.find({"city_id": city_id}))
+        sights = list(db.sights.find({"city_id": session['city_id']}))
          
         for sight in sights:
             if tag['name'] in sight['tags']:
                 sight['tags'].remove(tag['name'])
                 db.sights.update_one({"_id": ObjectId(sight['_id'])}, {"$set": {"tags": sight['tags']}})
     elif tag['used_for'] == "restaurants":
-        restaurants = list(db.restaurants.find({"city_id": city_id}))
+        restaurants = list(db.restaurants.find({"city_id": session['city_id']}))
          
         for restaurant in restaurants:
             if tag['name'] in restaurant['tags']:
                 restaurant['tags'].remove(tag['name'])
                 db.restaurants.update_one({"_id": ObjectId(restaurant['_id'])}, {"$set": {"tags": restaurant['tags']}})
     else:
-        hotels = list(db.hotels.find({"city_id": city_id}))
+        hotels = list(db.hotels.find({"city_id": session['city_id']}))
          
         for hotel in hotels:
             if tag['name'] in hotel['tags']:
