@@ -193,7 +193,11 @@ def currentCityName():
 @login_required
 @master_login_required
 def fetchAdminUsers():
-    return json.dumps(list(db.login.find({"admin": True})), default=str);
+    return json.dumps(list(db.login.find({"admin": True})), default=str)
+
+@app.route("/api/fetchCities")
+def fetchCities():
+    return json.dumps(list(db.cities.find()), default=str)
 
 @app.route("/api/insertCity", methods=["POST"])
 @login_required
@@ -250,6 +254,7 @@ def insertUser():
     return make_response("New entry has been inserted", 200)
 
 @app.route("/api/fetchUsers")
+@login_required
 def fetchUsers():
     return json.dumps(list(db.login.find({"city_id": session['city_id']})), default=str)
 

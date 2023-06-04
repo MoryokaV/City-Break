@@ -7,7 +7,7 @@ import 'package:city_break/utils/url_constants.dart';
 class EventController {
   Future<List<Event>> fetchEvents() async {
     try {
-      final response = await http.get(Uri.parse("$apiUrl/fetchEvents"));
+      final response = await http.get(Uri.parse("$apiUrl/fetchEvents$cityIdQuery"));
 
       if (response.statusCode == 200) {
         List data = jsonDecode(response.body);

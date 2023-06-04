@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class TourController {
   Future<List<Tour>> fetchTours() async {
     try {
-      final response = await http.get(Uri.parse("$apiUrl/fetchTours"));
+      final response = await http.get(Uri.parse("$apiUrl/fetchTours$cityIdQuery"));
 
       if (response.statusCode == 200) {
         List data = jsonDecode(response.body);

@@ -6,7 +6,7 @@ import 'package:city_break/utils/url_constants.dart';
 class AboutController {
   Future<Map<String, dynamic>> fetchAboutData() async {
     try {
-      final response = await http.get(Uri.parse("$apiUrl/fetchAboutData"));
+      final response = await http.get(Uri.parse("$apiUrl/fetchAboutData$cityIdQuery"));
 
       if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);

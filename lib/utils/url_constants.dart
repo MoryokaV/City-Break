@@ -1,10 +1,15 @@
 import 'dart:io';
+import 'package:city_break/services/localstorage_service.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const baseUrl = "https://cb.bjbraila.ro";
 const apiUrl = "https://cb.bjbraila.ro/api";
+const defaultCityId = "5331e6c5772d490dabeb124502b96882";
+final cityIdQuery = "?city_id=${LocalStorage.getCityId()}";
+
 const obiectivUrl = "https://obiectivbr.ro";
+
 const authorFacebookUrl = "https://www.facebook.com/mario.vlaviano.75";
 const authorInstagramUrl = "https://www.instagram.com/mario.vlv";
 const authorGithubUrl = "https://github.com/moryokav";

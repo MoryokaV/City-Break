@@ -7,7 +7,7 @@ import 'package:city_break/utils/url_constants.dart';
 class SightController {
   Future<List<Sight>> fetchSights() async {
     try {
-      final response = await http.get(Uri.parse("$apiUrl/fetchSights"));
+      final response = await http.get(Uri.parse("$apiUrl/fetchSights$cityIdQuery"));
 
       if (response.statusCode == 200) {
         List data = jsonDecode(response.body);
@@ -37,7 +37,7 @@ class SightController {
 
   Future<List<String>> fetchSightsTags() async {
     try {
-      final response = await http.get(Uri.parse("$apiUrl/fetchTags/sights"));
+      final response = await http.get(Uri.parse("$apiUrl/fetchTags/sights$cityIdQuery"));
 
       if (response.statusCode == 200) {
         List data = jsonDecode(response.body);

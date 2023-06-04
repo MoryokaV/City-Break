@@ -13,7 +13,7 @@ class TrendingController {
 
   Future<List<Object?>> fetchTrending() async {
     try {
-      final response = await http.get(Uri.parse("$apiUrl/fetchTrendingItems"));
+      final response = await http.get(Uri.parse("$apiUrl/fetchTrendingItems$cityIdQuery"));
 
       if (response.statusCode == 200) {
         List trending = jsonDecode(response.body);

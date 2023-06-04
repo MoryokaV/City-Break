@@ -1,3 +1,4 @@
+import 'package:city_break/views/cities_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -154,6 +155,8 @@ class PageRouter {
         return adaptivePageRoute(builder: (context) => const AllHotelsView());
       case '/allrestaurants':
         return adaptivePageRoute(builder: (context) => const AllRestaurantsView());
+      case '/cities':
+        return adaptivePageRoute(builder: (context) => const CitiesView());
       case '/gallery':
         final args = settings.arguments as Map<String, dynamic>;
 

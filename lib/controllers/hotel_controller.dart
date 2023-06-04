@@ -7,7 +7,7 @@ import 'package:city_break/utils/url_constants.dart';
 class HotelController {
   Future<List<Hotel>> fetchHotels() async {
     try {
-      final response = await http.get(Uri.parse("$apiUrl/fetchHotels"));
+      final response = await http.get(Uri.parse("$apiUrl/fetchHotels$cityIdQuery"));
 
       if (response.statusCode == 200) {
         List data = jsonDecode(response.body);
@@ -37,7 +37,7 @@ class HotelController {
 
   Future<List<String>> fetchHotelsTags() async {
     try {
-      final response = await http.get(Uri.parse("$apiUrl/fetchTags/hotels"));
+      final response = await http.get(Uri.parse("$apiUrl/fetchTags/hotels$cityIdQuery"));
 
       if (response.statusCode == 200) {
         List data = jsonDecode(response.body);
