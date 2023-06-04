@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:city_break/controllers/about_controller.dart';
@@ -161,7 +160,155 @@ class _AboutViewState extends State<AboutView> with TickerProviderStateMixin {
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: Divider(thickness: 1.1),
                             ),
-                            ContactSection(data: data),
+                            Text(
+                              "Contact",
+                              style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w700),
+                            ),
+                            const SizedBox(height: 14),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 4,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/user.svg",
+                                  width: 20,
+                                  color: kDisabledIconColor,
+                                ),
+                                const Text(
+                                  "Organizație: ",
+                                  style: TextStyle(
+                                    fontFamily: labelFont,
+                                  ),
+                                ),
+                                Text(
+                                  data['organization']!,
+                                  style: const TextStyle(
+                                    fontFamily: labelFont,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 4,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/phone.svg",
+                                  width: 20,
+                                  color: kDisabledIconColor,
+                                ),
+                                const Text(
+                                  "Telefon: ",
+                                  style: TextStyle(
+                                    fontFamily: labelFont,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => openTel(data['phone']!),
+                                  child: Text(
+                                    data['phone']!,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: labelFont,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 4,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/mail.svg",
+                                  width: 20,
+                                  color: kDisabledIconColor,
+                                ),
+                                const Text(
+                                  "Email: ",
+                                  style: TextStyle(
+                                    fontFamily: labelFont,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => openEmail(data['email']!),
+                                  child: Text(
+                                    data['email']!,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: labelFont,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 4,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/link-outline.svg",
+                                  width: 20,
+                                  color: kDisabledIconColor,
+                                ),
+                                const Text(
+                                  "Website oficial: ",
+                                  style: TextStyle(
+                                    fontFamily: labelFont,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => openBrowserURL(data['website']!),
+                                  child: Text(
+                                    data['website']!,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: labelFont,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 4,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/icons/link-outline.svg",
+                                  width: 20,
+                                  color: kDisabledIconColor,
+                                ),
+                                const Text(
+                                  "Facebook: ",
+                                  style: TextStyle(
+                                    fontFamily: labelFont,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => openBrowserURL(data['facebook']!),
+                                  child: Text(
+                                    data['facebook']!,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: labelFont,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 22),
                             InkWell(
                               onTap: () => Navigator.pushNamed(context, '/cities'),
@@ -281,170 +428,6 @@ class _AboutViewState extends State<AboutView> with TickerProviderStateMixin {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ContactSection extends StatelessWidget {
-  final Map<String, dynamic> data;
-
-  const ContactSection({super.key, required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Contact",
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(height: 14),
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 4,
-          children: [
-            SvgPicture.asset(
-              "assets/icons/user.svg",
-              width: 20,
-              color: kDisabledIconColor,
-            ),
-            const Text(
-              "Organizație: ",
-              style: TextStyle(
-                fontFamily: labelFont,
-              ),
-            ),
-            Text(
-              data['organization']!,
-              style: const TextStyle(
-                fontFamily: labelFont,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 4,
-          children: [
-            SvgPicture.asset(
-              "assets/icons/phone.svg",
-              width: 20,
-              color: kDisabledIconColor,
-            ),
-            const Text(
-              "Telefon: ",
-              style: TextStyle(
-                fontFamily: labelFont,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => openTel(data['phone']!),
-              child: Text(
-                data['phone']!,
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: labelFont,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 4,
-          children: [
-            SvgPicture.asset(
-              "assets/icons/mail.svg",
-              width: 20,
-              color: kDisabledIconColor,
-            ),
-            const Text(
-              "Email: ",
-              style: TextStyle(
-                fontFamily: labelFont,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => openEmail(data['email']!),
-              child: Text(
-                data['email']!,
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: labelFont,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 4,
-          children: [
-            SvgPicture.asset(
-              "assets/icons/link-outline.svg",
-              width: 20,
-              color: kDisabledIconColor,
-            ),
-            const Text(
-              "Website oficial: ",
-              style: TextStyle(
-                fontFamily: labelFont,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => openBrowserURL(data['website']!),
-              child: Text(
-                data['website']!,
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: labelFont,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 4,
-          children: [
-            SvgPicture.asset(
-              "assets/icons/link-outline.svg",
-              width: 20,
-              color: kDisabledIconColor,
-            ),
-            const Text(
-              "Facebook: ",
-              style: TextStyle(
-                fontFamily: labelFont,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => openBrowserURL(data['facebook']!),
-              child: Text(
-                data['facebook']!,
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: labelFont,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

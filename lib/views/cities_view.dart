@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:city_break/controllers/city_controller.dart';
 import 'package:city_break/models/city_model.dart';
+import 'package:city_break/services/localstorage_service.dart';
 import 'package:city_break/utils/search_all.dart';
 import 'package:city_break/utils/style.dart';
 import 'package:city_break/widgets/error_dialog.dart';
+import 'package:city_break/widgets/loading_spinner.dart';
 import 'package:city_break/widgets/search_list_field.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +22,7 @@ class _CitiesViewState extends State<CitiesView> {
   bool isLoading = true;
   List<City> cities = [];
   List<City> filteredData = [];
+  String selectedCityId = LocalStorage.getCityId()!;
 
   @override
   void initState() {
@@ -62,8 +65,15 @@ class _CitiesViewState extends State<CitiesView> {
                       .replaceAllMapped(RegExp('[ĂăÂâÎîȘșȚț]'), (m) => diacriticsMapping[m.group(0)] ?? '')
                       .split(" ")
                       .any((entryWord) => entryWord.startsWith(word)) ||
-                  city.name.toString().toLowerCase().split(" ").any((entryWord) => entryWord.startsWith(word))) &&
-              !filteredData.contains(city),
+                  city.name.toString().toLowerCase().split(" ").any((entryWord) => entryWord.startsWith(word))) ||
+              (city.state
+                          .toString()
+                          .toLowerCase()
+                          .replaceAllMapped(RegExp('[ĂăÂâÎîȘșȚț]'), (m) => diacriticsMapping[m.group(0)] ?? '')
+                          .split(" ")
+                          .any((entryWord) => entryWord.startsWith(word)) ||
+                      city.state.toString().toLowerCase().split(" ").any((entryWord) => entryWord.startsWith(word))) &&
+                  !filteredData.contains(city),
         ),
       );
     });
@@ -99,23 +109,60 @@ class _CitiesViewState extends State<CitiesView> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 14,
-            right: 14,
-            top: 10,
-          ),
-          child: Column(
-            children: [
-              SearchListField(
-                onChanged: updateList,
+        child: isLoading
+            ? const LoadingSpinner()
+            : CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 14,
+                        right: 14,
+                        top: 10,
+                      ),
+                      child: Column(
+                        children: [
+                          SearchListField(
+                            onChanged: updateList,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      childCount: filteredData.length,
+                      (context, index) {
+                        City city = filteredData[index];
+                        return Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                width: 0.25,
+                                color: Colors.black.withOpacity(0.4),
+                              ),
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text("${city.name}, ${city.state}"),
+                            leading: city.id == selectedCityId ? const Icon(Icons.check) : null,
+                            minLeadingWidth: 0,
+                            enabled: city.id != selectedCityId,
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () {
+                              LocalStorage.saveCityId(city.id);
+                              Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

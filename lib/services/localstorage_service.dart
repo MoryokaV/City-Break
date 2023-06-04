@@ -14,6 +14,8 @@ abstract class LocalStorage {
     if (prefs!.containsKey("cityId") == false) {
       prefs!.setString("cityId", defaultCityId);
     }
+
+    cityIdQuery = "?city_id=${LocalStorage.getCityId()}";
   }
 
   static void saveWishlist(String wishlist) {
@@ -26,6 +28,7 @@ abstract class LocalStorage {
 
   static void saveCityId(String cityId) {
     prefs!.setString("cityId", cityId);
+    cityIdQuery = "?city_id=${LocalStorage.getCityId()}";
   }
 
   static String? getCityId() {
