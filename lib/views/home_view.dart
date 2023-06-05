@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:city_break/controllers/about_controller.dart';
+import 'package:city_break/utils/url_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,56 +51,7 @@ class HomeView extends StatelessWidget {
                     controller: _scrollController,
                     physics: const ClampingScrollPhysics(),
                     children: [
-                      SizedBox(
-                        height: Responsive.safeBlockVertical * 35 + 20,
-                        child: Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Stack(
-                              alignment: Alignment.topLeft,
-                              children: [
-                                CachedAssetImage(
-                                  "assets/images/braila_night.jpg",
-                                  cacheHeight: Responsive.safeBlockVertical * 35,
-                                  cacheWidth: Responsive.screenWidth,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 18, top: 12),
-                                  child: RichText(
-                                    text: const TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "Brăila",
-                                          style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: " - un oraș istoric de pe malul Dunării",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: bodyFont,
-                                        height: 1.4,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Positioned(
-                              bottom: 0,
-                              child: SearchBar(),
-                            ),
-                          ],
-                        ),
-                      ),
+                      Masthead(),
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 22,
@@ -465,6 +418,100 @@ class HomeView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class Masthead extends StatefulWidget {
+  const Masthead({super.key});
+
+  @override
+  State<Masthead> createState() => _MastheadState();
+}
+
+class _MastheadState extends State<Masthead> {
+  AboutController aboutController = AboutController();
+  Map<String, dynamic> data = {};
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getAboutData();
+  }
+
+  void getAboutData() async {
+    try {
+      data = await aboutController.fetchAboutData();
+
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
+    } on HttpException {
+      showErrorDialog(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? Skeleton(
+            width: double.infinity,
+            height: Responsive.safeBlockVertical * 35,
+          )
+        : SizedBox(
+            height: Responsive.safeBlockVertical * 35 + 20,
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Stack(
+                  alignment: Alignment.topLeft,
+                  children: [
+                    CachedApiImage(
+                      imageUrl: "$baseUrl${data['header_image']}",
+                      height: Responsive.safeBlockVertical * 35,
+                      cacheHeight: Responsive.safeBlockVertical * 35,
+                      cacheWidth: Responsive.screenWidth,
+                      fadeInDuration: Duration.zero,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 18, top: 12),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: "Brăila",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            TextSpan(
+                              text: " - ${data['header_title']}",
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: bodyFont,
+                            height: 1.4,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Positioned(
+                  bottom: 0,
+                  child: SearchBar(),
+                ),
+              ],
+            ),
+          );
   }
 }
 

@@ -11,6 +11,7 @@ class CachedApiImage extends StatelessWidget {
   final double? cacheHeight;
   final BoxFit? fit;
   final String? blurhash;
+  final Duration? fadeInDuration;
 
   const CachedApiImage({
     super.key,
@@ -21,6 +22,7 @@ class CachedApiImage extends StatelessWidget {
     this.height,
     this.fit,
     this.blurhash,
+    this.fadeInDuration,
   });
 
   @override
@@ -44,6 +46,7 @@ class CachedApiImage extends StatelessWidget {
                 ),
               );
             },
+      fadeInDuration: fadeInDuration == null ?  const Duration(milliseconds: 500) : fadeInDuration!,
     );
   }
 }
