@@ -98,6 +98,7 @@ $(document).ready(async function () {
 
     if ($(".img-container").children().length > 0) {
       alert("You must have only one cover image!");
+      $(this).val(null);
       return;
     }
 
