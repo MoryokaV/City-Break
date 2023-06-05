@@ -208,7 +208,7 @@ def insertCity():
     
     db.cities.insert_one({"name": city['name'], "state": city['state'], "city_id": city_id}) 
     db.login.insert_one({"fullname": city['fullname'], "username": city['username'], "password": hashlib.sha256(city['password'].encode("utf-8")).hexdigest(), "city_id": city_id, "admin": True})
-    db.about.insert_one({"paragraph1": "", "phone": "", "email": "", "cover_image": "", "organization": "", "website": "", "facebook": "", "cover_image_blurhash": "", "heading1": "", "city_id": city_id})
+    db.about.insert_one({"paragraph1": "", "phone": "", "email": "", "cover_image": "", "organization": "", "website": "", "facebook": "", "cover_image_blurhash": "", "heading1": "", "header_image": "", "header_title": "", "city_id": city_id})
    
     createMediaDirectories(city_id)
     
@@ -742,6 +742,18 @@ def updateCoverImage():
     deleteImages([about['cover_image']], "about")
 
     db.about.update_one({"city_id": session['city_id']}, {"$set": {"cover_image": new_img['path'], "cover_image_blurhash": getBlurhash(new_img['path'])}})
+
+    return make_response("Entry has been updated", 200)
+
+@app.route("/api/updateHeader", methods=["PUT"])
+@login_required
+def updateHeader():
+    data = request.get_json();
+    about = db.about.find_one({"city_id": session['city_id']})
+
+    deleteImages([about['header_image']], "about")
+
+    db.about.update_one({"city_id": session['city_id']}, {"$set": data})
 
     return make_response("Entry has been updated", 200)
 
