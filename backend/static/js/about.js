@@ -3,8 +3,8 @@ import {
   endLoadingAnimation,
   phoneRegExp,
   phoneRegExpTitle,
-  appendImageElement
-} from './utils.js';
+  appendImageElement,
+} from "./utils.js";
 
 let paragraph1 = undefined;
 
@@ -13,8 +13,8 @@ const LIMIT = 500;
 let formData = new FormData();
 let current_image = undefined;
 
-$(document).ready(async function() {
-  const data = await $.getJSON("/api/fetchAboutData?city_id=" + Cookies.get("cityId"))
+$(document).ready(async function () {
+  const data = await $.getJSON("/api/fetchAboutData?city_id=" + Cookies.get("cityId"));
 
   // PARAGRAPH
 
@@ -26,13 +26,13 @@ $(document).ready(async function() {
   });
   $("#paragraph-1-content .ql-editor").html(data.paragraph1);
 
-  paragraph1.on('text-change', function() {
+  paragraph1.on("text-change", function () {
     if (paragraph1.getLength() > LIMIT) {
       paragraph1.deleteText(LIMIT, paragraph1.getLength());
     }
   });
 
-  $("#paragraphs-form").submit(async function(e) {
+  $("#paragraphs-form").submit(async function (e) {
     e.preventDefault();
 
     startLoadingAnimation($(this));
@@ -40,7 +40,7 @@ $(document).ready(async function() {
     await $.ajax({
       type: "PUT",
       url: "/api/updateAboutParagraph",
-      data: JSON.stringify({ "paragraph1": paragraph1.root.innerHTML, "heading1": $("#paragraph-1-heading").val() }),
+      data: JSON.stringify({ paragraph1: paragraph1.root.innerHTML, heading1: $("#paragraph-1-heading").val() }),
       processData: false,
       contentType: "application/json; charset=UTF-8",
     });
@@ -59,7 +59,7 @@ $(document).ready(async function() {
   $("#website").val(data.website);
   $("#facebook").val(data.facebook);
 
-  $("#contact-form").submit(async function(e) {
+  $("#contact-form").submit(async function (e) {
     e.preventDefault();
 
     startLoadingAnimation($(this));
@@ -73,7 +73,13 @@ $(document).ready(async function() {
     await $.ajax({
       type: "PUT",
       url: "/api/updateContactDetails",
-      data: JSON.stringify({ "organization": organization, "phone": phone, "email": email, "website": website, "facebook": facebook }),
+      data: JSON.stringify({
+        organization: organization,
+        phone: phone,
+        email: email,
+        website: website,
+        facebook: facebook,
+      }),
       processData: false,
       contentType: "application/json; charset=UTF-8",
     });
@@ -87,34 +93,34 @@ $(document).ready(async function() {
     appendImageElement(current_image, true);
   }
 
-  $("#cover-image").change(function() {
+  $("#cover-image").change(function () {
     $(this).prop("required", false);
 
     if ($(".img-container").children().length > 0) {
-      alert("You must have only one cover image!")
+      alert("You must have only one cover image!");
       return;
     }
 
     const file = $(this).prop("files")[0];
 
     formData.append("files[]", file);
-    current_image = "/static/media/about/" + file.name;
+    current_image = "/static/media/about/" + Cookies.get("cityId") + "/" + file.name;
 
     appendImageElement(file.name);
 
     $(this).val(null);
   });
 
-  $(".img-container").on("click", ".remove-img-btn", function() {
+  $(".img-container").on("click", ".remove-img-btn", function () {
     $("#cover-image").prop("required", true);
 
     formData.delete("files[]");
-    current_image = undefined
+    current_image = undefined;
 
     $(this).parent().remove();
   });
 
-  $("#cover-form").submit(async function(e) {
+  $("#cover-form").submit(async function (e) {
     e.preventDefault();
 
     startLoadingAnimation($(this));
@@ -128,16 +134,16 @@ $(document).ready(async function() {
         cache: false,
         processData: false,
         statusCode: {
-          413: function() {
-            alert("Files size should be less than 15MB")
-          }
+          413: function () {
+            alert("Files size should be less than 15MB");
+          },
         },
       });
 
       await $.ajax({
         type: "PUT",
         url: "/api/updateCoverImage",
-        data: JSON.stringify({ "path": current_image }),
+        data: JSON.stringify({ path: current_image }),
         processData: false,
         contentType: "application/json; charset=UTF-8",
       });
