@@ -458,7 +458,7 @@ class _MastheadState extends State<Masthead> {
     return isLoading
         ? Skeleton(
             width: double.infinity,
-            height: Responsive.safeBlockVertical * 35,
+            height: Responsive.safeBlockVertical * 35 + 20,
           )
         : SizedBox(
             height: Responsive.safeBlockVertical * 35 + 20,
