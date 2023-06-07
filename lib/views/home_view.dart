@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:city_break/controllers/about_controller.dart';
+import 'package:city_break/controllers/city_controller.dart';
 import 'package:city_break/utils/url_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -432,6 +433,9 @@ class _MastheadState extends State<Masthead> {
   AboutController aboutController = AboutController();
   Map<String, dynamic> data = {};
 
+  CityController cityController = CityController();
+  String cityName = "";
+
   bool isLoading = true;
 
   @override
@@ -444,6 +448,7 @@ class _MastheadState extends State<Masthead> {
   void getAboutData() async {
     try {
       data = await aboutController.fetchAboutData();
+      cityName = await cityController.getCurrentCityName();
 
       if (mounted) {
         setState(() => isLoading = false);
@@ -480,9 +485,9 @@ class _MastheadState extends State<Masthead> {
                       child: RichText(
                         text: TextSpan(
                           children: [
-                            const TextSpan(
-                              text: "Brăila",
-                              style: TextStyle(
+                            TextSpan(
+                              text: cityName,
+                              style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
                               ),
