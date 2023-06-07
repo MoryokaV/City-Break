@@ -215,7 +215,6 @@ def insertCity():
     return make_response("New entry has been inserted", 200)
 
 @app.route("/api/findCity/<id>")
-@login_required
 def findCity(id):
     return json.dumps(db.cities.find_one({"city_id": id}), default=str) 
 
