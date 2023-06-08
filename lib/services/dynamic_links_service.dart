@@ -13,8 +13,8 @@ import 'package:city_break/models/sight_model.dart';
 import 'package:city_break/models/tour_model.dart';
 import 'package:city_break/utils/navigation_util.dart';
 
-const String uriPrefix = "https://visitbraila.page.link";
-const String customDomain = "https://visitbraila.ro";
+const String uriPrefix = "https://citybreak.page.link";
+const String customDomain = "https://citybreak.ro";
 final FirebaseDynamicLinks _firebaseDynamicLinks = FirebaseDynamicLinks.instance;
 
 class DynamicLinksService {
