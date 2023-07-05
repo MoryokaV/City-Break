@@ -11,6 +11,8 @@ This is a fork of the [Visit Brăila](https://github.com/MoryokaV/Visit-Braila) 
 
 ### Screenshots
 ![app](https://github.com/MoryokaV/City-Break/assets/55505135/779801a2-328f-4899-bc07-9cae7f8ab06a)
+![app 2](https://github.com/MoryokaV/City-Break/assets/55505135/a8462a09-ef18-429f-becd-c11f96712973)
+
 
 ### [Demo video](https://www.youtube.com/watch?v=Uy1fnQCWw5E)
 
