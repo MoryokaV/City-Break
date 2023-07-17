@@ -1,3 +1,4 @@
+import 'package:city_break/services/localstorage_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:city_break/controllers/event_controller.dart';
@@ -34,7 +35,7 @@ class MessagingService {
     }
 
     await _firebaseMessaging
-        .subscribeToTopic("events")
+        .subscribeToTopic(LocalStorage.getCityId()!)
         .timeout(const Duration(seconds: 3))
         .onError((error, stackTrace) => null);
 
@@ -91,5 +92,14 @@ class MessagingService {
     } else {
       return false;
     }
+  }
+
+  static Future<void> updateCityTopic(String newCityId) async {
+    await _firebaseMessaging.unsubscribeFromTopic(LocalStorage.getCityId()!);
+
+    await _firebaseMessaging
+        .subscribeToTopic(newCityId)
+        .timeout(const Duration(seconds: 3))
+        .onError((error, stackTrace) => null);
   }
 }

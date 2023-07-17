@@ -65,7 +65,7 @@ def sendDailyNotification():
 
     messaging.send(message)
 
-def sendNewEventNotification(name, _id):
+def sendNewEventNotification(name, _id, city_id):
     message = messaging.Message(
         notification = messaging.Notification(
             title="Un nou eveniment in Brăila!",
@@ -75,7 +75,7 @@ def sendNewEventNotification(name, _id):
             'type': 'event',
             'id': str(_id),
         },
-        topic = "events",
+        topic = city_id,
     )
 
     messaging.send(message)

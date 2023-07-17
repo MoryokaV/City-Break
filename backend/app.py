@@ -539,7 +539,7 @@ def insertEvent():
     cleanUpEventsImages()
     
     if data['notify'] == True:
-        sendNewEventNotification(event['name'], record.inserted_id)
+        sendNewEventNotification(event['name'], record.inserted_id, session['city_id'])
 
     return make_response("New entry has been inserted", 200) 
 

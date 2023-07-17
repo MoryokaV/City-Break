@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:city_break/controllers/city_controller.dart';
 import 'package:city_break/models/city_model.dart';
 import 'package:city_break/services/localstorage_service.dart';
+import 'package:city_break/services/messaging_service.dart';
 import 'package:city_break/utils/search_all.dart';
 import 'package:city_break/utils/style.dart';
 import 'package:city_break/widgets/error_dialog.dart';
@@ -152,9 +153,11 @@ class _CitiesViewState extends State<CitiesView> {
                             minLeadingWidth: 0,
                             enabled: city.id != selectedCityId,
                             trailing: const Icon(Icons.chevron_right),
-                            onTap: () {
+                            onTap: () async {
+                              await MessagingService.updateCityTopic(city.id);
                               LocalStorage.saveCityId(city.id);
-                              Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+
+                              if (context.mounted) Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
                             },
                           ),
                         );
