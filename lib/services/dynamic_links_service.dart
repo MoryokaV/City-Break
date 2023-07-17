@@ -13,7 +13,7 @@ import 'package:city_break/models/sight_model.dart';
 import 'package:city_break/models/tour_model.dart';
 import 'package:city_break/utils/navigation_util.dart';
 
-const String uriPrefix = "https://citybreak.page.link";
+const String uriPrefix = "https://citybr.page.link";
 const String customDomain = "https://citybreak.ro";
 final FirebaseDynamicLinks _firebaseDynamicLinks = FirebaseDynamicLinks.instance;
 
@@ -35,7 +35,7 @@ class DynamicLinksService {
         packageName: "com.vmasoftware.city_break",
       ),
       iosParameters: IOSParameters(
-        bundleId: "com.vmasoftware.visitBraila",
+        bundleId: "com.vmasoftware.cityBreak",
         fallbackUrl: Uri.parse(alternativeUrl),
       ),
       navigationInfoParameters: const NavigationInfoParameters(
