@@ -154,10 +154,13 @@ class _CitiesViewState extends State<CitiesView> {
                             enabled: city.id != selectedCityId,
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () async {
-                              await MessagingService.updateCityTopic(city.id);
+                              await MessagingService.unsubscribeFromCurrentCityTopic();
+
                               LocalStorage.saveCityId(city.id);
 
                               if (context.mounted) Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+
+                              await MessagingService.subscribeToCurrentCityTopic();
                             },
                           ),
                         );

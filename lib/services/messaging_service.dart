@@ -94,11 +94,13 @@ class MessagingService {
     }
   }
 
-  static Future<void> updateCityTopic(String newCityId) async {
+  static Future<void> unsubscribeFromCurrentCityTopic() async {
     await _firebaseMessaging.unsubscribeFromTopic(LocalStorage.getCityId()!);
+  }
 
+  static Future<void> subscribeToCurrentCityTopic() async {
     await _firebaseMessaging
-        .subscribeToTopic(newCityId)
+        .subscribeToTopic(LocalStorage.getCityId()!)
         .timeout(const Duration(seconds: 3))
         .onError((error, stackTrace) => null);
   }
