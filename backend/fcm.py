@@ -9,7 +9,7 @@ import os
 
 # connect to mongodb 
 client = MongoClient(os.getenv("MONGO_URL"))
-db = client.visitbraila
+db = client.citybreak
 
 # authorize firebase project use
 cred = credentials.Certificate(os.getenv("CB_FIREBASE_CREDENTIALS")) 
@@ -32,7 +32,7 @@ def sendDailyNotification():
                 break
 
         if tomorrow_events == 0:
-            return
+            continue
 
         title = "Mâine în orașul tău"
         body = ""
