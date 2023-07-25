@@ -61,6 +61,8 @@ Admin panel used by app owners to manage database entries. This custom tool is a
 ### Screenshots
 ![cms](https://github.com/MoryokaV/City-Break/assets/55505135/96b10b3b-e07a-411d-b6b6-91040f23fd43)
 
+### [Demo video CMS](https://www.youtube.com/watch?v=Y9J9oqT3ep4)
+
 ### Features
 📝 Form validation using regexp  
 💾 Real-time optimized server storage information  
