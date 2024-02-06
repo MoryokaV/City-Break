@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:city_break/controllers/sight_controller.dart';
@@ -53,7 +53,9 @@ class _AllSightsViewState extends State<AllSightsView> {
       sights = await sightController.fetchSights();
       filteredData = sights;
     } on HttpException {
-      showErrorDialog(context);
+      if (mounted) {
+        showErrorDialog(context);
+      }
     }
 
     if (mounted) {

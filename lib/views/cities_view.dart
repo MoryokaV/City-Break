@@ -37,7 +37,9 @@ class _CitiesViewState extends State<CitiesView> {
       cities = await cityController.fetchCities();
       filteredData = cities;
     } on HttpException {
-      showErrorDialog(context);
+      if (mounted) {
+        showErrorDialog(context);
+      }
     }
 
     if (mounted) {

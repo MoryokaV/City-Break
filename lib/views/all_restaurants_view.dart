@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:city_break/controllers/restaurant_controller.dart';
@@ -54,7 +54,9 @@ class _AllRestaurantsViewState extends State<AllRestaurantsView> {
       restaurants = await restaurantController.fetchRestaurants();
       filteredData = restaurants;
     } on HttpException {
-      showErrorDialog(context);
+      if(mounted){
+        showErrorDialog(context);
+      }
     }
 
     if (mounted) {

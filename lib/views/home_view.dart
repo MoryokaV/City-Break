@@ -52,7 +52,7 @@ class HomeView extends StatelessWidget {
                     controller: _scrollController,
                     physics: const ClampingScrollPhysics(),
                     children: [
-                      Masthead(),
+                      const Masthead(),
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 22,
@@ -397,9 +397,9 @@ class HomeView extends StatelessWidget {
                       color: Colors.black,
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       width: double.infinity,
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           SearchBar(),
                         ],
                       ),
@@ -454,7 +454,9 @@ class _MastheadState extends State<Masthead> {
         setState(() => isLoading = false);
       }
     } on HttpException {
-      showErrorDialog(context);
+      if (mounted) {
+        showErrorDialog(context);
+      }
     }
   }
 

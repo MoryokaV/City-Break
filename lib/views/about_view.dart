@@ -64,7 +64,9 @@ class _AboutViewState extends State<AboutView> with TickerProviderStateMixin {
         fadeAnimationController.forward();
       }
     } on HttpException {
-      showErrorDialog(context);
+      if (mounted) {
+        showErrorDialog(context);
+      }
     }
   }
 
@@ -318,9 +320,9 @@ class _AboutViewState extends State<AboutView> with TickerProviderStateMixin {
                                   color: kBackgroundColor,
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: const [
+                                  children: [
                                     Text(
                                       "Alege orașul",
                                       style: TextStyle(
