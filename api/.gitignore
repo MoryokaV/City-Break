@@ -5,7 +5,6 @@ dist/
 
 .env
 
-
 public/static/media/sights/
 public/static/media/tours/
 public/static/media/restaurants/

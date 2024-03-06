@@ -1,9 +1,11 @@
 import { Request, Response, Router } from "express";
+import { Sight } from "../models/sightModel";
 
 const router = Router();
 
-router.get("/fetchSights", (req: Request, res: Response) => {
-  res.send("Fetch sights");
+router.get("/fetchSights", async (req: Request, res: Response) => {
+  const sights = await Sight.find({});
+  res.send(sights);
 });
 
 export default router;
