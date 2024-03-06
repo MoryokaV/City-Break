@@ -1,0 +1,15 @@
+node_modules/
+dist/
+
+.DS_Store
+
+.env
+
+
+public/static/media/sights/
+public/static/media/tours/
+public/static/media/restaurants/
+public/static/media/hotels/
+public/static/media/events/
+public/static/media/about/
+public/serviceAccountKey.json
