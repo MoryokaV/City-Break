@@ -1,8 +1,9 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import apiRouter from "./routes/apiRoutes";
 import connectToDatabse from "./dbconnect";
+import adminRouter from "./routes/adminRoutes";
 
 dotenv.config();
 connectToDatabse();
@@ -10,12 +11,15 @@ connectToDatabse();
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
-app.use("/api", apiRouter);
-
-app.use(express.static("public"));
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
+app.use(express.static("public"));
+
+app.use("/api", apiRouter);
+app.use("/admin", adminRouter);
+
+//TO REMOVE
+app.get("/", (_, res: Response) => {
   res.sendFile(path.join(__dirname, "..", "public/templates", "index.html"));
 });
 
