@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-interface ISight {
+export interface ISight {
   name: string;
   tags: Array<string>;
   description: string;
