@@ -26,4 +26,4 @@ const SightSchema = new Schema<ISight>({
   city_id: String,
 });
 
-export const Sight = model("Sight", SightSchema);
+export const Sight = model<ISight>("Sight", SightSchema);
