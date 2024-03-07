@@ -1,43 +1,44 @@
 import { Router, Response } from "express";
 import path from "path";
+import { requiresAuth } from "../middleware/auth";
 
 const adminRouter = Router();
 
 const templatesDir = path.join(__dirname, "..", "..", "public", "templates");
 
-adminRouter.get("/", (_, res: Response) => {
+adminRouter.get("/", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "index.html"));
 });
 
-adminRouter.get("/tags", (_, res: Response) => {
+adminRouter.get("/tags", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "tags.html"));
 });
 
-adminRouter.get("/sights", (_, res: Response) => {
+adminRouter.get("/sights", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "sights.html"));
 });
 
-adminRouter.get("/tours", (_, res: Response) => {
+adminRouter.get("/tours", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "tours.html"));
 });
 
-adminRouter.get("/restaurants", (_, res: Response) => {
+adminRouter.get("/restaurants", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "restaurants.html"));
 });
 
-adminRouter.get("/hotels", (_, res: Response) => {
+adminRouter.get("/hotels", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "hotels.html"));
 });
 
-adminRouter.get("/events", (_, res: Response) => {
+adminRouter.get("/events", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "events.html"));
 });
 
-adminRouter.get("/trending", (_, res: Response) => {
+adminRouter.get("/trending", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "trending.html"));
 });
 
-adminRouter.get("/about", (_, res: Response) => {
+adminRouter.get("/about", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "about.html"));
 });
 
