@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import apiRouter from "./routes/apiRoutes";
 import adminRouter from "./routes/adminRoutes";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const app: Express = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.CB_MONGODB_URL || "";
 
+app.use(morgan("dev"));
 app.use(express.json());
 
 app.use(express.static("public"));
