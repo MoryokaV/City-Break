@@ -6,7 +6,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import apiRouter from "./routes/apiRoutes";
 import adminRouter from "./routes/adminRoutes";
-import loginController from "./controllers/loginController";
+import loginRouter from "./routes/loginRoutes";
 
 dotenv.config();
 
@@ -41,7 +41,7 @@ app.use(express.static("public"));
 
 app.use("/api", apiRouter);
 app.use("/admin", adminRouter);
-app.use(loginController);
+app.use(loginRouter);
 
 app.get("/", (_, res: Response) => {
   res.redirect("/admin");
