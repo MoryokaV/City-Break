@@ -1,9 +1,23 @@
-import mongoose, { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
-const SightSchema = new Schema({
+interface ISight {
+  name: string;
+  tags: Array<string>;
+  description: string;
+  images: Array<string>;
+  primary_image: Number;
+  latitude: number;
+  longitude: number;
+  external_link: string;
+  primary_image_blurhash: string;
+  city_id: string;
+}
+
+const SightSchema = new Schema<ISight>({
   name: String,
-  description: Array,
-  images: Array,
+  tags: Array<string>,
+  description: String,
+  images: Array<string>,
   primary_image: Number,
   latitude: Number,
   longitude: Number,
@@ -12,4 +26,4 @@ const SightSchema = new Schema({
   city_id: String,
 });
 
-export const Sight = mongoose.model("Sight", SightSchema);
+export const Sight = model("Sight", SightSchema);
