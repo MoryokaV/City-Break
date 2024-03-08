@@ -3,7 +3,7 @@ import path from "path";
 import { requiresMasterAuth } from "../middleware/auth";
 import * as UserController from "../controllers/userController";
 
-const router = Router();
+const router: Router = Router();
 
 const templatesDir = path.join(__dirname, "..", "..", "public", "templates");
 

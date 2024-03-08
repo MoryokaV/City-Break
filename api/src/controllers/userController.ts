@@ -1,6 +1,6 @@
-import { User } from "../models/userModel";
 import { Response, Request, RequestHandler, NextFunction } from "express";
 import { createHash } from "crypto";
+import { usersCollection } from "../db";
 
 interface LoginRequestBody {
   username: string;
@@ -12,7 +12,7 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
 
   password = createHash("sha256").update(password).digest("hex");
 
-  const user = await User.findOne({
+  const user = await usersCollection.findOne({
     username: username,
     password: password,
   });
@@ -24,8 +24,7 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     req.session.admin = user.admin;
 
     if (username === "master") {
-      res.status(200).send({ url: "/master" });
-      return;
+      return res.status(200).send({ url: "/master" });
     }
 
     req.session.city_id = user.city_id;
@@ -33,9 +32,9 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     req.session.city_name = "Braila";
 
     res.cookie("cityId", user.city_id);
-    res.status(200).send({ url: "/admin" });
+    return res.status(200).send({ url: "/admin" });
   } else {
-    res.status(401).send("Wrong user or password!");
+    return res.status(401).send("Wrong user or password!");
   }
 };
 
@@ -48,7 +47,7 @@ export const logout: RequestHandler = (
     if (error) {
       next(error);
     } else {
-      res.status(200).redirect("/login");
+      return res.status(200).redirect("/login");
     }
   });
 };

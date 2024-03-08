@@ -1,5 +1,5 @@
-import express, { Express, Request, Response } from "express";
-import mongoose from "mongoose";
+import express, { Express, Response } from "express";
+// import mongoose from "mongoose";
 import session from "express-session";
 import dotenv from "dotenv";
 import morgan from "morgan";
@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import apiRouter from "./routes/apiRoutes";
 import adminRouter from "./routes/adminRoutes";
 import loginRouter from "./routes/loginRoutes";
+import { connectToDatabase } from "./db";
 
 dotenv.config();
 
@@ -47,9 +48,7 @@ app.get("/", (_, res: Response) => {
   res.redirect("/admin");
 });
 
-mongoose.connect(MONGO_URL).then((conn) => {
-  console.log(`Connected to database. Host ${conn.connection.host}`);
-
+connectToDatabase(MONGO_URL).then(() => {
   app.listen(PORT, () => {
     console.log(`[server]: Server is running at http://localhost:${PORT}`);
   });

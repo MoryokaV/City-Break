@@ -1,20 +1,31 @@
-import { Response, Router, Request, RequestHandler } from "express";
-import { ISight, Sight } from "../models/sightModel";
+import { Response, Router, Request } from "express";
+import { ISight } from "../models/sightModel";
+import { sightsCollection } from "../db";
+import { ObjectId } from "mongodb";
 
-const router = Router();
+const router: Router = Router();
 
 router.get("/fetchSights", async (req: Request, res: Response) => {
   const { city_id } = req.query;
-  const sights = await Sight.find({ city_id: city_id });
+  const sights = await sightsCollection.find({ city_id: city_id }).toArray();
 
-  res.status(200).send(sights);
+  return res.status(200).send(sights);
 });
 
 router.get("/findSight/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const sight = await Sight.findById(id);
 
-  res.status(200).send(sight);
+  if (!ObjectId.isValid(id)) {
+    return res.status(404).end();
+  }
+
+  const sight = await sightsCollection.findOne({ _id: new ObjectId(id) });
+
+  if (sight == null) {
+    return res.status(404).end();
+  }
+
+  return res.status(200).send(sight);
 });
 
 interface UpdateSightRequestBody {
@@ -24,16 +35,14 @@ interface UpdateSightRequestBody {
 }
 
 router.put("/editSight", async (req: Request, res: Response) => {
-  const { images_to_delete, _id, sight } = <UpdateSightRequestBody>req.body;
-
-  console.log(_id);
-  console.log(sight);
+  const { images_to_delete, _id, sight } = req.body as UpdateSightRequestBody;
 
   //delete images
 
-  await Sight.findByIdAndUpdate(_id, sight);
+  // await Sight.findByIdAndUpdate(_id, sight);
+  await sightsCollection.updateOne({ _id: new ObjectId(_id) }, { $set: sight });
 
-  res.status(200).send("Entry has been updated");
+  return res.status(200).send("Entry has been updated");
 });
 
 /*
