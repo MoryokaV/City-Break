@@ -1,7 +1,7 @@
 import { Response, Router, Request } from "express";
-import { ISight } from "../models/sightModel";
-import { sightsCollection } from "../db";
 import { ObjectId } from "mongodb";
+import { sightsCollection } from "../db";
+import { Sight } from "../models/sightModel";
 
 const router: Router = Router();
 
@@ -31,7 +31,7 @@ router.get("/findSight/:id", async (req: Request, res: Response) => {
 interface UpdateSightRequestBody {
   images_to_delete: [string];
   _id: string;
-  sight: ISight;
+  sight: Sight;
 }
 
 router.put("/editSight", async (req: Request, res: Response) => {
@@ -39,28 +39,19 @@ router.put("/editSight", async (req: Request, res: Response) => {
 
   //delete images
 
-  // await Sight.findByIdAndUpdate(_id, sight);
   await sightsCollection.updateOne({ _id: new ObjectId(_id) }, { $set: sight });
 
   return res.status(200).send("Entry has been updated");
 });
 
-/*
-@app.route("/api/editSight", methods=["PUT"])
-@login_required
-def editSight():
-    data = request.get_json()
+router.post("/insertSight", async (req: Request, res: Response) => {
+  const sight = req.body as Sight;
 
-    deleteImages(data['images_to_delete'], 'sights')
+  //save images
 
-    sight = data['sight']
-    sight['latitude'] = float(sight['latitude'])
-    sight['longitude'] = float(sight['longitude'])
-    sight['primary_image_blurhash'] = getBlurhash(sight['images'][sight['primary_image'] - 1])
+  await sightsCollection.insertOne(sight);
 
-    db.sights.update_one({"_id": ObjectId(data['_id'])}, {"$set": sight})
-
-    return make_response("Entry has been updated", 200)
-*/
+  return res.status(200).send("New entry has been inserted");
+});
 
 export default router;

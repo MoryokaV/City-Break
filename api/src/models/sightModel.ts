@@ -1,14 +1,12 @@
-import { Double } from "mongodb";
-
-export interface ISight {
+export type Sight = {
   name: string;
   tags: Array<string>;
   description: string;
   images: Array<string>;
-  primary_image: Number;
-  latitude: Double;
-  longitude: Double;
+  primary_image: number;
+  latitude: number;
+  longitude: number;
   external_link: string;
   primary_image_blurhash: string;
   city_id: string;
-}
+};

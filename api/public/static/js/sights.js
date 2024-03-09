@@ -49,13 +49,27 @@ $(document).ready(async function () {
   $("#sight-images").change(function () {
     $(this).prop("required", false);
 
-    addImages($(this).prop("files"), "/static/media/sights/", true, sight.images, formData, $("#sight-primary-image"));
+    addImages(
+      $(this).prop("files"),
+      "/static/media/sights/",
+      true,
+      sight.images,
+      formData,
+      $("#sight-primary-image"),
+    );
 
     $(this).val(null);
   });
 
   $(".img-container").on("click", ".remove-img-btn", function () {
-    removeImage($(this), true, sight.images, formData, $("#sight-primary-image"), $("#sight-images"));
+    removeImage(
+      $(this),
+      true,
+      sight.images,
+      formData,
+      $("#sight-primary-image"),
+      $("#sight-images"),
+    );
   });
 
   $("#sight-primary-image").on("change", function () {
@@ -63,13 +77,17 @@ $(document).ready(async function () {
       "src",
       $("#preview-images img")
         .eq($(this).val() - 1)
-        .prop("src")
+        .prop("src"),
     );
   });
 
   // COORDINATES
-  $("#sight-latitude").attr("pattern", latitudeRegExp).attr("title", latitudeRegExpTitle);
-  $("#sight-longitude").attr("pattern", longitudeRegExp).attr("title", longitudeRegExpTitle);
+  $("#sight-latitude")
+    .attr("pattern", latitudeRegExp)
+    .attr("title", latitudeRegExpTitle);
+  $("#sight-longitude")
+    .attr("pattern", longitudeRegExp)
+    .attr("title", longitudeRegExpTitle);
 
   // SUBMIT
   $("#insert-sight-form").submit(async function (e) {

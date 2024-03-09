@@ -1,5 +1,4 @@
 import express, { Express, Response } from "express";
-// import mongoose from "mongoose";
 import session from "express-session";
 import dotenv from "dotenv";
 import morgan from "morgan";

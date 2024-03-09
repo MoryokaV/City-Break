@@ -1,10 +1,12 @@
 import { Collection, Db, MongoClient } from "mongodb";
-import { IUser } from "./models/userModel";
-import { ISight } from "./models/sightModel";
+import { User } from "./models/userModel";
+import { Sight } from "./models/sightModel";
+import { Tag } from "./models/tagModel";
 
 export let db: Db;
-export let usersCollection: Collection<IUser>;
-export let sightsCollection: Collection<ISight>;
+export let usersCollection: Collection<User>;
+export let sightsCollection: Collection<Sight>;
+export let tagsCollection: Collection<Tag>;
 
 export const connectToDatabase = async (url: string) => {
   await MongoClient.connect(url)
@@ -13,6 +15,7 @@ export const connectToDatabase = async (url: string) => {
 
       usersCollection = db.collection("login");
       sightsCollection = db.collection("sights");
+      tagsCollection = db.collection("tags");
     })
     .catch((e) => {
       console.log(
