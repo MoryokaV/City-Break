@@ -5,6 +5,7 @@ import { Tag } from "./models/tagModel";
 import { City } from "./models/cityModel";
 import { Tour } from "./models/tourModel";
 import { Restaurant } from "./models/restaurantModel";
+import { Hotel } from "./models/hotelModel";
 
 export let db: Db;
 export let usersCollection: Collection<User>;
@@ -13,6 +14,7 @@ export let tagsCollection: Collection<Tag>;
 export let sightsCollection: Collection<Sight>;
 export let toursCollection: Collection<Tour>;
 export let restaurantsCollection: Collection<Restaurant>;
+export let hotelsCollection: Collection<Hotel>;
 
 export const connectToDatabase = async (url: string) => {
   await MongoClient.connect(url)
@@ -25,6 +27,7 @@ export const connectToDatabase = async (url: string) => {
       sightsCollection = db.collection("sights");
       toursCollection = db.collection("tours");
       restaurantsCollection = db.collection("restaurants");
+      hotelsCollection = db.collection("hotels");
     })
     .catch((e) => {
       console.log(

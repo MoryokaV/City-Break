@@ -107,11 +107,11 @@ export const deleteImages = (
     } else if (collection === "restaurants") {
       occurrences = (await sightsCollection.find({ images: image }).toArray())
         .length;
+    } else if (collection === "hotels") {
+      occurrences = (await sightsCollection.find({ images: image }).toArray())
+        .length;
     }
-    // else if (collection === "hotels") {
-    //   occurrences = (await sightsCollection.find({ images: image }).toArray())
-    //     .length;
-    // } else if (collection === "events") {
+    // else if (collection === "events") {
     //   occurrences = (await sightsCollection.find({ images: image }).toArray())
     //     .length;
     // }

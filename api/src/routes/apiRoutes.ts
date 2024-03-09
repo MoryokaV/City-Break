@@ -8,6 +8,7 @@ import tagController from "../controllers/tagController";
 import cityController from "../controllers/cityController";
 import tourController from "../controllers/tourController";
 import restaurantController from "../controllers/restaurantController";
+import hotelController from "../controllers/hotelController";
 
 const apiRouter: Router = Router();
 
@@ -25,5 +26,6 @@ apiRouter.use(tagController);
 apiRouter.use(cityController);
 apiRouter.use(tourController);
 apiRouter.use(restaurantController);
+apiRouter.use(hotelController);
 
 export default apiRouter;
