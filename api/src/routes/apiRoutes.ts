@@ -1,16 +1,30 @@
-import { Router, Response } from "express";
+import { Router, Response, Request } from "express";
 import { getCurrentUser } from "../controllers/userController";
 import { getServerStorage } from "../utils/storage";
 import sightController from "../controllers/sightController";
 import tagController from "../controllers/tagController";
 import cityController from "../controllers/cityController";
+import { uploadImages } from "../utils/images";
+import multer from "multer";
 
 const apiRouter: Router = Router();
+
+const storage = multer.memoryStorage();
+// const storage = multer.diskStorage({
+//   destination: function (req, _, callback) {
+//     callback(null, `./public/`);
+//   },
+//   filename(_, file, callback) {
+//     callback(null, file.originalname);
+//   },
+// });
+const upload = multer({ storage: storage });
 
 apiRouter.get("/currentUser", getCurrentUser);
 apiRouter.get("/serverStorage", async (_, res: Response) => {
   return res.send(await getServerStorage());
 });
+apiRouter.post("/uploadImages/:folder", upload.array("files[]"), uploadImages);
 
 apiRouter.use(sightController);
 apiRouter.use(tagController);

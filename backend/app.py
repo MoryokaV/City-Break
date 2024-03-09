@@ -287,7 +287,7 @@ def insertSight():
     sight['city_id'] = session['city_id']
 
     db.sights.insert_one(sight)
-    
+
     return make_response("New entry has been inserted", 200)
 
 @app.route("/api/fetchSights")
