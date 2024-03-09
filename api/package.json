@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
+    "diskusage": "^1.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "express-session": "^1.18.0",
