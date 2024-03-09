@@ -12,13 +12,13 @@ router.get("/fetchTags/:used_for", async (req: Request, res: Response) => {
 
   if (used_for === "all") {
     tags = await tagsCollection.find({ city_id: city_id }).toArray();
+  } else {
+    tags = await tagsCollection
+      .find({ city_id: city_id, used_for: used_for })
+      .toArray();
   }
 
-  tags = await tagsCollection
-    .find({ city_id: city_id, used_for: used_for })
-    .toArray();
-
-  return tags;
+  return res.status(200).send(tags);
 });
 
 export default router;
