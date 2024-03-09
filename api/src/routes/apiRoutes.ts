@@ -13,9 +13,9 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 apiRouter.get("/currentUser", getCurrentUser);
-apiRouter.get("/serverStorage", async (_, res: Response) => {
-  return res.send(await getServerStorage());
-});
+apiRouter.get("/serverStorage", async (_, res: Response) =>
+  res.status(200).send(await getServerStorage()),
+);
 apiRouter.post("/uploadImages/:folder", upload.array("files[]"), uploadImages);
 
 apiRouter.use(sightController);

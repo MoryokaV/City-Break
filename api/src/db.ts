@@ -16,9 +16,9 @@ export const connectToDatabase = async (url: string) => {
       db = client.db("citybreak");
 
       usersCollection = db.collection("login");
-      sightsCollection = db.collection("sights");
-      tagsCollection = db.collection("tags");
       cityCollection = db.collection("cities");
+      tagsCollection = db.collection("tags");
+      sightsCollection = db.collection("sights");
     })
     .catch((e) => {
       console.log(

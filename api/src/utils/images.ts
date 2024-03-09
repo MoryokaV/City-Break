@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { encode } from "blurhash";
-import path from "path";
 import sharp from "sharp";
+import { encode } from "blurhash";
+import fs from "fs";
+import { sightsCollection } from "../db";
 
 export const uploadImages = async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
@@ -13,7 +14,7 @@ export const uploadImages = async (req: Request, res: Response) => {
 
   await Promise.all(
     files.map(async (file: Express.Multer.File) => {
-      const path = `./static/media/${folder}/${req.session.city_id}/${file.originalname}`;
+      const fullPath = `./static/media/${folder}/${req.session.city_id}/${file.originalname}`;
 
       const image = sharp(file.buffer);
 
@@ -26,7 +27,7 @@ export const uploadImages = async (req: Request, res: Response) => {
         mozjpeg: true,
       });
 
-      return image.toFile(path);
+      return image.toFile(fullPath);
     }),
   );
 
@@ -79,7 +80,7 @@ const calcImageSize = (metadata: sharp.Metadata) => {
 };
 
 export const getBlurhashString = async (filePath: string): Promise<string> => {
-  const fullPath = path.join(__dirname, "..", "..", filePath);
+  const fullPath = "." + filePath;
 
   const { data, info } = await sharp(fullPath)
     .ensureAlpha()
@@ -87,4 +88,40 @@ export const getBlurhashString = async (filePath: string): Promise<string> => {
     .toBuffer({ resolveWithObject: true });
 
   return encode(new Uint8ClampedArray(data), info.width, info.height, 4, 3);
+};
+
+export const deleteImages = (
+  images: Array<string>,
+  collection: string,
+): void => {
+  images.forEach(async (image) => {
+    const fullPath = "." + image;
+    let occurrences = 1;
+
+    if (collection === "sights") {
+      occurrences = (await sightsCollection.find({ images: image }).toArray())
+        .length;
+    }
+    // else if (collection === "tours") {
+    //   occurrences = (await .find({ images: image }).toArray())
+    //     .length;
+    // } else if (collection === "restaurants") {
+    //   occurrences = (await sightsCollection.find({ images: image }).toArray())
+    //     .length;
+    // } else if (collection === "hotels") {
+    //   occurrences = (await sightsCollection.find({ images: image }).toArray())
+    //     .length;
+    // } else if (collection === "events") {
+    //   occurrences = (await sightsCollection.find({ images: image }).toArray())
+    //     .length;
+    // }
+
+    if (occurrences === 1) {
+      try {
+        fs.unlinkSync(fullPath);
+      } catch (_) {
+        //pass
+      }
+    }
+  });
 };

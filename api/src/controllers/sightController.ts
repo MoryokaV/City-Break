@@ -2,7 +2,7 @@ import { Response, Router, Request } from "express";
 import { ObjectId } from "mongodb";
 import { sightsCollection } from "../db";
 import { Sight } from "../models/sightModel";
-import { getBlurhashString } from "../utils/images";
+import { deleteImages, getBlurhashString } from "../utils/images";
 
 const router: Router = Router();
 
@@ -29,6 +29,18 @@ router.get("/findSight/:id", async (req: Request, res: Response) => {
   return res.status(200).send(sight);
 });
 
+router.post("/insertSight", async (req: Request, res: Response) => {
+  const sight = req.body as Sight;
+  sight.primary_image_blurhash = await getBlurhashString(
+    sight.images[sight.primary_image - 1],
+  );
+  sight.city_id = req.session.city_id;
+
+  await sightsCollection.insertOne(sight);
+
+  return res.status(200).send("New entry has been inserted");
+});
+
 interface UpdateSightRequestBody {
   images_to_delete: [string];
   _id: string;
@@ -38,25 +50,33 @@ interface UpdateSightRequestBody {
 router.put("/editSight", async (req: Request, res: Response) => {
   const { images_to_delete, _id, sight } = req.body as UpdateSightRequestBody;
 
-  //delete images
+  sight.primary_image_blurhash = await getBlurhashString(
+    sight.images[sight.primary_image - 1],
+  );
+
+  deleteImages(images_to_delete, "sights");
 
   await sightsCollection.updateOne({ _id: new ObjectId(_id) }, { $set: sight });
 
   return res.status(200).send("Entry has been updated");
 });
 
-router.post("/insertSight", async (req: Request, res: Response) => {
-  const sight = req.body as Sight;
-  sight.primary_image_blurhash = await getBlurhashString(
-    sight.images[sight.primary_image - 1],
-  );
-  sight.city_id = req.session.city_id;
+router.delete("/deleteSight/:_id", async (req: Request, res: Response) => {
+  const { _id } = req.params;
 
-  //save images
+  const images: Array<string> | undefined = (
+    await sightsCollection.findOne({ _id: new ObjectId(_id) })
+  )?.images;
 
-  await sightsCollection.insertOne(sight);
+  if (images) {
+    deleteImages(images, "sights");
+  }
 
-  return res.status(200).send("New entry has been inserted");
+  //remove from trending
+
+  sightsCollection.deleteOne({ _id: new ObjectId(_id) });
+
+  return res.status(200).send("Successfully deleted document");
 });
 
 export default router;
