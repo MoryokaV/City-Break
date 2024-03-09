@@ -1,0 +1,90 @@
+import { Response, Router, Request } from "express";
+import { ObjectId } from "mongodb";
+import { restaurantsCollection } from "../db";
+import { Restaurant } from "../models/restaurantModel";
+import { deleteImages, getBlurhashString } from "../utils/images";
+
+const router: Router = Router();
+
+router.get("/fetchRestaurants", async (req: Request, res: Response) => {
+  const { city_id } = req.query;
+  const restaurants = await restaurantsCollection
+    .find({ city_id: city_id })
+    .toArray();
+
+  return res.status(200).send(restaurants);
+});
+
+router.get("/findRestaurant/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(404).end();
+  }
+
+  const restaurant = await restaurantsCollection.findOne({
+    _id: new ObjectId(id),
+  });
+
+  if (restaurant == null) {
+    return res.status(404).end();
+  }
+
+  return res.status(200).send(restaurant);
+});
+
+router.post("/insertRestaurant", async (req: Request, res: Response) => {
+  const restaurant = req.body as Restaurant;
+  restaurant.primary_image_blurhash = await getBlurhashString(
+    restaurant.images[restaurant.primary_image - 1],
+  );
+  restaurant.city_id = req.session.city_id;
+
+  await restaurantsCollection.insertOne(restaurant);
+
+  return res.status(200).send("New entry has been inserted");
+});
+
+interface UpdateRestaurantRequestBody {
+  images_to_delete: [string];
+  _id: string;
+  restaurant: Restaurant;
+}
+
+router.put("/editRestaurant", async (req: Request, res: Response) => {
+  const { images_to_delete, _id, restaurant } =
+    req.body as UpdateRestaurantRequestBody;
+
+  restaurant.primary_image_blurhash = await getBlurhashString(
+    restaurant.images[restaurant.primary_image - 1],
+  );
+
+  deleteImages(images_to_delete, "restaurants");
+
+  await restaurantsCollection.updateOne(
+    { _id: new ObjectId(_id) },
+    { $set: restaurant },
+  );
+
+  return res.status(200).send("Entry has been updated");
+});
+
+router.delete("/deleteRestaurant/:_id", async (req: Request, res: Response) => {
+  const { _id } = req.params;
+
+  const images: Array<string> | undefined = (
+    await restaurantsCollection.findOne({ _id: new ObjectId(_id) })
+  )?.images;
+
+  if (images) {
+    deleteImages(images, "restaurants");
+  }
+
+  //remove from trending
+
+  restaurantsCollection.deleteOne({ _id: new ObjectId(_id) });
+
+  return res.status(200).send("Successfully deleted document");
+});
+
+export default router;

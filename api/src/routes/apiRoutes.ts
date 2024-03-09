@@ -7,6 +7,7 @@ import sightController from "../controllers/sightController";
 import tagController from "../controllers/tagController";
 import cityController from "../controllers/cityController";
 import tourController from "../controllers/tourController";
+import restaurantController from "../controllers/restaurantController";
 
 const apiRouter: Router = Router();
 
@@ -23,5 +24,6 @@ apiRouter.use(sightController);
 apiRouter.use(tagController);
 apiRouter.use(cityController);
 apiRouter.use(tourController);
+apiRouter.use(restaurantController);
 
 export default apiRouter;
