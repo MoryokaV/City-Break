@@ -3,12 +3,14 @@ import { User } from "./models/userModel";
 import { Sight } from "./models/sightModel";
 import { Tag } from "./models/tagModel";
 import { City } from "./models/cityModel";
+import { Tour } from "./models/tourModel";
 
 export let db: Db;
 export let usersCollection: Collection<User>;
-export let sightsCollection: Collection<Sight>;
-export let tagsCollection: Collection<Tag>;
 export let cityCollection: Collection<City>;
+export let tagsCollection: Collection<Tag>;
+export let sightsCollection: Collection<Sight>;
+export let toursCollection: Collection<Tour>;
 
 export const connectToDatabase = async (url: string) => {
   await MongoClient.connect(url)
@@ -19,6 +21,7 @@ export const connectToDatabase = async (url: string) => {
       cityCollection = db.collection("cities");
       tagsCollection = db.collection("tags");
       sightsCollection = db.collection("sights");
+      toursCollection = db.collection("tours");
     })
     .catch((e) => {
       console.log(
