@@ -2,6 +2,7 @@ import { Response, Router, Request } from "express";
 import { ObjectId } from "mongodb";
 import { sightsCollection } from "../db";
 import { Sight } from "../models/sightModel";
+import { getBlurhashString } from "../utils/images";
 
 const router: Router = Router();
 
@@ -46,6 +47,10 @@ router.put("/editSight", async (req: Request, res: Response) => {
 
 router.post("/insertSight", async (req: Request, res: Response) => {
   const sight = req.body as Sight;
+  sight.primary_image_blurhash = await getBlurhashString(
+    sight.images[sight.primary_image - 1],
+  );
+  sight.city_id = req.session.city_id;
 
   //save images
 

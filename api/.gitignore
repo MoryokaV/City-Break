@@ -5,10 +5,10 @@ dist/
 
 .env
 
-public/static/media/sights/
-public/static/media/tours/
-public/static/media/restaurants/
-public/static/media/hotels/
-public/static/media/events/
-public/static/media/about/
-public/serviceAccountKey.json
+static/media/sights/
+static/media/tours/
+static/media/restaurants/
+static/media/hotels/
+static/media/events/
+static/media/about/
+static/serviceAccountKey.json

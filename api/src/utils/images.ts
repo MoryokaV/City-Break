@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import { encode } from "blurhash";
+import path from "path";
 import sharp from "sharp";
 
 export const uploadImages = async (req: Request, res: Response) => {
@@ -11,7 +13,7 @@ export const uploadImages = async (req: Request, res: Response) => {
 
   await Promise.all(
     files.map(async (file: Express.Multer.File) => {
-      const path = `./public/static/media/${folder}/${req.session.city_id}/${file.originalname}`;
+      const path = `./static/media/${folder}/${req.session.city_id}/${file.originalname}`;
 
       const image = sharp(file.buffer);
 
@@ -74,4 +76,15 @@ const calcImageSize = (metadata: sharp.Metadata) => {
   }
 
   return { outWidth: w, outHeight: h };
+};
+
+export const getBlurhashString = async (filePath: string): Promise<string> => {
+  const fullPath = path.join(__dirname, "..", "..", filePath);
+
+  const { data, info } = await sharp(fullPath)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  return encode(new Uint8ClampedArray(data), info.width, info.height, 4, 3);
 };

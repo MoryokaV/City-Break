@@ -37,7 +37,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(express.static("public"));
+app.use("/static", express.static("static"));
+app.use(express.static("templates"));
 
 app.use("/api", apiRouter);
 app.use("/admin", adminRouter);

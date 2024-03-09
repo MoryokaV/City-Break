@@ -4,7 +4,7 @@ import { requiresAuth } from "../middleware/auth";
 
 const adminRouter = Router();
 
-const templatesDir = path.join(__dirname, "..", "..", "public", "templates");
+const templatesDir = path.join(__dirname, "..", "..", "templates");
 
 adminRouter.get("/", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "index.html"));

@@ -10,14 +10,6 @@ import multer from "multer";
 const apiRouter: Router = Router();
 
 const storage = multer.memoryStorage();
-// const storage = multer.diskStorage({
-//   destination: function (req, _, callback) {
-//     callback(null, `./public/`);
-//   },
-//   filename(_, file, callback) {
-//     callback(null, file.originalname);
-//   },
-// });
 const upload = multer({ storage: storage });
 
 apiRouter.get("/currentUser", getCurrentUser);

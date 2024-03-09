@@ -24,6 +24,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "blurhash": "^2.0.5",
     "cookie-parser": "^1.4.6",
     "diskusage": "^1.2.0",
     "dotenv": "^16.4.5",

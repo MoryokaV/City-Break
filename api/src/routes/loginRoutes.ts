@@ -5,7 +5,7 @@ import * as UserController from "../controllers/userController";
 
 const router: Router = Router();
 
-const templatesDir = path.join(__dirname, "..", "..", "public", "templates");
+const templatesDir = path.join(__dirname, "..", "..", "templates");
 
 router.get("/master", requiresMasterAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "master.html"));

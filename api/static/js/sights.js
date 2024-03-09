@@ -117,16 +117,15 @@ $(document).ready(async function () {
         },
       });
 
-      // await $.ajax({
-      //   url: "/api/insertSight",
-      //   type: "POST",
-      //   data: JSON.stringify(sight),
-      //   processData: false,
-      //   contentType: "application/json; charset=UTF-8",
-      // });
-      //
-      // location.reload();
-      endLoadingAnimation($(this));
+      await $.ajax({
+        url: "/api/insertSight",
+        type: "POST",
+        data: JSON.stringify(sight),
+        processData: false,
+        contentType: "application/json; charset=UTF-8",
+      });
+
+      location.reload();
     } catch {
       endLoadingAnimation($(this));
     }
