@@ -1,6 +1,6 @@
 import { Response, Request, RequestHandler, NextFunction } from "express";
 import { createHash } from "crypto";
-import { usersCollection } from "../db";
+import { cityCollection, usersCollection } from "../db";
 
 interface LoginRequestBody {
   username: string;
@@ -29,10 +29,10 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     }
 
     req.session.city_id = user.city_id;
-    //TODO
-    req.session.city_name = "Braila";
-
     res.cookie("cityId", user.city_id);
+    req.session.city_name = (await cityCollection.findOne({
+      city_id: user.city_id,
+    }))!.name;
 
     req.session.save();
     return res.status(200).send({ url: "/admin" });

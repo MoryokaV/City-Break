@@ -122,7 +122,7 @@ $(document).ready(async function () {
         type: "POST",
         data: JSON.stringify(sight),
         processData: false,
-        contentType: "application/json; charse=UTF-8",
+        contentType: "application/json; charset=UTF-8",
       });
 
       location.reload();
