@@ -9,6 +9,7 @@ import cityController from "../controllers/cityController";
 import tourController from "../controllers/tourController";
 import restaurantController from "../controllers/restaurantController";
 import hotelController from "../controllers/hotelController";
+import trendingController from "../controllers/trendingController";
 
 const apiRouter: Router = Router();
 
@@ -27,5 +28,6 @@ apiRouter.use(cityController);
 apiRouter.use(tourController);
 apiRouter.use(restaurantController);
 apiRouter.use(hotelController);
+apiRouter.use(trendingController);
 
 export default apiRouter;

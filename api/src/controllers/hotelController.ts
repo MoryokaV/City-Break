@@ -4,6 +4,7 @@ import { deleteImages, getBlurhashString } from "../utils/images";
 import { hotelsCollection } from "../db";
 import { Hotel } from "../models/hotelModel";
 import { requiresAuth } from "../middleware/auth";
+import { filterTrendingByItemId } from "../utils/trending";
 
 const router: Router = Router();
 
@@ -74,6 +75,7 @@ router.delete("/deleteHotel/:_id", requiresAuth, async (req: Request, res: Respo
   }
 
   //remove from trending
+  filterTrendingByItemId(_id, req.session.city_id);
 
   hotelsCollection.deleteOne({ _id: new ObjectId(_id) });
 

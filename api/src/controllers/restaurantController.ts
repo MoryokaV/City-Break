@@ -4,6 +4,7 @@ import { restaurantsCollection } from "../db";
 import { Restaurant } from "../models/restaurantModel";
 import { deleteImages, getBlurhashString } from "../utils/images";
 import { requiresAuth } from "../middleware/auth";
+import { filterTrendingByItemId } from "../utils/trending";
 
 const router: Router = Router();
 
@@ -79,6 +80,7 @@ router.delete(
     }
 
     //remove from trending
+    filterTrendingByItemId(_id, req.session.city_id);
 
     restaurantsCollection.deleteOne({ _id: new ObjectId(_id) });
 

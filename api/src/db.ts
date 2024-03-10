@@ -6,6 +6,7 @@ import { City } from "./models/cityModel";
 import { Tour } from "./models/tourModel";
 import { Restaurant } from "./models/restaurantModel";
 import { Hotel } from "./models/hotelModel";
+import { TrendingItem } from "./models/trendingModel";
 
 export let db: Db;
 export let usersCollection: Collection<User>;
@@ -15,6 +16,7 @@ export let sightsCollection: Collection<Sight>;
 export let toursCollection: Collection<Tour>;
 export let restaurantsCollection: Collection<Restaurant>;
 export let hotelsCollection: Collection<Hotel>;
+export let trendingCollection: Collection<TrendingItem>;
 
 export const connectToDatabase = async (client: MongoClient) => {
   await client
@@ -29,10 +31,9 @@ export const connectToDatabase = async (client: MongoClient) => {
       toursCollection = db.collection("tours");
       restaurantsCollection = db.collection("restaurants");
       hotelsCollection = db.collection("hotels");
+      trendingCollection = db.collection("trending");
     })
-    .catch((e) => {
-      console.log(
-        `[database]: An error occurred while connecting to database: ${e}`,
-      );
+    .catch(e => {
+      console.log(`[database]: An error occurred while connecting to database: ${e}`);
     });
 };
