@@ -16,8 +16,9 @@ export let toursCollection: Collection<Tour>;
 export let restaurantsCollection: Collection<Restaurant>;
 export let hotelsCollection: Collection<Hotel>;
 
-export const connectToDatabase = async (url: string) => {
-  await MongoClient.connect(url)
+export const connectToDatabase = async (client: MongoClient) => {
+  await client
+    .connect()
     .then((client: MongoClient) => {
       db = client.db("citybreak");
 

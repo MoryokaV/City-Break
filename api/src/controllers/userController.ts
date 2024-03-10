@@ -24,7 +24,6 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     req.session.admin = user.admin;
 
     if (username === "master") {
-      req.session.save();
       return res.status(200).send({ url: "/master" });
     }
 
@@ -34,7 +33,6 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
       city_id: user.city_id,
     }))!.name;
 
-    req.session.save();
     return res.status(200).send({ url: "/admin" });
   } else {
     return res.status(401).send("Wrong user or password!");
