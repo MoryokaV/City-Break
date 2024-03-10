@@ -7,6 +7,7 @@ import { Tour } from "./models/tourModel";
 import { Restaurant } from "./models/restaurantModel";
 import { Hotel } from "./models/hotelModel";
 import { TrendingItem } from "./models/trendingModel";
+import { Event } from "./models/eventModel";
 
 export let db: Db;
 export let usersCollection: Collection<User>;
@@ -17,6 +18,7 @@ export let toursCollection: Collection<Tour>;
 export let restaurantsCollection: Collection<Restaurant>;
 export let hotelsCollection: Collection<Hotel>;
 export let trendingCollection: Collection<TrendingItem>;
+export let eventsCollection: Collection<Event>;
 
 export const connectToDatabase = async (client: MongoClient) => {
   await client
