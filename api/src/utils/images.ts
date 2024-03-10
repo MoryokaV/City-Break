@@ -2,7 +2,12 @@ import { Request, Response } from "express";
 import sharp from "sharp";
 import { encode } from "blurhash";
 import fs from "fs";
-import { sightsCollection, toursCollection } from "../db";
+import {
+  hotelsCollection,
+  restaurantsCollection,
+  sightsCollection,
+  toursCollection,
+} from "../db";
 
 export const uploadImages = async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
@@ -105,10 +110,11 @@ export const deleteImages = (
       occurrences = (await toursCollection.find({ images: image }).toArray())
         .length;
     } else if (collection === "restaurants") {
-      occurrences = (await sightsCollection.find({ images: image }).toArray())
-        .length;
+      occurrences = (
+        await restaurantsCollection.find({ images: image }).toArray()
+      ).length;
     } else if (collection === "hotels") {
-      occurrences = (await sightsCollection.find({ images: image }).toArray())
+      occurrences = (await hotelsCollection.find({ images: image }).toArray())
         .length;
     }
     // else if (collection === "events") {

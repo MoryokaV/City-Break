@@ -1,4 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export type Tour = {
+  _id?: ObjectId;
   name: string;
   stages: Array<Stage>;
   description: string;

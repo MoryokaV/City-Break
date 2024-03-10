@@ -1,4 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export type Restaurant = {
+  _id?: ObjectId;
   name: string;
   tags: Array<string>;
   description: string;

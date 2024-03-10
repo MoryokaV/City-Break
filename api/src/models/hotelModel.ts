@@ -1,4 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export type Hotel = {
+  _id?: ObjectId;
   name: string;
   stars: number;
   phone: string;
