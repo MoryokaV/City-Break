@@ -95,27 +95,20 @@ export const getBlurhashString = async (filePath: string): Promise<string> => {
   return encode(new Uint8ClampedArray(data), info.width, info.height, 4, 3);
 };
 
-export const deleteImages = (
-  images: Array<string>,
-  collection: string,
-): void => {
-  images.forEach(async (image) => {
+export const deleteImages = (images: Array<string>, collection: string): void => {
+  images.forEach(async image => {
     const fullPath = "." + image;
     let occurrences = 1;
 
     if (collection === "sights") {
-      occurrences = (await sightsCollection.find({ images: image }).toArray())
-        .length;
+      occurrences = (await sightsCollection.find({ images: image }).toArray()).length;
     } else if (collection === "tours") {
-      occurrences = (await toursCollection.find({ images: image }).toArray())
-        .length;
+      occurrences = (await toursCollection.find({ images: image }).toArray()).length;
     } else if (collection === "restaurants") {
-      occurrences = (
-        await restaurantsCollection.find({ images: image }).toArray()
-      ).length;
-    } else if (collection === "hotels") {
-      occurrences = (await hotelsCollection.find({ images: image }).toArray())
+      occurrences = (await restaurantsCollection.find({ images: image }).toArray())
         .length;
+    } else if (collection === "hotels") {
+      occurrences = (await hotelsCollection.find({ images: image }).toArray()).length;
     }
     // else if (collection === "events") {
     //   occurrences = (await sightsCollection.find({ images: image }).toArray())

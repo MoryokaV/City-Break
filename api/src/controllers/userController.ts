@@ -44,7 +44,7 @@ export const logout: RequestHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  req.session.destroy((error) => {
+  req.session.destroy(error => {
     if (error) {
       next(error);
     } else {

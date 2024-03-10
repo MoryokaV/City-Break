@@ -30,21 +30,17 @@ router.get("/findHotel/:id", async (req: Request, res: Response) => {
   return res.status(200).send(hotel);
 });
 
-router.post(
-  "/insertHotel",
-  requiresAuth,
-  async (req: Request, res: Response) => {
-    const hotel = req.body as Hotel;
-    hotel.primary_image_blurhash = await getBlurhashString(
-      hotel.images[hotel.primary_image - 1],
-    );
-    hotel.city_id = req.session.city_id;
+router.post("/insertHotel", requiresAuth, async (req: Request, res: Response) => {
+  const hotel = req.body as Hotel;
+  hotel.primary_image_blurhash = await getBlurhashString(
+    hotel.images[hotel.primary_image - 1],
+  );
+  hotel.city_id = req.session.city_id;
 
-    await hotelsCollection.insertOne(hotel);
+  await hotelsCollection.insertOne(hotel);
 
-    return res.status(200).send("New entry has been inserted");
-  },
-);
+  return res.status(200).send("New entry has been inserted");
+});
 
 interface UpdateHotelRequestBody {
   images_to_delete: [string];
@@ -66,26 +62,22 @@ router.put("/editHotel", requiresAuth, async (req: Request, res: Response) => {
   return res.status(200).send("Entry has been updated");
 });
 
-router.delete(
-  "/deleteHotel/:_id",
-  requiresAuth,
-  async (req: Request, res: Response) => {
-    const { _id } = req.params;
+router.delete("/deleteHotel/:_id", requiresAuth, async (req: Request, res: Response) => {
+  const { _id } = req.params;
 
-    const images: Array<string> | undefined = (
-      await hotelsCollection.findOne({ _id: new ObjectId(_id) })
-    )?.images;
+  const images: Array<string> | undefined = (
+    await hotelsCollection.findOne({ _id: new ObjectId(_id) })
+  )?.images;
 
-    if (images) {
-      deleteImages(images, "hotels");
-    }
+  if (images) {
+    deleteImages(images, "hotels");
+  }
 
-    //remove from trending
+  //remove from trending
 
-    hotelsCollection.deleteOne({ _id: new ObjectId(_id) });
+  hotelsCollection.deleteOne({ _id: new ObjectId(_id) });
 
-    return res.status(200).send("Successfully deleted document");
-  },
-);
+  return res.status(200).send("Successfully deleted document");
+});
 
 export default router;

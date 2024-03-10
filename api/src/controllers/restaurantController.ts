@@ -9,9 +9,7 @@ const router: Router = Router();
 
 router.get("/fetchRestaurants", async (req: Request, res: Response) => {
   const { city_id } = req.query;
-  const restaurants = await restaurantsCollection
-    .find({ city_id: city_id })
-    .toArray();
+  const restaurants = await restaurantsCollection.find({ city_id: city_id }).toArray();
 
   return res.status(200).send(restaurants);
 });
@@ -34,21 +32,17 @@ router.get("/findRestaurant/:id", async (req: Request, res: Response) => {
   return res.status(200).send(restaurant);
 });
 
-router.post(
-  "/insertRestaurant",
-  requiresAuth,
-  async (req: Request, res: Response) => {
-    const restaurant = req.body as Restaurant;
-    restaurant.primary_image_blurhash = await getBlurhashString(
-      restaurant.images[restaurant.primary_image - 1],
-    );
-    restaurant.city_id = req.session.city_id;
+router.post("/insertRestaurant", requiresAuth, async (req: Request, res: Response) => {
+  const restaurant = req.body as Restaurant;
+  restaurant.primary_image_blurhash = await getBlurhashString(
+    restaurant.images[restaurant.primary_image - 1],
+  );
+  restaurant.city_id = req.session.city_id;
 
-    await restaurantsCollection.insertOne(restaurant);
+  await restaurantsCollection.insertOne(restaurant);
 
-    return res.status(200).send("New entry has been inserted");
-  },
-);
+  return res.status(200).send("New entry has been inserted");
+});
 
 interface UpdateRestaurantRequestBody {
   images_to_delete: [string];
@@ -56,27 +50,19 @@ interface UpdateRestaurantRequestBody {
   restaurant: Restaurant;
 }
 
-router.put(
-  "/editRestaurant",
-  requiresAuth,
-  async (req: Request, res: Response) => {
-    const { images_to_delete, _id, restaurant } =
-      req.body as UpdateRestaurantRequestBody;
+router.put("/editRestaurant", requiresAuth, async (req: Request, res: Response) => {
+  const { images_to_delete, _id, restaurant } = req.body as UpdateRestaurantRequestBody;
 
-    restaurant.primary_image_blurhash = await getBlurhashString(
-      restaurant.images[restaurant.primary_image - 1],
-    );
+  restaurant.primary_image_blurhash = await getBlurhashString(
+    restaurant.images[restaurant.primary_image - 1],
+  );
 
-    deleteImages(images_to_delete, "restaurants");
+  deleteImages(images_to_delete, "restaurants");
 
-    await restaurantsCollection.updateOne(
-      { _id: new ObjectId(_id) },
-      { $set: restaurant },
-    );
+  await restaurantsCollection.updateOne({ _id: new ObjectId(_id) }, { $set: restaurant });
 
-    return res.status(200).send("Entry has been updated");
-  },
-);
+  return res.status(200).send("Entry has been updated");
+});
 
 router.delete(
   "/deleteRestaurant/:_id",

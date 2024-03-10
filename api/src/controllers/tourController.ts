@@ -30,18 +30,14 @@ router.get("/findTour/:id", async (req: Request, res: Response) => {
   return res.status(200).send(tour);
 });
 
-router.post(
-  "/insertTour",
-  requiresAuth,
-  async (req: Request, res: Response) => {
-    const tour = req.body as Tour;
-    tour.city_id = req.session.city_id;
+router.post("/insertTour", requiresAuth, async (req: Request, res: Response) => {
+  const tour = req.body as Tour;
+  tour.city_id = req.session.city_id;
 
-    await toursCollection.insertOne(tour);
+  await toursCollection.insertOne(tour);
 
-    return res.status(200).send("New entry has been inserted");
-  },
-);
+  return res.status(200).send("New entry has been inserted");
+});
 
 interface UpdateTourRequestBody {
   images_to_delete: [string];
@@ -59,24 +55,20 @@ router.put("/editTour", requiresAuth, async (req: Request, res: Response) => {
   return res.status(200).send("Entry has been updated");
 });
 
-router.delete(
-  "/deleteTour/:_id",
-  requiresAuth,
-  async (req: Request, res: Response) => {
-    const { _id } = req.params;
+router.delete("/deleteTour/:_id", requiresAuth, async (req: Request, res: Response) => {
+  const { _id } = req.params;
 
-    const images: Array<string> | undefined = (
-      await toursCollection.findOne({ _id: new ObjectId(_id) })
-    )?.images;
+  const images: Array<string> | undefined = (
+    await toursCollection.findOne({ _id: new ObjectId(_id) })
+  )?.images;
 
-    if (images) {
-      deleteImages(images, "tours");
-    }
+  if (images) {
+    deleteImages(images, "tours");
+  }
 
-    toursCollection.deleteOne({ _id: new ObjectId(_id) });
+  toursCollection.deleteOne({ _id: new ObjectId(_id) });
 
-    return res.status(200).send("Successfully deleted document");
-  },
-);
+  return res.status(200).send("Successfully deleted document");
+});
 
 export default router;
