@@ -9,6 +9,7 @@ import apiRouter from "./routes/apiRoutes";
 import adminRouter from "./routes/adminRoutes";
 import loginRouter from "./routes/loginRoutes";
 import { connectToDatabase } from "./db";
+import path from "path";
 
 dotenv.config();
 
@@ -57,7 +58,15 @@ app.use("/admin", adminRouter);
 app.use(loginRouter);
 
 app.get("/", (_, res: Response) => {
-  res.redirect("/admin");
+  return res.redirect("/admin");
+});
+
+app.get("/favicon.ico", (_, res: Response) => {
+  return res.sendFile(path.join(__dirname, "..", "/static/favicon.ico"));
+});
+
+app.get("/apple-touch-icon.png", (_, res: Response) => {
+  return res.sendFile(path.join(__dirname, "..", "/static/apple-touch-icon.png"));
 });
 
 connectToDatabase(client).then(() => {
