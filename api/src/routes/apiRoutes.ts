@@ -10,6 +10,7 @@ import tourController from "../controllers/tourController";
 import restaurantController from "../controllers/restaurantController";
 import hotelController from "../controllers/hotelController";
 import trendingController from "../controllers/trendingController";
+import aboutController from "../controllers/aboutController";
 
 const apiRouter: Router = Router();
 
@@ -29,5 +30,6 @@ apiRouter.use(tourController);
 apiRouter.use(restaurantController);
 apiRouter.use(hotelController);
 apiRouter.use(trendingController);
+apiRouter.use(aboutController);
 
 export default apiRouter;
