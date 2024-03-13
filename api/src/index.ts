@@ -10,6 +10,7 @@ import adminRouter from "./routes/adminRoutes";
 import loginRouter from "./routes/loginRoutes";
 import { connectToDatabase } from "./db";
 import path from "path";
+import * as ServerStorage from "./utils/storage";
 
 dotenv.config();
 
@@ -70,6 +71,8 @@ app.get("/apple-touch-icon.png", (_, res: Response) => {
 });
 
 connectToDatabase(client).then(() => {
+  ServerStorage.initMediaDirs();
+
   app.listen(PORT, () => {
     console.log(`[server]: Server is running at http://localhost:${PORT}`);
   });

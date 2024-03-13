@@ -1,13 +1,21 @@
 import { Router, Request, Response } from "express";
 import { requiresAuth, requiresMasterAuth } from "../middleware/auth";
 import {
+  aboutCollection,
   citiesCollection,
+  eventsCollection,
+  hotelsCollection,
+  restaurantsCollection,
   sightsCollection,
+  tagsCollection,
   toursCollection,
+  trendingCollection,
   usersCollection,
 } from "../db";
-import { City } from "../models/cityModel";
 import * as uuid from "uuid";
+import { About } from "../models/aboutModel";
+import * as ServerStorage from "../utils/storage";
+import { createHash } from "crypto";
 
 const router: Router = Router();
 
@@ -53,23 +61,41 @@ router.post("/insertCity", requiresMasterAuth, async (req: Request, res: Respons
   uuid.v4({}, buffer);
   cityUser.city_id = buffer.toString("hex");
 
-  // await citiesCollection.insertOne({
-  //   name: cityUser.name,
-  //   state: cityUser.state,
-  //   city_id: cityUser.city_id,
-  // });
-  //
-  // await usersCollection.insertOne({
-  //   fullname: cityUser.fullname,
-  //   username: cityUser.username,
-  //   password: "",
-  //   city_id: cityUser.city_id,
-  //   admin: true,
-  // });
+  await citiesCollection.insertOne({
+    name: cityUser.name,
+    state: cityUser.state,
+    city_id: cityUser.city_id,
+  });
 
-  //db.about.insert_one({"paragraph1": "", "phone": "", "email": "", "cover_image": "", "organization": "", "website": "", "facebook": "", "cover_image_blurhash": "", "heading1": "", "header_image": "", "header_title": "", "city_id": city_id})
+  cityUser.password = createHash("sha256").update(cityUser.password).digest("hex");
 
-  //createMediaDirectories
+  await usersCollection.insertOne({
+    fullname: cityUser.fullname,
+    username: cityUser.username,
+    password: cityUser.password,
+    city_id: cityUser.city_id,
+    admin: true,
+  });
+
+  // initialize about document with empty strings
+  const about: About = {
+    paragraph1: "",
+    heading1: "",
+    phone: "",
+    email: "",
+    cover_image: "",
+    cover_image_blurhash: "",
+    organiation: "",
+    website: "",
+    facebook: "",
+    header_title: "",
+    header_image: "",
+    city_id: cityUser.city_id,
+  };
+
+  await aboutCollection.insertOne(about);
+
+  ServerStorage.createMediaDirectories(cityUser.city_id);
 
   return res.status(200).send("New entry has been inserted");
 });
@@ -80,8 +106,18 @@ router.delete(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    // await sightsCollection.deleteMany({ city_id: id });
-    // await toursCollection.deleteMany({ city_id: id });
+    await sightsCollection.deleteMany({ city_id: id });
+    await toursCollection.deleteMany({ city_id: id });
+    await restaurantsCollection.deleteMany({ city_id: id });
+    await hotelsCollection.deleteMany({ city_id: id });
+    await eventsCollection.deleteMany({ city_id: id });
+    await tagsCollection.deleteMany({ city_id: id });
+    await trendingCollection.deleteMany({ city_id: id });
+    await aboutCollection.deleteOne({ city_id: id });
+    await usersCollection.deleteMany({ city_id: id });
+    await citiesCollection.deleteOne({ city_id: id });
+
+    ServerStorage.deleteMediaDirectories(id);
 
     return res.status(200).send("Successfully deleted document");
   },

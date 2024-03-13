@@ -38,8 +38,6 @@ router.put("/updateTrendingItemIndex", async (req: Request, res: Response) => {
     { $set: { index: newIndex } },
   );
 
-  console.log(newIndex);
-
   return res.status(200).send("Entry has been updated");
 });
 

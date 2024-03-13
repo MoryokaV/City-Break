@@ -35,6 +35,7 @@ export const connectToDatabase = async (client: MongoClient) => {
       toursCollection = db.collection("tours");
       restaurantsCollection = db.collection("restaurants");
       hotelsCollection = db.collection("hotels");
+      eventsCollection = db.collection("events");
       trendingCollection = db.collection("trending");
       aboutCollection = db.collection("about");
     })

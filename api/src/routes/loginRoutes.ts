@@ -17,5 +17,6 @@ router.get("/login", (_, res: Response) => {
 
 router.get("/logout", UserController.logout);
 router.post("/login", UserController.login);
+router.get("/currentUser", UserController.getCurrentUser);
 
 export default router;

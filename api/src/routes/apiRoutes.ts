@@ -1,5 +1,4 @@
 import { Router, Response } from "express";
-import { getCurrentUser } from "../controllers/userController";
 import { getServerStorage } from "../utils/storage";
 import { uploadImages } from "../utils/images";
 import multer from "multer";
@@ -17,7 +16,6 @@ const apiRouter: Router = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-apiRouter.get("/currentUser", getCurrentUser);
 apiRouter.get("/serverStorage", async (_, res: Response) =>
   res.status(200).send(await getServerStorage()),
 );

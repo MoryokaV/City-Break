@@ -1,32 +1,40 @@
-export const getFilename = (path) => path.substring(path.lastIndexOf("/") + 1);
+export const getFilename = path => path.substring(path.lastIndexOf("/") + 1);
 const diacritice = "ĂăÂâÎîȘșȚț";
 const diacritice_mari = "ĂÂÎȘȚ";
 
 // Loading animation
-export const startLoadingAnimation = (container) => container.find(`button[type="submit"]`).addClass("loading-btn");
-export const endLoadingAnimation = (container) => container.find(`button[type="submit"]`).removeClass("loading-btn");
+export const startLoadingAnimation = container =>
+  container.find(`button[type="submit"]`).addClass("loading-btn");
+export const endLoadingAnimation = container =>
+  container.find(`button[type="submit"]`).removeClass("loading-btn");
 
 // Form Validation
 export const nameRegExp = `^[A-Za-z${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`;
 export const addressRegExp = `^[A-Za-z0-9${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`;
 export const tagRegExp = `^[A-Z${diacritice_mari}][A-Za-z${diacritice} \\-&]*$`;
 export const idRegExp = "^[0-9a-fA-F]{24}$";
-export const phoneRegExp = "^(\\+4|)?(07[0-8]{1}[0-9]{1}|02[0-9]{2}|03[0-9]{2}){1}?([0-9]{3}){2}$";
-export const latitudeRegExp = "^(\\+|-)?(?:90(?:(?:\\.0{1,15})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,15})?))$";
+export const phoneRegExp =
+  "^(\\+4|)?(07[0-8]{1}[0-9]{1}|02[0-9]{2}|03[0-9]{2}){1}?([0-9]{3}){2}$";
+export const latitudeRegExp =
+  "^(\\+|-)?(?:90(?:(?:\\.0{1,15})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,15})?))$";
 export const longitudeRegExp =
   "^(\\+|-)?(?:180(?:(?:\\.0{1,15})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,15})?))$";
 
-export const nameRegExpTitle = "Name should start with a letter. Allowed characters: a-z A-Z 0-9 ,.\"'() -&";
-export const addressRegExpTitle = "Name shouldn't start with a symbol. Allowed characters: a-z A-Z 0-9 ,.\"'() -&/";
-export const tagRegExpTitle = "Name should start with a capital letter. Allowed characters: a-z A-Z -&";
+export const nameRegExpTitle =
+  "Name should start with a letter. Allowed characters: a-z A-Z 0-9 ,.\"'() -&";
+export const addressRegExpTitle =
+  "Name shouldn't start with a symbol. Allowed characters: a-z A-Z 0-9 ,.\"'() -&/";
+export const tagRegExpTitle =
+  "Name should start with a capital letter. Allowed characters: a-z A-Z -&";
 export const idRegExpTitle = "Please enter a valid id";
-export const phoneRegExpTitle = "Please enter a valid RO phone number (no spaces allowed)";
+export const phoneRegExpTitle =
+  "Please enter a valid RO phone number (no spaces allowed)";
 export const latitudeRegExpTitle = "Invalid latitude coordinates";
 export const longitudeRegExpTitle = "Invalid longitude coordinates";
 
 // User fullname
 const getCurrentUser = async () => {
-  const data = await $.getJSON("/api/currentUser");
+  const data = await $.getJSON("/currentUser");
 
   $("#user-fullname").text(data.fullname);
 
@@ -35,7 +43,7 @@ const getCurrentUser = async () => {
       `<a href="/users" class="${window.location.pathname === "/users" ? "active" : ""} nav-item group">
         <ion-icon name="people-outline"></ion-icon>
         <p>Users</p>
-      </a>`
+      </a>`,
     );
   }
 };
@@ -43,8 +51,8 @@ const getCurrentUser = async () => {
 const getCityName = async () => {
   const name = (await $.getJSON("/api/currentCityName")).name;
 
-  $(".title-long").html(`City Break &nbsp;&ndash;&nbsp; ${name}`); 
-} 
+  $(".title-long").html(`City Break &nbsp;&ndash;&nbsp; ${name}`);
+};
 
 // Server storage info
 const getStorageInfo = async () => {
@@ -71,16 +79,16 @@ export const appendImageElement = (image, uploaded = false) => {
         <button type="button" class="btn btn-icon remove-img-btn">
           <ion-icon name="close-outline"></ion-icon>
         </button>
-      </li>`
+      </li>`,
   );
 };
 
-const addPreviewImages = async (images) => {
+const addPreviewImages = async images => {
   function getBase64(image) {
     const reader = new FileReader();
 
-    return new Promise((resolve) => {
-      reader.onload = (e) => {
+    return new Promise(resolve => {
+      reader.onload = e => {
         resolve(e.target.result);
       };
 
@@ -88,17 +96,24 @@ const addPreviewImages = async (images) => {
     });
   }
 
-  const blobs = await Promise.all(images.map((image) => getBase64(image)));
+  const blobs = await Promise.all(images.map(image => getBase64(image)));
 
-  blobs.map((blob) => $("#preview-images").append(`<img src="${blob}">`));
+  blobs.map(blob => $("#preview-images").append(`<img src="${blob}">`));
 
   if ($("#preview-primary-image").attr("src") === undefined) {
     $("#preview-primary-image").prop("src", $("#preview-images img").eq(0).prop("src"));
   }
 };
 
-export const addImages = (filelist, path, preview, current_images, formData, primary_elem) => {
-  const images = Array.from(filelist).filter((image) => {
+export const addImages = (
+  filelist,
+  path,
+  preview,
+  current_images,
+  formData,
+  primary_elem,
+) => {
+  const images = Array.from(filelist).filter(image => {
     if (current_images.includes(`${path + Cookies.get("cityId")}/${image.name}`)) {
       alert(`'${image.name}' is already present in list!`);
       return false;
@@ -111,7 +126,7 @@ export const addImages = (filelist, path, preview, current_images, formData, pri
     addPreviewImages(images);
   }
 
-  images.map((image) => {
+  images.map(image => {
     formData.append("files[]", image);
     current_images.push(`${path + Cookies.get("cityId")}/${image.name}`);
 
@@ -129,7 +144,14 @@ const removePreviewImage = (elem, images) => {
   $("#preview-images img").eq(elem.parent().index()).remove();
 };
 
-export const removeImage = (elem, preview, current_images, formData, primary_elem, input_elem) => {
+export const removeImage = (
+  elem,
+  preview,
+  current_images,
+  formData,
+  primary_elem,
+  input_elem,
+) => {
   if (parseInt(primary_elem.val()) === current_images.length) {
     primary_elem.val(current_images.length - 1);
   }
@@ -145,8 +167,10 @@ export const removeImage = (elem, preview, current_images, formData, primary_ele
 
   let files = [...formData.getAll("files[]")];
   formData.delete("files[]");
-  files = files.filter((file) => file.name != getFilename(current_images[elem.parent().index()]));
-  files.map((file) => formData.append("files[]", file));
+  files = files.filter(
+    file => file.name != getFilename(current_images[elem.parent().index()]),
+  );
+  files.map(file => formData.append("files[]", file));
 
   current_images.splice(elem.parent().index(), 1);
 
@@ -159,8 +183,12 @@ export const removeImage = (elem, preview, current_images, formData, primary_ele
 // TAGS
 
 export const initializeTags = async (collection, activeTags, preview, modal) => {
-  const tags = await $.getJSON(`/api/fetchTags/${collection}?city_id=${Cookies.get("cityId")}`);
-  tags.map((tag) => $(`${modal} #tags`).append(`<option value="${tag.name}">${tag.name}</option>`));
+  const tags = await $.getJSON(
+    `/api/fetchTags/${collection}?city_id=${Cookies.get("cityId")}`,
+  );
+  tags.map(tag =>
+    $(`${modal} #tags`).append(`<option value="${tag.name}">${tag.name}</option>`),
+  );
 
   $(`${modal} #tags`).change(function () {
     if (!activeTags.includes($(this).val())) {
@@ -209,7 +237,9 @@ export const appendActiveTags = (activeTags, preview, modal) => {
     $(`${modal} #active-tags`).append(`<span class="badge bg-primary">${tag}</span>`);
 
     if (preview) {
-      $("#preview-tags").append(`<p>${tag}</p>${index != activeTags.length - 1 ? ", " : " "}`);
+      $("#preview-tags").append(
+        `<p>${tag}</p>${index != activeTags.length - 1 ? ", " : " "}`,
+      );
     }
   });
 };
@@ -219,7 +249,7 @@ $(document).ready(function () {
 
   getCurrentUser();
 
-  if(window.location.pathname !== "/master"){
+  if (window.location.pathname !== "/master") {
     getCityName();
   }
 
