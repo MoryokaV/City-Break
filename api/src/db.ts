@@ -11,7 +11,7 @@ import { Event } from "./models/eventModel";
 
 export let db: Db;
 export let usersCollection: Collection<User>;
-export let cityCollection: Collection<City>;
+export let citiesCollection: Collection<City>;
 export let tagsCollection: Collection<Tag>;
 export let sightsCollection: Collection<Sight>;
 export let toursCollection: Collection<Tour>;
@@ -27,7 +27,7 @@ export const connectToDatabase = async (client: MongoClient) => {
       db = client.db("citybreak");
 
       usersCollection = db.collection("login");
-      cityCollection = db.collection("cities");
+      citiesCollection = db.collection("cities");
       tagsCollection = db.collection("tags");
       sightsCollection = db.collection("sights");
       toursCollection = db.collection("tours");

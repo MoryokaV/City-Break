@@ -10,7 +10,7 @@ let city = {
   password: "",
 };
 
-const getRecords = (data) => {
+const getRecords = data => {
   if (data.length === 0) return "No records";
   else if (data.length === 1) return "1 record";
   else return `${data.length} records`;
@@ -18,7 +18,9 @@ const getRecords = (data) => {
 
 const fetchCities = async () => {
   users = await $.getJSON("/api/fetchAdminUsers");
-  cities = await Promise.all(users.map((user) => $.getJSON(`/api/findCity/${user.city_id}`)));
+  cities = await Promise.all(
+    users.map(user => $.getJSON(`/api/findCity/${user.city_id}`)),
+  );
 
   $("#cities-records").text(getRecords(users));
   $("#cities-table tbody").empty();
@@ -35,7 +37,7 @@ const fetchCities = async () => {
           <button class="btn-icon action-delete-city"><ion-icon class="edit-icon" name="remove-circle-outline"></ion-icon></button>
           <button class="btn-icon action-edit-user" data-bs-toggle="modal" data-bs-target="#edit-user-modal"><ion-icon class="edit-icon" name="create-outline"></ion-icon></button>
         </td>
-      </tr>`
+      </tr>`,
     );
   });
 };
@@ -54,7 +56,7 @@ $(document).ready(async function () {
     }
   });
 
-  $("#cities-table").on('click', ".action-edit-user", async function() {
+  $("#cities-table").on("click", ".action-edit-user", async function () {
     $("#edit-user-modal").attr("data-id", $(this).parent().attr("data-user-id"));
   });
 
@@ -78,7 +80,7 @@ $(document).ready(async function () {
     e.preventDefault();
 
     startLoadingAnimation($(this));
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     await $.ajax({
       type: "PUT",
@@ -104,7 +106,7 @@ $(document).ready(async function () {
     city.username = $("#username").val();
     city.password = $("#password").val();
 
-    if (cities.filter((c) => c.name == city.name && c.state == city.state).length > 0) {
+    if (cities.filter(c => c.name == city.name && c.state == city.state).length > 0) {
       alert("City already exists");
       endLoadingAnimation($(this));
       return;

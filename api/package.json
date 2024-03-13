@@ -18,6 +18,7 @@
     "@types/morgan": "^1.9.9",
     "@types/multer": "^1.4.11",
     "@types/node": "^20.11.24",
+    "@types/uuid": "^9.0.8",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
@@ -33,6 +34,7 @@
     "express-session": "^1.18.0",
     "mongodb": "^6.4.0",
     "multer": "^1.4.5-lts.1",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.2",
+    "uuid": "^9.0.1"
   }
 }
