@@ -28,7 +28,7 @@ export const uploadImages = async (req: Request, res: Response) => {
 
       image.resize(outWidth, outHeight);
       image.jpeg({
-        quality: 80,
+        quality: 70,
         mozjpeg: true,
       });
 
@@ -41,7 +41,7 @@ export const uploadImages = async (req: Request, res: Response) => {
 
 const calcImageSize = (metadata: sharp.Metadata) => {
   const MEDIUM = 1700;
-  const LARGE = 2300;
+  const LARGE = 2200;
 
   const { width: w, height: h } = metadata;
 
