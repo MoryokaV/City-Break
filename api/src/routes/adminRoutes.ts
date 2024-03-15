@@ -1,6 +1,6 @@
 import { Router, Response } from "express";
 import path from "path";
-import { requiresAuth } from "../middleware/auth";
+import { requiresAdminAuth, requiresAuth } from "../middleware/auth";
 
 const adminRouter = Router();
 
@@ -40,6 +40,10 @@ adminRouter.get("/trending", requiresAuth, (_, res: Response) => {
 
 adminRouter.get("/about", requiresAuth, (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "about.html"));
+});
+
+adminRouter.get("/users", requiresAdminAuth, (_, res: Response) => {
+  res.sendFile(path.join(templatesDir, "users.html"));
 });
 
 export default adminRouter;
