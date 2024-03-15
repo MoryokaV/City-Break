@@ -3,6 +3,7 @@ import sharp from "sharp";
 import { encode } from "blurhash";
 import fs from "fs";
 import {
+  eventsCollection,
   hotelsCollection,
   restaurantsCollection,
   sightsCollection,
@@ -109,11 +110,9 @@ export const deleteImages = (images: Array<string>, collection: string): void =>
         .length;
     } else if (collection === "hotels") {
       occurrences = (await hotelsCollection.find({ images: image }).toArray()).length;
+    } else if (collection === "events") {
+      occurrences = (await eventsCollection.find({ images: image }).toArray()).length;
     }
-    // else if (collection === "events") {
-    //   occurrences = (await sightsCollection.find({ images: image }).toArray())
-    //     .length;
-    // }
 
     if (occurrences === 1) {
       try {

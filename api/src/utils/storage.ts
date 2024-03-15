@@ -2,6 +2,7 @@ import disk from "diskusage";
 import os from "os";
 import fs from "fs";
 import path from "path";
+import { eventsCollection } from "../db";
 
 type ServerStorageInfo = {
   total: number;
@@ -74,4 +75,26 @@ export const initMediaDirs = () => {
   } catch (_) {
     //pass
   }
+};
+
+export const cleanUpEventsImages = (id: string) => {
+  // Because of MongoDB TTL index images don't get deleted automatically
+  // so i will delete them on the next insert
+
+  const folder = `/static/media/events/${id}/`;
+  const fullPath = path.join(__dirname, "..", "..", folder);
+
+  const files = fs.readdirSync(fullPath);
+
+  files.forEach(async file => {
+    const occurrences = await eventsCollection.find({ images: folder + file }).toArray();
+
+    if (occurrences.length === 0) {
+      try {
+        fs.unlinkSync(path.join(fullPath, file));
+      } catch (_) {
+        //pass
+      }
+    }
+  });
 };

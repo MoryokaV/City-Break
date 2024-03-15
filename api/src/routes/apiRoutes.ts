@@ -8,6 +8,7 @@ import cityController from "../controllers/cityController";
 import tourController from "../controllers/tourController";
 import restaurantController from "../controllers/restaurantController";
 import hotelController from "../controllers/hotelController";
+import eventController from "../controllers/eventController";
 import trendingController from "../controllers/trendingController";
 import aboutController from "../controllers/aboutController";
 
@@ -27,6 +28,7 @@ apiRouter.use(cityController);
 apiRouter.use(tourController);
 apiRouter.use(restaurantController);
 apiRouter.use(hotelController);
+apiRouter.use(eventController);
 apiRouter.use(trendingController);
 apiRouter.use(aboutController);
 

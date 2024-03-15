@@ -82,7 +82,7 @@ router.delete(
     //remove from trending
     filterTrendingByItemId(_id, req.session.city_id);
 
-    restaurantsCollection.deleteOne({ _id: new ObjectId(_id) });
+    await restaurantsCollection.deleteOne({ _id: new ObjectId(_id) });
 
     return res.status(200).send("Successfully deleted document");
   },

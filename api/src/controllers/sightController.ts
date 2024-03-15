@@ -77,7 +77,7 @@ router.delete("/deleteSight/:_id", requiresAuth, async (req: Request, res: Respo
   //remove from trending
   filterTrendingByItemId(_id, req.session.city_id);
 
-  sightsCollection.deleteOne({ _id: new ObjectId(_id) });
+  await sightsCollection.deleteOne({ _id: new ObjectId(_id) });
 
   return res.status(200).send("Successfully deleted document");
 });

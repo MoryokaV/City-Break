@@ -77,7 +77,7 @@ router.delete("/deleteHotel/:_id", requiresAuth, async (req: Request, res: Respo
   //remove from trending
   filterTrendingByItemId(_id, req.session.city_id);
 
-  hotelsCollection.deleteOne({ _id: new ObjectId(_id) });
+  await hotelsCollection.deleteOne({ _id: new ObjectId(_id) });
 
   return res.status(200).send("Successfully deleted document");
 });

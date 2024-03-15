@@ -66,7 +66,7 @@ router.delete("/deleteTour/:_id", requiresAuth, async (req: Request, res: Respon
     deleteImages(images, "tours");
   }
 
-  toursCollection.deleteOne({ _id: new ObjectId(_id) });
+  await toursCollection.deleteOne({ _id: new ObjectId(_id) });
 
   return res.status(200).send("Successfully deleted document");
 });

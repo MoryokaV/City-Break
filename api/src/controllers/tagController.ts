@@ -105,7 +105,7 @@ router.delete("/deleteTag/:_id", requiresAuth, async (req: Request, res: Respons
     );
   }
 
-  tagsCollection.deleteOne({ _id: new ObjectId(_id) });
+  await tagsCollection.deleteOne({ _id: new ObjectId(_id) });
 
   res.status(200).send("Successfully deleted document");
 });

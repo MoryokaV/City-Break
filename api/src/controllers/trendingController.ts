@@ -68,7 +68,7 @@ router.delete("/deleteTrendingItem", async (req: Request, res: Response) => {
     }),
   );
 
-  trendingCollection.deleteOne({ _id: new ObjectId(_id) });
+  await trendingCollection.deleteOne({ _id: new ObjectId(_id) });
 
   return res.status(200).send("Successfully deleted document");
 });
