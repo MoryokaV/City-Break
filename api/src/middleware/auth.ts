@@ -35,3 +35,15 @@ export const requiresAdminAuth: RequestHandler = (
     res.status(401).redirect("/login");
   }
 };
+
+export const requiresAdminOrMasterAuth: RequestHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (req.session.admin === true || req.session.username === "master") {
+    next();
+  } else {
+    res.status(401).redirect("/login");
+  }
+};

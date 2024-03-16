@@ -11,6 +11,7 @@ import hotelController from "../controllers/hotelController";
 import eventController from "../controllers/eventController";
 import trendingController from "../controllers/trendingController";
 import aboutController from "../controllers/aboutController";
+import userController from "../controllers/userController";
 
 const apiRouter: Router = Router();
 
@@ -31,5 +32,6 @@ apiRouter.use(hotelController);
 apiRouter.use(eventController);
 apiRouter.use(trendingController);
 apiRouter.use(aboutController);
+apiRouter.use(userController);
 
 export default apiRouter;
