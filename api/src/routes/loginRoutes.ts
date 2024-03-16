@@ -1,7 +1,7 @@
 import { Response, Router } from "express";
 import path from "path";
 import { requiresMasterAuth } from "../middleware/auth";
-import * as UserController from "../controllers/userController";
+import * as LoginController from "../controllers/loginController";
 
 const router: Router = Router();
 
@@ -15,8 +15,8 @@ router.get("/login", (_, res: Response) => {
   res.sendFile(path.join(templatesDir, "login.html"));
 });
 
-router.get("/logout", UserController.logout);
-router.post("/login", UserController.login);
-router.get("/currentUser", UserController.getCurrentUser);
+router.get("/logout", LoginController.logout);
+router.post("/login", LoginController.login);
+router.get("/currentUser", LoginController.getCurrentUser);
 
 export default router;
