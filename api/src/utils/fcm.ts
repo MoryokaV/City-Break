@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import path from "path";
 import dayjs from "dayjs";
 import isTomorrow from "dayjs/plugin/isTomorrow";
+import { finished } from "stream";
 
 dotenv.config({ path: path.join(__dirname, "..", "..", ".env") });
 
@@ -18,7 +19,7 @@ admin.initializeApp({
 
 dayjs.extend(isTomorrow);
 
-const sendDailyNotification = async () => {
+export const sendDailyNotification = async () => {
   const client = new MongoClient(MONGO_URL);
   const db = client.db("citybreak");
   const citiesCollection = db.collection<City>("cities");
