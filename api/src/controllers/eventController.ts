@@ -4,8 +4,9 @@ import { ObjectId } from "mongodb";
 import { requiresAuth } from "../middleware/auth";
 import { deleteImages, getBlurhashString } from "../utils/images";
 import { Event } from "../models/eventModel";
-import moment from "moment";
+import dayjs from "dayjs";
 import { cleanUpEventsImages } from "../utils/storage";
+import { sendNewEventNotification } from "../utils/fcm";
 
 const router: Router = Router();
 
@@ -41,11 +42,11 @@ router.post("/insertEvent", requiresAuth, async (req: Request, res: Response) =>
   const { notify, event } = req.body as InsertEventRequestBody;
 
   event.date_time = new Date(event.date_time);
-  event.expire_at = moment(event.date_time).add(1, "day").toDate();
+  event.expire_at = dayjs(event.date_time).add(1, "day").toDate();
 
   if (event.end_date_time) {
     event.end_date_time = new Date(event.end_date_time);
-    event.expire_at = moment(event.end_date_time).add(1, "day").toDate();
+    event.expire_at = dayjs(event.end_date_time).add(1, "day").toDate();
   } else {
     event.end_date_time = null;
   }
@@ -56,11 +57,17 @@ router.post("/insertEvent", requiresAuth, async (req: Request, res: Response) =>
 
   event.city_id = req.session.city_id;
 
-  await eventsCollection.insertOne(event);
+  const record = await eventsCollection.insertOne(event);
 
   cleanUpEventsImages(req.session.city_id);
 
   if (notify === true) {
+    sendNewEventNotification(
+      event.name,
+      record.insertedId.toString(),
+      req.session.city_id,
+      req.session.city_name,
+    );
     console.log("SendNewEventNotification");
   }
 
@@ -77,11 +84,11 @@ router.put("/editEvent", requiresAuth, async (req: Request, res: Response) => {
   const { images_to_delete, _id, event } = req.body as UpdateEventRequestBody;
 
   event.date_time = new Date(event.date_time);
-  event.expire_at = moment(event.date_time).add(1, "day").toDate();
+  event.expire_at = dayjs(event.date_time).add(1, "day").toDate();
 
   if (event.end_date_time) {
     event.end_date_time = new Date(event.end_date_time);
-    event.expire_at = moment(event.end_date_time).add(1, "day").toDate();
+    event.expire_at = dayjs(event.end_date_time).add(1, "day").toDate();
   } else {
     event.end_date_time = null;
   }
