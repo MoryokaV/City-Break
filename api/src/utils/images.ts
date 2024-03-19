@@ -21,7 +21,15 @@ export const uploadImages = async (req: Request, res: Response) => {
 
   await Promise.all(
     files.map(async (file: Express.Multer.File) => {
-      const fullPath = path.join(__dirname, "..", "..", `static/media/${folder}/${req.session.city_id}/${file.originalname}`);
+      //bug fix: special characters were replaced
+      file.originalname = Buffer.from(file.originalname, "latin1").toString("utf8");
+
+      const fullPath = path.join(
+        __dirname,
+        "..",
+        "..",
+        `static/media/${folder}/${req.session.city_id}/${file.originalname}`,
+      );
 
       const image = sharp(file.buffer);
 
@@ -87,7 +95,7 @@ const calcImageSize = (metadata: sharp.Metadata) => {
 };
 
 export const getBlurhashString = async (filePath: string): Promise<string> => {
-  const fullPath = "." + filePath;
+  const fullPath = path.join(__dirname, "..", "..", filePath);
 
   const { data, info } = await sharp(fullPath)
     .ensureAlpha()
