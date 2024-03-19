@@ -25,9 +25,11 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@types/cors": "^2.8.17",
     "blurhash": "^2.0.5",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.10",
     "diskusage": "^1.2.0",
     "dotenv": "^16.4.5",
