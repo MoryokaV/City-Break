@@ -6,11 +6,10 @@ import dotenv from "dotenv";
 import path from "path";
 import dayjs from "dayjs";
 import isTomorrow from "dayjs/plugin/isTomorrow";
-import { finished } from "stream";
 
 dotenv.config({ path: path.join(__dirname, "..", "..", ".env") });
 
-const FIREBASE_CREDENTIALS = process.env.CB_FIREBASE_CREDENTIALS || "";
+const FIREBASE_CREDENTIALS = process.env.CB_FCM_CREDENTIALS || "";
 const MONGO_URL = process.env.CB_MONGODB_URL || "";
 
 admin.initializeApp({

@@ -53,7 +53,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-app.use("/static", express.static("static"));
+app.use("/static", express.static(path.join(__dirname, "/static")));
 app.use(express.static("templates"));
 
 app.use("/api", apiRouter);
