@@ -9,6 +9,7 @@ import {
   sightsCollection,
   toursCollection,
 } from "../db";
+import path from "path";
 
 export const uploadImages = async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
@@ -20,7 +21,7 @@ export const uploadImages = async (req: Request, res: Response) => {
 
   await Promise.all(
     files.map(async (file: Express.Multer.File) => {
-      const fullPath = `./static/media/${folder}/${req.session.city_id}/${file.originalname}`;
+      const fullPath = path.join(__dirname, "..", "..", `./static/media/${folder}/${req.session.city_id}/${file.originalname}`);
 
       const image = sharp(file.buffer);
 
