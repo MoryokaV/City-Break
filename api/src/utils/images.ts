@@ -21,7 +21,7 @@ export const uploadImages = async (req: Request, res: Response) => {
 
   await Promise.all(
     files.map(async (file: Express.Multer.File) => {
-      const fullPath = path.join(__dirname, "..", "..", `./static/media/${folder}/${req.session.city_id}/${file.originalname}`);
+      const fullPath = path.join(__dirname, "..", "..", `static/media/${folder}/${req.session.city_id}/${file.originalname}`);
 
       const image = sharp(file.buffer);
 
