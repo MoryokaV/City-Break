@@ -8,15 +8,16 @@ const router: Router = Router();
 const templatesDir = path.join(__dirname, "..", "..", "templates");
 
 router.get("/master", requiresMasterAuth, (_, res: Response) => {
-  res.sendFile(path.join(templatesDir, "master.html"));
+  return res.sendFile(path.join(templatesDir, "master.html"));
 });
 
 router.get("/login", (_, res: Response) => {
-  res.sendFile(path.join(templatesDir, "login.html"));
+  return res.sendFile(path.join(templatesDir, "login.html"));
 });
+router.post("/login", LoginController.login);
 
 router.get("/logout", LoginController.logout);
-router.post("/login", LoginController.login);
+
 router.get("/currentUser", LoginController.getCurrentUser);
 
 export default router;
