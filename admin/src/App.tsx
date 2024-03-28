@@ -1,9 +1,12 @@
-function App() {
-  return (
-    <>
-      <h1>Vite + React</h1>
-    </>
-  )
-}
+import { Outlet } from "react-router-dom";
+import "./assets/css/styles.css";
 
-export default App
+export default function App() {
+    return (
+      <>
+        <h1>Navbar</h1>
+        <Outlet/>
+      </>
+    );
+  }
+  
