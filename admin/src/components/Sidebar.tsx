@@ -1,43 +1,14 @@
-import { useEffect, useRef } from "react";
-import {
-  IoBedOutline,
-  IoBookOutline,
-  IoBookmarksOutline,
-  IoBusinessOutline,
-  IoCalendarOutline,
-  IoPersonCircle,
-  IoRestaurantOutline,
-  IoSpeedometerOutline,
-  IoTrendingUpOutline,
-  IoWalkOutline,
-} from "react-icons/io5";
+import { ReactElement, RefObject } from "react";
+import { NavLink } from "react-router-dom";
+import { IoPersonCircle } from "react-icons/io5";
+import { SidebarData } from "../data/SidebarData";
 
-interface Props {
+interface SidebarProps {
   show: boolean;
-  closeSidebar: () => void;
+  sidebarRef: RefObject<HTMLElement>;
 }
 
-const Sidebar: React.FC<Props> = ({ show, closeSidebar }) => {
-  const sidebarRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const handler = (event: MouseEvent) => {
-      if (
-        show &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target as Node)
-      ) {
-        console.log("outside");
-        closeSidebar();
-      }
-    };
-
-    document.addEventListener("mousedown", handler);
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
-  }, [show]);
-
+const Sidebar: React.FC<SidebarProps> = ({ show, sidebarRef }) => {
   return (
     <aside ref={sidebarRef} className={`${show ? "show" : ""}`}>
       <header>
@@ -46,55 +17,49 @@ const Sidebar: React.FC<Props> = ({ show, closeSidebar }) => {
       </header>
       <hr />
       <nav>
-        <a href="/" className="nav-item active group">
-          <IoSpeedometerOutline />
-          <p>Dashboard</p>
-        </a>
-        <a href="/admin/tags" className="nav-item group">
-          <IoBookmarksOutline />
-          <p>Tags</p>
-        </a>
-        <a href="/admin/sights" className="nav-item group">
-          <IoBusinessOutline />
-          <p>Sights</p>
-        </a>
-        <a href="/admin/tours" className="nav-item group">
-          <IoWalkOutline />
-          <p>Tours</p>
-        </a>
-        <a href="/admin/restaurants" className="nav-item group">
-          <IoRestaurantOutline />
-          <p>Restaurants</p>
-        </a>
-        <a href="/admin/hotels" className="nav-item group">
-          <IoBedOutline />
-          <p>Accommodation</p>
-        </a>
-        <a href="/admin/events" className="nav-item group">
-          <IoCalendarOutline />
-          <p>Events</p>
-        </a>
-        <a href="/admin/trending" className="nav-item group">
-          <IoTrendingUpOutline />
-          <p>Trending</p>
-        </a>
-        <a href="/admin/about" className="nav-item group">
-          <IoBookOutline />
-          <p>About</p>
-        </a>
+        {SidebarData.map((item, index) => {
+          return (
+            <NavItem path={item.path} icon={item.icon} key={index}>
+              {item.name}
+            </NavItem>
+          );
+        })}
       </nav>
       <hr />
-
-      <section className="storage-info">
-        <p>
-          Server storage: <span id="space-used">0.0 GB</span> of{" "}
-          <span id="space-total">0.0 GB</span> Used
-        </p>
-        <div className="bar-outline">
-          <div className="bar-filled" id="storage-bar"></div>
-        </div>
-      </section>
+      <StorageInfo />
     </aside>
+  );
+};
+
+interface NavItemProps {
+  path: string;
+  icon: ReactElement;
+  children: string;
+}
+
+const NavItem: React.FC<NavItemProps> = ({ path, icon, children }) => {
+  return (
+    <NavLink
+      to={path}
+      className={({ isActive }) => (isActive ? "active" : "") + " nav-item group"}
+    >
+      {icon}
+      <p>{children}</p>
+    </NavLink>
+  );
+};
+
+const StorageInfo = () => {
+  return (
+    <section className="storage-info">
+      <p>
+        Server storage: <span id="space-used">0.0 GB</span> of{" "}
+        <span id="space-total">0.0 GB</span> Used
+      </p>
+      <div className="bar-outline">
+        <div className="bar-filled" id="storage-bar"></div>
+      </div>
+    </section>
   );
 };
 
