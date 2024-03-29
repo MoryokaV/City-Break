@@ -1,12 +1,16 @@
 import { IoMenuOutline, IoLogOutOutline } from "react-icons/io5";
 
-const Navbar = () => {
+interface Props {
+  onMenuBtnClick: () => void;
+}
+
+const Navbar: React.FC<Props> = ({ onMenuBtnClick }) => {
   return (
     <header>
       <div className="group">
         <button
           className="btn-icon menu-btn btn-header"
-          // onClick={() => document.querySelector("aside")?.classList.toggle("show")}
+          onClick={onMenuBtnClick}
         >
           <IoMenuOutline size="1.5rem" />
         </button>

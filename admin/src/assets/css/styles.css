@@ -96,25 +96,6 @@ body,
 
 /* BELOW 960px - phones & tables */
 @media (max-width: 60em) {
-  #root > aside {
-    position: absolute;
-    height: 100%;
-    width: var(--sidebar-width);
-    box-shadow: none;
-    transform: translateX(-100%);
-    transition: 0.3s ease-in-out;
-    max-width: 80%;
-  }
-
-  #root {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
-
-  #root > header {
-    grid-column: 1;
-  }
-
   .menu-btn {
     display: block;
   }
@@ -133,13 +114,5 @@ body,
 
   .trending-item > img {
     height: 12rem;
-  }
-}
-
-/* Landscape phone */
-@media (max-height: 36em) {
-  #root > aside {
-    display: block;
-    overflow: auto;
   }
 }

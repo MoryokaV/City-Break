@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import {
   IoBedOutline,
   IoBookOutline,
@@ -11,9 +12,34 @@ import {
   IoWalkOutline,
 } from "react-icons/io5";
 
-const Sidebar = () => {
+interface Props {
+  show: boolean;
+  closeSidebar: () => void;
+}
+
+const Sidebar: React.FC<Props> = ({ show, closeSidebar }) => {
+  const sidebarRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handler = (event: MouseEvent) => {
+      if (
+        show &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
+        console.log("outside");
+        closeSidebar();
+      }
+    };
+
+    document.addEventListener("mousedown", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  }, [show]);
+
   return (
-    <aside>
+    <aside ref={sidebarRef} className={`${show ? "show" : ""}`}>
       <header>
         <IoPersonCircle size="2rem" className="col-2" />
         <p id="user-fullname" className="col mb-0 fw-normal fs-5 text-truncate"></p>
