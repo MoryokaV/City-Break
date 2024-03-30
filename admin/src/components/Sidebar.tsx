@@ -2,6 +2,7 @@ import { ReactElement, RefObject } from "react";
 import { NavLink } from "react-router-dom";
 import { IoPersonCircle } from "react-icons/io5";
 import { SidebarData } from "../data/SidebarData";
+import styles from "../assets/css/Sidebar.module.css";
 
 interface SidebarProps {
   show: boolean;
@@ -10,10 +11,15 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ show, sidebarRef }) => {
   return (
-    <aside ref={sidebarRef} className={`${show ? "show" : ""}`}>
+    <aside
+      ref={sidebarRef}
+      className={`${show ? `${styles.show}` : ""} ${styles.sidebar}`}
+    >
       <header>
         <IoPersonCircle size="2rem" className="col-2" />
-        <p id="user-fullname" className="col mb-0 fw-normal fs-5 text-truncate"></p>
+        <p id="user-fullname" className="col mb-0 fw-normal fs-5 text-truncate">
+          Mario Vlaviano
+        </p>
       </header>
       <hr />
       <nav>
@@ -41,7 +47,9 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, children }) => {
   return (
     <NavLink
       to={path}
-      className={({ isActive }) => (isActive ? "active" : "") + " nav-item group"}
+      className={({ isActive }) =>
+        (isActive ? `${styles.active}` : "") + ` ${styles.navItem} group`
+      }
     >
       {icon}
       <p>{children}</p>
@@ -51,13 +59,13 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, children }) => {
 
 const StorageInfo = () => {
   return (
-    <section className="storage-info">
+    <section className={styles.storageInfo}>
       <p>
         Server storage: <span id="space-used">0.0 GB</span> of{" "}
         <span id="space-total">0.0 GB</span> Used
       </p>
-      <div className="bar-outline">
-        <div className="bar-filled" id="storage-bar"></div>
+      <div className={styles.barOutline}>
+        <div className={styles.barFilled} id="storage-bar"></div>
       </div>
     </section>
   );
