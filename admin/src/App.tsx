@@ -2,7 +2,6 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import { Outlet } from "react-router-dom";
 import layoutStyles from "./assets/css/Layout.module.css";
-import "./assets/css/styles.css";
 import { useState, useRef, useEffect } from "react";
 
 export default function App() {
