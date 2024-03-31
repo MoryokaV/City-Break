@@ -10,7 +10,7 @@ export const TourTable = () => {
 
   useEffect(() => {
     fetch(
-      "https://cb.bjbraila.ro/api/fetchTours?city_id=5331e6c5772d490dabeb124502b96882",
+      "/api/fetchTours?city_id=5331e6c5772d490dabeb124502b96882",
     )
       .then(response => response.json())
       .then(data => {
