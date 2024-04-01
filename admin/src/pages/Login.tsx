@@ -1,8 +1,37 @@
 import { IoEyeOffOutline } from "react-icons/io5";
 import styles from "../assets/css/Login.module.css";
-import icon from "../assets/icon.png";
+import icon from "../assets/images/icon.png";
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
+  const [loginDetails, setLoginDetails] = useState({
+    username: "",
+    password: "",
+  });
+
+  const { login } = useAuth();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginDetails),
+    }).then(async response => {
+      if (response.status === 200) {
+        const data = await response.json();
+        login(data.user, data.url);
+      } else {
+        const error = await response.text();
+        alert(error);
+      }
+    });
+  };
+
   return (
     <div className={styles.background}>
       <main className={styles.content}>
@@ -11,7 +40,7 @@ export default function Login() {
             <div className={styles.sideImg}></div>
           </div>
           <div className="col-sm-6">
-            <form className={styles.formLogin}>
+            <form className={styles.formLogin} onSubmit={handleSubmit}>
               <img className="mb-2 img-fluid" src={icon} width="128" height="128" />
               <h2 className="mb-4 fw-medium">CITY BREAK</h2>
               <section className="form-floating">
@@ -22,8 +51,8 @@ export default function Login() {
                   autoCorrect="off"
                   autoCapitalize="off"
                   autoComplete="username"
-                  id="user"
-                  name="user"
+                  id="username"
+                  name="username"
                   placeholder="user"
                   required
                   style={{
@@ -31,6 +60,9 @@ export default function Login() {
                     borderBottomLeftRadius: "0",
                     borderBottomRightRadius: "0",
                   }}
+                  onChange={e =>
+                    setLoginDetails({ ...loginDetails, username: e.target.value })
+                  }
                 />
                 <label className="floatingInput">Username</label>
               </section>
@@ -43,8 +75,8 @@ export default function Login() {
                   autoCorrect="off"
                   autoCapitalize="off"
                   autoComplete="current-password"
-                  id="pass"
-                  name="pass"
+                  id="password"
+                  name="password"
                   placeholder="password"
                   maxLength={20}
                   required
@@ -53,6 +85,9 @@ export default function Login() {
                     borderTopLeftRadius: "0",
                     borderTopRightRadius: "0",
                   }}
+                  onChange={e =>
+                    setLoginDetails({ ...loginDetails, password: e.target.value })
+                  }
                 />
                 <IoEyeOffOutline className={styles.eyeIcon} />
                 {/* <ion-icon name="eye-off-outline" class="eye-icon"></ion-icon> */}

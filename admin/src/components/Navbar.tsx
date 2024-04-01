@@ -1,11 +1,22 @@
 import { IoMenuOutline, IoLogOutOutline } from "react-icons/io5";
 import styles from "../assets/css/Navbar.module.css";
+import { useAuth } from "../hooks/useAuth";
 
 interface Props {
   onMenuBtnClick: () => void;
 }
 
 const Navbar: React.FC<Props> = ({ onMenuBtnClick }) => {
+  const { logout } = useAuth();
+
+  const logoutBtnHandler = () => {
+    fetch("/api/logout", {
+      method: "POST",
+    }).then(() => {
+      logout();
+    });
+  };
+
   return (
     <header className={styles.topbar}>
       <div className="group">
@@ -17,9 +28,13 @@ const Navbar: React.FC<Props> = ({ onMenuBtnClick }) => {
         </button>
         <h1 className={styles.title}>CITY BREAK</h1>
       </div>
-      <a href="/logout" role="button" className={`btn-icon ${styles.btnHeader}`}>
+      <button
+        onClick={logoutBtnHandler}
+        role="button"
+        className={`btn-icon ${styles.btnHeader}`}
+      >
         <IoLogOutOutline size="1.5rem" />
-      </a>
+      </button>
     </header>
   );
 };

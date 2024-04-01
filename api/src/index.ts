@@ -57,8 +57,8 @@ app.use("/static", express.static(path.join(__dirname, "..", "/static")));
 app.use(express.static("templates"));
 
 app.use("/api", apiRouter);
-app.use("/admin", adminRouter);
-app.use(loginRouter);
+// app.use("/admin", adminRouter);
+app.use("/api", loginRouter);
 
 app.get("/", (_, res: Response) => {
   return res.redirect("/admin");

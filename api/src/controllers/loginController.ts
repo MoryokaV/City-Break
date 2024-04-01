@@ -33,7 +33,15 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
       city_id: user.city_id,
     }))!.name;
 
-    return res.status(200).send({ url: "/admin" });
+    return res.status(200).json({
+      user: {
+        fullname: req.session.fullname,
+        username: req.session.username,
+        city_id: req.session.city_id,
+        admin: req.session.admin,
+      },
+      url: "/",
+    });
   } else {
     return res.status(401).send("Wrong user or password!");
   }

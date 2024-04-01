@@ -8,23 +8,34 @@ import Dashboard from "./pages/Dashboard";
 import App from "./App";
 import ErrorPage from "./pages/404";
 import Login from "./pages/Login";
+import { AuthProvider } from "./hooks/useAuth";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
+    element: <AuthProvider />,
     children: [
       {
-        index: true,
-        element: <Dashboard />,
+        path: "/",
+        element: (
+          <ProtectedRoute>
+            <App />
+          </ProtectedRoute>
+        ),
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+        ],
+      },
+      {
+        path: "/login",
+        element: <Login />,
       },
     ],
   },
-  {
-    path: "/login",
-    element: <Login/>
-  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
