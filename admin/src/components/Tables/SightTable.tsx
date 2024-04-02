@@ -4,8 +4,13 @@ import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { Sight } from "../../models/SightModel";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
+import { SightForm } from "../Forms/SightForm";
 
-export const SightTable = () => {
+interface Props {
+  onEditClick: (content: React.ReactElement) => void;
+}
+
+export const SightTable: React.FC<Props> = ({ onEditClick }) => {
   const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
   const [sights, setSights] = useState<Array<Sight>>([]);
@@ -56,7 +61,8 @@ export const SightTable = () => {
                         <button
                           className="btn-icon action-edit-sight"
                           data-bs-toggle="modal"
-                          data-bs-target="#sight-modal"
+                          data-bs-target="#modal"
+                          onClick={() => onEditClick(<SightForm key={Math.random()} />)}
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>
