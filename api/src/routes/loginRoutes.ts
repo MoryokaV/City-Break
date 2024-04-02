@@ -19,8 +19,6 @@ router.post("/login", LoginController.login);
 
 router.post("/logout", LoginController.logout);
 
-router.get("/currentUser", LoginController.getCurrentUser);
-
 router.get("/user", (req: Request, res: Response) => {
   if (req.session) {
     return res.status(200).json({

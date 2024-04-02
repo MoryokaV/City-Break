@@ -60,9 +60,3 @@ export const logout: RequestHandler = (
     }
   });
 };
-
-export const getCurrentUser: RequestHandler = (req: Request, res: Response) => {
-  const user = { fullname: req.session.fullname, is_admin: req.session.admin };
-
-  res.send(user);
-};

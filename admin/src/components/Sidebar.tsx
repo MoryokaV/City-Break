@@ -1,4 +1,4 @@
-import { ReactElement, RefObject } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { IoPersonCircle } from "react-icons/io5";
 import { SidebarData } from "../data/SidebarData";
@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 
 interface SidebarProps {
   show: boolean;
-  sidebarRef: RefObject<HTMLElement>;
+  sidebarRef: React.RefObject<HTMLElement>;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ show, sidebarRef }) => {
@@ -42,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ show, sidebarRef }) => {
 
 interface NavItemProps {
   path: string;
-  icon: ReactElement;
+  icon: React.ReactElement;
   children: string;
 }
 
@@ -61,14 +61,28 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, children }) => {
 };
 
 const StorageInfo = () => {
+  const [diskUsage, setDiskUsage] = useState({
+    used: 0.0,
+    total: 0.0,
+  });
+
+  useEffect(() => {
+    fetch("/api/serverStorage")
+      .then(response => response.json())
+      .then(data => setDiskUsage(data));
+  }, []);
+
   return (
     <section className={styles.storageInfo}>
       <p>
-        Server storage: <span id="space-used">0.0 GB</span> of{" "}
-        <span id="space-total">0.0 GB</span> Used
+        Server storage: <span>{diskUsage.used} GB</span> of{" "}
+        <span>{diskUsage.total} GB</span> Used
       </p>
       <div className={styles.barOutline}>
-        <div className={styles.barFilled} id="storage-bar"></div>
+        <div
+          className={styles.barFilled}
+          style={{ width: `${(diskUsage.used * 100) / diskUsage.total}%` }}
+        ></div>
       </div>
     </section>
   );
