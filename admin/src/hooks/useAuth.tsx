@@ -4,8 +4,9 @@ import { Outlet, useNavigate } from "react-router-dom";
 type UserType = {
   fullname: string;
   username: string;
+  admin: boolean;
   city_id: string;
-  admin: boolean,
+  city_name: string;
 } | null;
 
 type AuthContextType = {

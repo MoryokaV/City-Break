@@ -19,10 +19,6 @@ import { createHash } from "crypto";
 
 const router: Router = Router();
 
-router.get("/currentCityName", requiresAuth, (req: Request, res: Response) => {
-  return res.status(200).send({ name: req.session.city_name });
-});
-
 router.get("/fetchAdminUsers", requiresMasterAuth, async (_, res: Response) => {
   const users = await usersCollection.find({ admin: true }).toArray();
 

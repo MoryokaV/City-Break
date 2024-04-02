@@ -4,7 +4,6 @@ import MongoStore from "connect-mongo";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import cookieParser from "cookie-parser";
 import cors from "cors";
 import apiRouter from "./routes/apiRoutes";
 import adminRouter from "./routes/adminRoutes";
@@ -50,7 +49,6 @@ app.use(session(sessionConfig));
 
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(cookieParser());
 app.use(cors());
 
 app.use("/static", express.static(path.join(__dirname, "..", "/static")));

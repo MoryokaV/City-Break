@@ -28,7 +28,6 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     }
 
     req.session.city_id = user.city_id;
-    res.cookie("cityId", user.city_id);
     req.session.city_name = (await citiesCollection.findOne({
       city_id: user.city_id,
     }))!.name;
@@ -37,8 +36,9 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
       user: {
         fullname: req.session.fullname,
         username: req.session.username,
-        city_id: req.session.city_id,
         admin: req.session.admin,
+        city_id: req.session.city_id,
+        city_name: req.session.city_name,
       },
       url: "/",
     });

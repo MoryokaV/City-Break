@@ -62,8 +62,8 @@ const NavItem: React.FC<NavItemProps> = ({ path, icon, children }) => {
 
 const StorageInfo = () => {
   const [diskUsage, setDiskUsage] = useState({
-    used: 0.0,
-    total: 0.0,
+    used: 0,
+    total: 0,
   });
 
   useEffect(() => {
