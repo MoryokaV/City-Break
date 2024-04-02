@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { IoPersonCircle } from "react-icons/io5";
 import { SidebarData } from "../data/SidebarData";
 import styles from "../assets/css/Sidebar.module.css";
+import { useAuth } from "../hooks/useAuth";
 
 interface SidebarProps {
   show: boolean;
@@ -10,6 +11,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ show, sidebarRef }) => {
+  const { user } = useAuth();
+
   return (
     <aside
       ref={sidebarRef}
@@ -18,7 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({ show, sidebarRef }) => {
       <header>
         <IoPersonCircle size="2rem" className="col-2" />
         <p id="user-fullname" className="col mb-0 fw-normal fs-5 text-truncate">
-          Mario Vlaviano
+          {user?.fullname}
         </p>
       </header>
       <hr />

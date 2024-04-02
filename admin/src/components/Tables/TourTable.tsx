@@ -3,21 +3,21 @@ import DashboardCard from "../DashboardCard";
 import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { Tour } from "../../models/TourModel";
 import { LoadingSpinner } from "../LoadingSpinner";
+import { useAuth } from "../../hooks/useAuth";
 
 export const TourTable = () => {
+  const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
   const [tours, setTours] = useState<Array<Tour>>([]);
 
   useEffect(() => {
-    fetch(
-      "/api/fetchTours?city_id=5331e6c5772d490dabeb124502b96882",
-    )
+    fetch("/api/fetchTours?city_id=" + user?.city_id)
       .then(response => response.json())
       .then(data => {
         setTours(data);
         setLoading(false);
       });
-  }, []);
+  }, [user?.city_id]);
 
   return (
     <DashboardCard title="Tours" records={tours.length}>

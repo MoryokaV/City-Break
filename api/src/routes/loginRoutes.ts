@@ -7,13 +7,14 @@ const router: Router = Router();
 
 const templatesDir = path.join(__dirname, "..", "..", "templates");
 
-router.get("/master", requiresMasterAuth, (_, res: Response) => {
-  return res.sendFile(path.join(templatesDir, "master.html"));
-});
+// router.get("/master", requiresMasterAuth, (_, res: Response) => {
+//   return res.sendFile(path.join(templatesDir, "master.html"));
+// });
 
 // router.get("/login", (_, res: Response) => {
 //   return res.sendFile(path.join(templatesDir, "login.html"));
 // });
+
 router.post("/login", LoginController.login);
 
 router.post("/logout", LoginController.logout);

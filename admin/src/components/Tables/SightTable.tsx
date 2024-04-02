@@ -3,21 +3,21 @@ import DashboardCard from "../DashboardCard";
 import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { Sight } from "../../models/SightModel";
 import { LoadingSpinner } from "../LoadingSpinner";
+import { useAuth } from "../../hooks/useAuth";
 
 export const SightTable = () => {
+  const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
   const [sights, setSights] = useState<Array<Sight>>([]);
 
   useEffect(() => {
-    fetch(
-      "/api/fetchSights?city_id=5331e6c5772d490dabeb124502b96882",
-    )
+    fetch("/api/fetchSights?city_id=" + user?.city_id)
       .then(response => response.json())
       .then(data => {
         setSights(data);
         setLoading(false);
       });
-  }, []);
+  }, [user?.city_id]);
 
   return (
     <DashboardCard title="Sights" records={sights.length}>
