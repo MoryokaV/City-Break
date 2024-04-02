@@ -24,6 +24,13 @@ export const SightTable: React.FC<Props> = ({ onEditClick }) => {
       });
   }, [user?.city_id]);
 
+  const deleteSight = (id: string) => {
+    if (confirm("Are you sure you want to delete the entry")) {
+      fetch("/api/deleteSight/" + id, { method: "DELETE" });
+      setSights(sights.filter(sight => sight._id !== id));
+    }
+  };
+
   return (
     <DashboardCard title="Sights" records={sights.length}>
       <table>
@@ -66,7 +73,10 @@ export const SightTable: React.FC<Props> = ({ onEditClick }) => {
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>
-                        <button className="btn-icon action-delete-sight">
+                        <button
+                          className="btn-icon action-delete-sight"
+                          onClick={() => deleteSight(sight._id)}
+                        >
                           <IoRemoveCircleOutline className="edit-icon" />
                         </button>
                       </div>

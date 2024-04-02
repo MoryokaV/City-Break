@@ -1,5 +1,5 @@
 export type Sight = {
-    _id?: string;
+    _id: string;
     name: string;
     tags: Array<string>;
     description: string;
