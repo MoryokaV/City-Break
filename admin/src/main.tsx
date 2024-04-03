@@ -10,6 +10,7 @@ import ErrorPage from "./pages/404";
 import Login from "./pages/Login";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import Sight from "./pages/Sight";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Dashboard />,
+          },
+          {
+            path: "sight",
+            element: <Sight />,
           },
         ],
       },

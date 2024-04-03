@@ -1,6 +1,6 @@
-export const SightForm = ({key}: {key: number}) => {
+export const SightForm = ({formKey}: {formKey: number}) => {
   return (
-    <form className="row g-3" key={key}>
+    <form className="row g-3" key={formKey}>
       <section className="col-12">
         <label htmlFor="sight-name" className="form-label">
           Name
@@ -19,8 +19,8 @@ export const SightForm = ({key}: {key: number}) => {
           Tags
         </label>
         <div className="col-sm-3">
-          <select id="tags" name="tags" className="form-select">
-            <option value="-" selected disabled hidden>
+          <select id="tags" name="tags" className="form-select" defaultValue="-">
+            <option disabled hidden>
               -
             </option>
           </select>
@@ -61,7 +61,7 @@ export const SightForm = ({key}: {key: number}) => {
               type="number"
               min="1"
               max="1"
-              value="1"
+              defaultValue="1"
               required
             />
           </div>

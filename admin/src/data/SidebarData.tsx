@@ -30,17 +30,17 @@ export const SidebarData: Array<SidebarItem> = [
   },
   {
     name: "Sights",
-    path: "/sights",
+    path: "/sight",
     icon: <IoBusinessOutline />,
   },
   {
     name: "Tours",
-    path: "/tours",
+    path: "/tour",
     icon: <IoWalkOutline />,
   },
   {
     name: "Restaurants",
-    path: "/restauants",
+    path: "/restauant",
     icon: <IoRestaurantOutline />,
   },
   {
@@ -50,7 +50,7 @@ export const SidebarData: Array<SidebarItem> = [
   },
   {
     name: "Events",
-    path: "/events",
+    path: "/event",
     icon: <IoCalendarOutline />,
   },
   {
