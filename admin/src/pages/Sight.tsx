@@ -9,10 +9,11 @@ export default function SightPage() {
     formState: { isSubmitting },
     reset,
     getValues,
-    watch
+    setValue,
+    watch,
   } = useForm<Sight>();
 
-  const formProps = { register, handleSubmit, isSubmitting, reset, getValues };
+  const formProps = { register, handleSubmit, isSubmitting, reset, setValue, getValues };
   const sight = watch();
 
   return (
@@ -33,10 +34,17 @@ export default function SightPage() {
               <img className="card-img-top" id="preview-primary-image" />
               <section className="card-body preview-body">
                 <h4 className="card-title">{sight.name}</h4>
-                <div
-                  id="preview-tags"
-                  className="d-flex align-items-center flex-wrap"
-                ></div>
+                <div className="d-flex align-items-center flex-wrap">
+                  {sight.tags &&
+                    sight.tags.map((tag, index) => {
+                      return (
+                        <p key={index}>
+                          {tag}
+                          {index != sight.tags.length - 1 ? ", " : " "}
+                        </p>
+                      );
+                    })}
+                </div>
                 <div id="preview-description" className="card-text"></div>
                 <footer
                   className="d-flex align-items-center gap-2"

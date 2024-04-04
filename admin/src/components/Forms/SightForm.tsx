@@ -7,32 +7,33 @@ import {
   UseFormHandleSubmit,
   UseFormRegister,
   UseFormReset,
+  UseFormSetValue,
 } from "react-hook-form";
 import { nameRegExp, nameRegExpTitle } from "../../data/RegExpData";
 import { Sight } from "../../models/SightModel";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { Tag } from "../../models/Tagmodel";
+import { Tag } from "../../models/TagModel";
+import { TagsField } from "../TagsField";
 
 interface Props {
   formKey: number;
   register: UseFormRegister<Sight>;
   handleSubmit: UseFormHandleSubmit<Sight, undefined>;
   reset: UseFormReset<Sight>;
+  setValue: UseFormSetValue<Sight>;
   getValues: UseFormGetValues<Sight>;
-  isSubmitting: boolean,
+  isSubmitting: boolean;
 }
 
-export const SightForm: React.FC<Props> = ({ formKey, register, handleSubmit, reset, getValues, isSubmitting }) => {
-  const [tags, setTags] = useState<Array<Tag>>([]);
-  const { user } = useAuth();
-
-  useEffect(() => {
-    fetch("/api/fetchTags/sights?city_id=" + user?.city_id)
-      .then(response => response.json())
-      .then(data => setTags(data));
-  }, []);
-
+export const SightForm: React.FC<Props> = ({
+  formKey,
+  register,
+  handleSubmit,
+  reset,
+  setValue,
+  isSubmitting,
+}) => {
   const onSubmit: SubmitHandler<Sight> = async (data: FieldValues) => {
     console.log(data);
 
@@ -42,10 +43,11 @@ export const SightForm: React.FC<Props> = ({ formKey, register, handleSubmit, re
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="row g-3" key={formKey}>
       <section className="col-12">
-        <label htmlFor="sight-name" className="form-label">
+        <label htmlFor="name" className="form-label">
           Name
         </label>
         <input
+          id="name"
           {...register("name")}
           type="text"
           required
@@ -55,29 +57,7 @@ export const SightForm: React.FC<Props> = ({ formKey, register, handleSubmit, re
           className="form-control"
         />
       </section>
-      <section className="col-12 d-flex flex-wrap gap-3">
-        <label htmlFor="tags" className="col-form-label">
-          Tags
-        </label>
-        <div className="col-sm-3">
-          <select id="tags" name="tags" className="form-select" defaultValue="-">
-            <option disabled hidden>
-              -
-            </option>
-            {tags.map((tag, index) => {
-              return (
-                <option key={index} value={tag.name}>
-                  {tag.name}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <a role="button" className="btn btn-text text-primary" id="tag-btn">
-          Add
-        </a>
-        <div id="active-tags" className="d-flex align-items-center flex-wrap gap-2"></div>
-      </section>
+      <TagsField collection="sights" register={register} setValue={setValue} />
       <section className="col-12">
         <label className="form-label">Description</label>
         <DescriptionField />
