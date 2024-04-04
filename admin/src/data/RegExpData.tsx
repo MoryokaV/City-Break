@@ -1,9 +1,9 @@
-const diacritice = "ĂăÂâÎîȘșȚț";
-const diacritice_mari = "ĂÂÎȘȚ";
+const diacritice = "ĂăÂâÎîȘșȚé";
+const diacritice_mari = "ĂÂÎȘȚÉ";
 
 // Form Validation
-export const nameRegExp = `^[A-Za-z${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`;
-export const addressRegExp = `^[A-Za-z0-9${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`;
+// export const nameRegExp = `^[A-Za-z${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`;
+// export const addressRegExp = `^[A-Za-z0-9${diacritice}][A-Za-z0-9${diacritice},.\"'\\(\\) \\-&]*$`;
 export const tagRegExp = `^[A-Z${diacritice_mari}][A-Za-z${diacritice} \\-&]*$`;
 export const idRegExp = "^[0-9a-fA-F]{24}$";
 export const phoneRegExp =

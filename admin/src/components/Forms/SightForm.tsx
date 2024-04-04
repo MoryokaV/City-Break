@@ -9,11 +9,14 @@ import {
   UseFormReset,
   UseFormSetValue,
 } from "react-hook-form";
-import { nameRegExp, nameRegExpTitle } from "../../data/RegExpData";
+import {
+  latitudeRegExp,
+  latitudeRegExpTitle,
+  longitudeRegExp,
+  longitudeRegExpTitle,
+} from "../../data/RegExpData";
 import { Sight } from "../../models/SightModel";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
-import { Tag } from "../../models/TagModel";
 import { TagsField } from "../TagsField";
 
 interface Props {
@@ -52,8 +55,6 @@ export const SightForm: React.FC<Props> = ({
           type="text"
           required
           maxLength={60}
-          pattern={nameRegExp}
-          title={nameRegExpTitle}
           className="form-control"
         />
       </section>
@@ -102,6 +103,8 @@ export const SightForm: React.FC<Props> = ({
           type="text"
           className="form-control"
           {...register("latitude", { valueAsNumber: true })}
+          pattern={latitudeRegExp}
+          title={latitudeRegExpTitle}
           required
         />
       </section>
@@ -113,6 +116,8 @@ export const SightForm: React.FC<Props> = ({
           type="text"
           className="form-control"
           {...register("longitude", { valueAsNumber: true })}
+          pattern={longitudeRegExp}
+          title={longitudeRegExpTitle}
           required
         />
       </section>
