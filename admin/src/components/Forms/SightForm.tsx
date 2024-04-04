@@ -1,5 +1,5 @@
 import "react-quill/dist/quill.snow.css";
-import { DescriptionField } from "../DescriptionField";
+import { DescriptionField } from "./DescriptionField";
 import {
   FieldValues,
   SubmitHandler,
@@ -17,7 +17,9 @@ import {
 } from "../../data/RegExpData";
 import { Sight } from "../../models/SightModel";
 import { useEffect, useState } from "react";
-import { TagsField } from "../TagsField";
+import { TagsField } from "./TagsField";
+import { InputField } from "./InputField";
+import { PrimaryImageField } from "./PrimaryImageField";
 
 interface Props {
   formKey: number;
@@ -46,16 +48,14 @@ export const SightForm: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="row g-3" key={formKey}>
       <section className="col-12">
-        <label htmlFor="name" className="form-label">
-          Name
-        </label>
-        <input
+        <InputField
           id="name"
-          {...register("name")}
+          label="Name"
+          register={register}
           type="text"
           required
+          valueAsNumber={false}
           maxLength={60}
-          className="form-control"
         />
       </section>
       <TagsField collection="sights" register={register} setValue={setValue} />
@@ -78,58 +78,40 @@ export const SightForm: React.FC<Props> = ({
         <ul className="img-container"></ul>
       </section>
       <section className="col-12">
-        <div className="row gx-3 gy-0">
-          <label htmlFor="sight-primary-image" className="col-auto col-form-label">
-            Primary image index
-          </label>
-          <div className="col">
-            <input
-              className="form-control"
-              {...register("primary_image", { valueAsNumber: true })}
-              type="number"
-              min="1"
-              max="1"
-              defaultValue="1"
-              required
-            />
-          </div>
-        </div>
+        <PrimaryImageField register={register} />
       </section>
       <section className="col-sm-6">
-        <label className="form-label" htmlFor="sight-latitude">
-          Latitude
-        </label>
-        <input
+        <InputField
+          id="latitude"
+          label="Latitude"
+          register={register}
           type="text"
-          className="form-control"
-          {...register("latitude", { valueAsNumber: true })}
+          required
+          valueAsNumber={true}
           pattern={latitudeRegExp}
           title={latitudeRegExpTitle}
-          required
         />
       </section>
       <section className="col-sm-6">
-        <label className="form-label" htmlFor="sight-longitude">
-          Longitude
-        </label>
-        <input
+        <InputField
+          id="longitude"
+          label="Longitude"
+          register={register}
           type="text"
-          className="form-control"
-          {...register("longitude", { valueAsNumber: true })}
+          required
+          valueAsNumber={true}
           pattern={longitudeRegExp}
           title={longitudeRegExpTitle}
-          required
         />
       </section>
       <section className="col-12">
-        <label className="form-label" htmlFor="sight-external-link">
-          External link
-        </label>
-        <input
+        <InputField
+          id="external_link"
+          label="External link"
+          register={register}
           type="url"
-          className="form-control"
-          {...register("external_link")}
           required
+          valueAsNumber={false}
         />
         <div className="form-text">Note: it must be a website URL</div>
       </section>

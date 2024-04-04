@@ -69,7 +69,7 @@ export const SightTable: React.FC<Props> = ({ onEditClick }) => {
                           className="btn-icon action-edit-sight"
                           data-bs-toggle="modal"
                           data-bs-target="#modal"
-                          onClick={() => onEditClick(<SightForm formKey={Math.random()} />)}
+                          // onClick={() => onEditClick(<SightForm formKey={Math.random()} />)}
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>

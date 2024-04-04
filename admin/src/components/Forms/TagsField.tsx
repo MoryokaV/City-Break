@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { Tag } from "../models/TagModel";
-import { useAuth } from "../hooks/useAuth";
+import { Tag } from "../../models/TagModel";
+import { useAuth } from "../../hooks/useAuth";
 
 interface Props {
   collection: string;
@@ -28,6 +28,7 @@ export const TagsField: React.FC<Props> = ({ collection, register, setValue }) =
       .then(data => setTags(data));
 
     register("tags");
+    setValue("tags", []);
   }, [register]);
 
   const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
