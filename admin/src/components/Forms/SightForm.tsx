@@ -1,4 +1,10 @@
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 export const SightForm = ({formKey}: {formKey: number}) => {
+  const theme = "snow"
+  const placeholder = "Type something here..."
+
   return (
     <form className="row g-3" key={formKey}>
       <section className="col-12">
@@ -32,7 +38,7 @@ export const SightForm = ({formKey}: {formKey: number}) => {
       </section>
       <section className="col-12">
         <label className="form-label">Description</label>
-        <div id="sight-description"></div>
+        <ReactQuill theme={theme} placeholder={placeholder}/>
       </section>
       <section className="col-12 d-flex gap-3">
         <label htmlFor="sight-images" style={{ cursor: "pointer" }}>
