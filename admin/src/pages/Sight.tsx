@@ -1,6 +1,20 @@
+import { useForm } from "react-hook-form";
+import { Sight } from "../models/SightModel";
 import { SightForm } from "../components/Forms/SightForm";
 
-export default function Sight() {
+export default function SightPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+    reset,
+    getValues,
+    watch
+  } = useForm<Sight>();
+
+  const formProps = { register, handleSubmit, isSubmitting, reset, getValues };
+  const sight = watch();
+
   return (
     <div className="d-flex">
       <div className="container-sm m-auto py-3">
@@ -9,7 +23,7 @@ export default function Sight() {
             <div className="card shadow-sm">
               <h5 className="card-header">Insert sight</h5>
               <div className="card-body">
-                <SightForm formKey={0} />
+                <SightForm formKey={0} {...formProps} />
               </div>
             </div>
           </div>
@@ -18,7 +32,7 @@ export default function Sight() {
             <div className="card">
               <img className="card-img-top" id="preview-primary-image" />
               <section className="card-body preview-body">
-                <h4 id="preview-name" className="card-title"></h4>
+                <h4 className="card-title">{sight.name}</h4>
                 <div
                   id="preview-tags"
                   className="d-flex align-items-center flex-wrap"

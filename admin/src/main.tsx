@@ -10,7 +10,7 @@ import ErrorPage from "./pages/404";
 import Login from "./pages/Login";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import Sight from "./pages/Sight";
+import SightPage from "./pages/Sight";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
           },
           {
             path: "sight",
-            element: <Sight />,
+            element: <SightPage />,
           },
         ],
       },

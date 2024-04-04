@@ -1,13 +1,29 @@
 import "react-quill/dist/quill.snow.css";
 import { DescriptionField } from "../DescriptionField";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {
+  FieldValues,
+  SubmitHandler,
+  UseFormGetValues,
+  UseFormHandleSubmit,
+  UseFormRegister,
+  UseFormReset,
+} from "react-hook-form";
 import { nameRegExp, nameRegExpTitle } from "../../data/RegExpData";
 import { Sight } from "../../models/SightModel";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { Tag } from "../../models/Tagmodel";
 
-export const SightForm = ({ formKey }: { formKey: number }) => {
+interface Props {
+  formKey: number;
+  register: UseFormRegister<Sight>;
+  handleSubmit: UseFormHandleSubmit<Sight, undefined>;
+  reset: UseFormReset<Sight>;
+  getValues: UseFormGetValues<Sight>;
+  isSubmitting: boolean,
+}
+
+export const SightForm: React.FC<Props> = ({ formKey, register, handleSubmit, reset, getValues, isSubmitting }) => {
   const [tags, setTags] = useState<Array<Tag>>([]);
   const { user } = useAuth();
 
@@ -16,14 +32,6 @@ export const SightForm = ({ formKey }: { formKey: number }) => {
       .then(response => response.json())
       .then(data => setTags(data));
   }, []);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-    reset,
-    getValues,
-  } = useForm<Sight>();
 
   const onSubmit: SubmitHandler<Sight> = async (data: FieldValues) => {
     console.log(data);
@@ -57,7 +65,11 @@ export const SightForm = ({ formKey }: { formKey: number }) => {
               -
             </option>
             {tags.map((tag, index) => {
-              return <option key={index} value={tag.name}>{tag.name}</option>;
+              return (
+                <option key={index} value={tag.name}>
+                  {tag.name}
+                </option>
+              );
             })}
           </select>
         </div>
