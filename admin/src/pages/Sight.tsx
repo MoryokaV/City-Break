@@ -20,11 +20,16 @@ export default function SightPage() {
 
   const sight = watch();
 
+  const resetForm = () => {
+    setPreviewBlobs([]);
+    reset();
+  };
+
   const formProps = {
     register,
     handleSubmit,
     isSubmitting,
-    reset,
+    resetForm,
     setValue,
     getValues,
     watch,

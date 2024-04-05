@@ -21,24 +21,25 @@ import { PrimaryImageField } from "./Fields/PrimaryImageField";
 import { ImagesField } from "./Fields/ImagesField";
 import { useAuth } from "../../hooks/useAuth";
 import { FormType } from "../../models/FormModel";
+import { createImagesFormData, getPathsFromFileList } from "../../utils/images";
 
 interface Props {
-  formKey: number;
   register: UseFormRegister<any>;
   handleSubmit: UseFormHandleSubmit<FormType<Sight>, undefined>;
-  reset: UseFormReset<FormType<Sight>>;
   setValue: UseFormSetValue<any>;
   getValues: UseFormGetValues<any>;
+  resetForm: () => void;
   isSubmitting: boolean;
   files: FileList;
   activeTags: Array<string>;
+  formKey: number;
 }
 
 export const SightForm: React.FC<Props> = ({
   formKey,
   register,
   handleSubmit,
-  reset,
+  resetForm,
   setValue,
   isSubmitting,
   files,
@@ -49,22 +50,27 @@ export const SightForm: React.FC<Props> = ({
   const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
     const formData = new FormData();
 
-    console.log(data);
+    createImagesFormData(formData, data.images);
 
-    Array.from(data.images).forEach(file => {
-      formData.append("files[]", file);
-    });
-
-    const images = Array.from(data.images).map(
-      image => `${"/static/media/sights/" + user?.city_id}/${image.name}`,
-    );
-
+    const images = getPathsFromFileList(data.images, user?.city_id!);
     const sight: Sight = { ...data, images: images };
 
-    console.log(sight);
-    console.log(formData);
+    await fetch("/api/uploadImages/sights", {
+      method: "POST",
+      body: formData,
+    }).then(response => {
+      if (response.status === 413) {
+        alert("Files size should be less than 15MB");
+      }
+    });
 
-    // reset();
+    await fetch("/api/insertSight", {
+      method: "POST",
+      body: JSON.stringify(sight),
+      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    });
+
+    resetForm();
   };
 
   return (
@@ -80,7 +86,12 @@ export const SightForm: React.FC<Props> = ({
           maxLength={60}
         />
       </section>
-      <TagsField collection="sights" register={register} setValue={setValue} activeTags={activeTags} />
+      <TagsField
+        collection="sights"
+        register={register}
+        setValue={setValue}
+        activeTags={activeTags}
+      />
       <section className="col-12">
         <label className="form-label">Description</label>
         <DescriptionField register={register} setValue={setValue} />
@@ -125,7 +136,10 @@ export const SightForm: React.FC<Props> = ({
         <div className="form-text">Note: it must be a website URL</div>
       </section>
       <section className="col-12">
-        <button type="submit" className={`btn btn-primary ${isSubmitting && "loading-btn"}`}>
+        <button
+          type="submit"
+          className={`btn btn-primary ${isSubmitting && "loading-btn"}`}
+        >
           <span>Save</span>
         </button>
       </section>
