@@ -1,5 +1,5 @@
 import "react-quill/dist/quill.snow.css";
-import { DescriptionField } from "./DescriptionField";
+import { DescriptionField } from "./Fields/DescriptionField";
 import {
   SubmitHandler,
   UseFormGetValues,
@@ -7,7 +7,6 @@ import {
   UseFormRegister,
   UseFormReset,
   UseFormSetValue,
-  // UseFormWatch,
 } from "react-hook-form";
 import {
   latitudeRegExp,
@@ -16,10 +15,10 @@ import {
   longitudeRegExpTitle,
 } from "../../data/RegExpData";
 import { Sight } from "../../models/SightModel";
-import { TagsField } from "./TagsField";
-import { InputField } from "./InputField";
-import { PrimaryImageField } from "./PrimaryImageField";
-import { ImagesField } from "./ImagesField";
+import { TagsField } from "./Fields/TagsField";
+import { InputField } from "./Fields/InputField";
+import { PrimaryImageField } from "./Fields/PrimaryImageField";
+import { ImagesField } from "./Fields/ImagesField";
 import { useAuth } from "../../hooks/useAuth";
 import { FormType } from "../../models/FormModel";
 
@@ -46,6 +45,7 @@ export const SightForm: React.FC<Props> = ({
   activeTags,
 }) => {
   const { user } = useAuth();
+
   const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
     const formData = new FormData();
 
@@ -125,7 +125,7 @@ export const SightForm: React.FC<Props> = ({
         <div className="form-text">Note: it must be a website URL</div>
       </section>
       <section className="col-12">
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className={`btn btn-primary ${isSubmitting && "loading-btn"}`}>
           <span>Save</span>
         </button>
       </section>

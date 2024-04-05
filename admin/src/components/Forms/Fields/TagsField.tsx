@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FieldValues, UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { Tag } from "../../models/TagModel";
-import { useAuth } from "../../hooks/useAuth";
+import { Tag } from "../../../models/TagModel";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface Props {
   collection: string;
