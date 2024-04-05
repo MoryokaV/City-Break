@@ -4,7 +4,6 @@ import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { Sight } from "../../models/SightModel";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
-import { SightForm } from "../Forms/SightForm";
 
 interface Props {
   onEditClick: (content: React.ReactElement) => void;

@@ -5,7 +5,6 @@ import {
   UseFormGetValues,
   UseFormHandleSubmit,
   UseFormRegister,
-  UseFormReset,
   UseFormSetValue,
 } from "react-hook-form";
 import {
@@ -32,7 +31,7 @@ interface Props {
   isSubmitting: boolean;
   files: FileList;
   activeTags: Array<string>;
-  formKey: number;
+  formKey?: number;
 }
 
 export const SightForm: React.FC<Props> = ({

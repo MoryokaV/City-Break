@@ -15,6 +15,7 @@ import SightPage from "./pages/Sight";
 const router = createBrowserRouter([
   {
     element: <AuthProvider />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -23,7 +24,6 @@ const router = createBrowserRouter([
             <App />
           </ProtectedRoute>
         ),
-        errorElement: <ErrorPage />,
         children: [
           {
             index: true,

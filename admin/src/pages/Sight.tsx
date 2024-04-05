@@ -59,7 +59,7 @@ export default function SightPage() {
             <div className="card shadow-sm">
               <h5 className="card-header">Insert sight</h5>
               <div className="card-body">
-                <SightForm formKey={0} {...formProps} />
+                <SightForm {...formProps} />
               </div>
             </div>
           </div>
