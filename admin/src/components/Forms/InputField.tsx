@@ -1,11 +1,11 @@
-import { UseFormRegister } from "react-hook-form";
+import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface Props {
-  register: UseFormRegister<any>;
+  register: UseFormRegister<FieldValues>;
   label: string;
   id: string;
   valueAsNumber: boolean;
-  [x: string]: any;
+  [x: string]: unknown;
 }
 
 export const InputField: React.FC<Props> = ({

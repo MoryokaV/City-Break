@@ -1,10 +1,11 @@
-import { UseFormRegister } from "react-hook-form";
+import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface Props {
-  register: UseFormRegister<any>;
+  register: UseFormRegister<FieldValues>;
+  max: number;
 }
 
-export const PrimaryImageField: React.FC<Props> = ({ register }) => (
+export const PrimaryImageField: React.FC<Props> = ({ register, max }) => (
   <div className="row gx-3 gy-0">
     <label htmlFor="primary_image" className="col-auto col-form-label">
       Primary image index
@@ -16,7 +17,7 @@ export const PrimaryImageField: React.FC<Props> = ({ register }) => (
         {...register("primary_image", { valueAsNumber: true })}
         type="number"
         min="1"
-        max="1"
+        max={max > 0 ? max : "1"}
         defaultValue="1"
         required
       />

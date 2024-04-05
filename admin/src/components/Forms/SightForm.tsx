@@ -20,16 +20,20 @@ import { Sight } from "../../models/SightModel";
 import { TagsField } from "./TagsField";
 import { InputField } from "./InputField";
 import { PrimaryImageField } from "./PrimaryImageField";
+import { ImagesField } from "./ImagesField";
+import { useAuth } from "../../hooks/useAuth";
+
+type FormType<T> = Omit<T, "images"> & { images: FileList };
 
 interface Props {
   formKey: number;
   register: UseFormRegister<FieldValues>;
-  handleSubmit: UseFormHandleSubmit<Sight, undefined>;
-  reset: UseFormReset<Sight>;
+  handleSubmit: UseFormHandleSubmit<FormType<Sight>, undefined>;
+  reset: UseFormReset<FormType<Sight>>;
   setValue: UseFormSetValue<FieldValues>;
   getValues: UseFormGetValues<FieldValues>;
   isSubmitting: boolean;
-  watch: UseFormWatch<Sight>;
+  watch: UseFormWatch<FieldValues>;
 }
 
 export const SightForm: React.FC<Props> = ({
@@ -41,11 +45,29 @@ export const SightForm: React.FC<Props> = ({
   watch,
   isSubmitting,
 }) => {
-  const onSubmit: SubmitHandler<Sight> = async (data: FieldValues) => {
+  const { user } = useAuth();
+  const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
+    const formData = new FormData();
+
     console.log(data);
+
+    Array.from(data.images).forEach(file => {
+      formData.append("files[]", file);
+    });
+
+    const images = Array.from(data.images).map(
+      image => `${"/static/media/sights/" + user?.city_id}/${image.name}`,
+    );
+
+    const sight: Sight = { ...data, images: images };
+
+    console.log(sight);
+    console.log(formData);
 
     // reset();
   };
+
+  const files: FileList = watch("images");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="row g-3" key={formKey}>
@@ -65,22 +87,9 @@ export const SightForm: React.FC<Props> = ({
         <label className="form-label">Description</label>
         <DescriptionField register={register} setValue={setValue} />
       </section>
-      <section className="col-12 d-flex gap-3">
-        <label htmlFor="sight-images" style={{ cursor: "pointer" }}>
-          Images
-          <input
-            type="file"
-            className="hidden-input"
-            id="sight-images"
-            name="images"
-            accept="image/*"
-            multiple
-          />
-        </label>
-        <ul className="img-container"></ul>
-      </section>
+      <ImagesField register={register} files={files} setValue={setValue} />
       <section className="col-12">
-        <PrimaryImageField register={register} />
+        <PrimaryImageField register={register} max={files && files.length} />
       </section>
       <section className="col-sm-6">
         <InputField
