@@ -1,7 +1,6 @@
 import "react-quill/dist/quill.snow.css";
 import { DescriptionField } from "./DescriptionField";
 import {
-  FieldValues,
   SubmitHandler,
   UseFormGetValues,
   UseFormHandleSubmit,
@@ -26,11 +25,11 @@ import { FormType } from "../../models/FormModel";
 
 interface Props {
   formKey: number;
-  register: UseFormRegister<FieldValues>;
+  register: UseFormRegister<any>;
   handleSubmit: UseFormHandleSubmit<FormType<Sight>, undefined>;
   reset: UseFormReset<FormType<Sight>>;
-  setValue: UseFormSetValue<FieldValues>;
-  getValues: UseFormGetValues<FieldValues>;
+  setValue: UseFormSetValue<any>;
+  getValues: UseFormGetValues<any>;
   isSubmitting: boolean;
   // watch: UseFormWatch<FieldValues>;
   files: FileList;
