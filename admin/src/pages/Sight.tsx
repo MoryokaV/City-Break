@@ -1,8 +1,13 @@
 import { useForm } from "react-hook-form";
 import { Sight } from "../models/SightModel";
 import { SightForm } from "../components/Forms/SightForm";
+import { useEffect, useState } from "react";
+import { getBase64 } from "../utils/images";
+import { FormType } from "../models/FormModel";
 
 export default function SightPage() {
+  const [previewBlobs, setPreviewBlobs] = useState<Array<string>>([]);
+
   const {
     register,
     handleSubmit,
@@ -11,7 +16,9 @@ export default function SightPage() {
     getValues,
     setValue,
     watch,
-  } = useForm<Sight>();
+  } = useForm<FormType<Sight>>();
+
+  const sight = watch();
 
   const formProps = {
     register,
@@ -21,9 +28,22 @@ export default function SightPage() {
     setValue,
     getValues,
     watch,
+    files: sight.images,
   };
 
-  const sight = watch();
+  useEffect(() => {
+    if (sight.images) {
+      processPreviewImages();
+    }
+  }, [sight.images]);
+
+  const processPreviewImages = async () => {
+    const blobs: Array<string> = await Promise.all(
+      Array.from(sight.images).map(image => getBase64(image)),
+    );
+
+    setPreviewBlobs(blobs);
+  };
 
   return (
     <div className="d-flex">
@@ -40,7 +60,10 @@ export default function SightPage() {
           <div className="col-sm-10 col-lg-4">
             <p className="preview-title">Live preview</p>
             <div className="card">
-              <img className="card-img-top" id="preview-primary-image" />
+              <img
+                className="card-img-top"
+                src={previewBlobs && previewBlobs[sight.primary_image - 1]}
+              />
               <section className="card-body preview-body">
                 <h4 className="card-title">{sight.name}</h4>
                 <div className="d-flex align-items-center flex-wrap">
@@ -59,10 +82,11 @@ export default function SightPage() {
                   className="card-text"
                   dangerouslySetInnerHTML={{ __html: sight.description }}
                 ></div>
-                <footer
-                  className="d-flex align-items-center gap-2"
-                  id="preview-images"
-                ></footer>
+                <footer className="d-flex align-items-center gap-2">
+                  {previewBlobs.map((blob, index) => (
+                    <img key={index} src={blob} />
+                  ))}
+                </footer>
               </section>
             </div>
           </div>

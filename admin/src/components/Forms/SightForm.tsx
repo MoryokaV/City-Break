@@ -8,7 +8,7 @@ import {
   UseFormRegister,
   UseFormReset,
   UseFormSetValue,
-  UseFormWatch,
+  // UseFormWatch,
 } from "react-hook-form";
 import {
   latitudeRegExp,
@@ -22,8 +22,7 @@ import { InputField } from "./InputField";
 import { PrimaryImageField } from "./PrimaryImageField";
 import { ImagesField } from "./ImagesField";
 import { useAuth } from "../../hooks/useAuth";
-
-type FormType<T> = Omit<T, "images"> & { images: FileList };
+import { FormType } from "../../models/FormModel";
 
 interface Props {
   formKey: number;
@@ -33,7 +32,8 @@ interface Props {
   setValue: UseFormSetValue<FieldValues>;
   getValues: UseFormGetValues<FieldValues>;
   isSubmitting: boolean;
-  watch: UseFormWatch<FieldValues>;
+  // watch: UseFormWatch<FieldValues>;
+  files: FileList;
 }
 
 export const SightForm: React.FC<Props> = ({
@@ -42,8 +42,9 @@ export const SightForm: React.FC<Props> = ({
   handleSubmit,
   reset,
   setValue,
-  watch,
+  // watch,
   isSubmitting,
+  files,
 }) => {
   const { user } = useAuth();
   const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
@@ -67,7 +68,7 @@ export const SightForm: React.FC<Props> = ({
     // reset();
   };
 
-  const files: FileList = watch("images");
+  // const files: FileList = watch("images");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="row g-3" key={formKey}>

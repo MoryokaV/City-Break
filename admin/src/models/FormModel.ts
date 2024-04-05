@@ -1,0 +1,1 @@
+export type FormType<T> = Omit<T, "images"> & { images: FileList };
