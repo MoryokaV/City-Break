@@ -7,17 +7,17 @@ interface Props {
   collection: string;
   register: UseFormRegister<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
+  activeTags: Array<string>;
 }
 
 type ButtonActionType = "Add" | "Remove";
 type ButtonHandlerType = (() => React.MouseEventHandler) | undefined;
 
-export const TagsField: React.FC<Props> = ({ collection, register, setValue }) => {
+export const TagsField: React.FC<Props> = ({ collection, register, setValue, activeTags = [] }) => {
   const { user } = useAuth();
   const selectRef = useRef<HTMLSelectElement>(null);
 
   const [tags, setTags] = useState<Array<Tag>>([]);
-  const [activeTags, setActiveTags] = useState<Array<string>>([]);
 
   const [buttonAction, setButtonAction] = useState<ButtonActionType>("Add");
   const [buttonHandler, setButtonHandler] = useState<ButtonHandlerType>(undefined);
@@ -48,8 +48,6 @@ export const TagsField: React.FC<Props> = ({ collection, register, setValue }) =
     }
 
     activeTags.push(selectRef.current!.value);
-
-    setActiveTags(activeTags);
     setValue("tags", activeTags);
 
     setButtonAction("Add");
@@ -60,8 +58,6 @@ export const TagsField: React.FC<Props> = ({ collection, register, setValue }) =
   const removeTag = () => {
     const index = activeTags.indexOf(selectRef.current!.value);
     activeTags.splice(index, 1);
-
-    setActiveTags(activeTags);
     setValue("tags", activeTags);
 
     setButtonAction("Add");

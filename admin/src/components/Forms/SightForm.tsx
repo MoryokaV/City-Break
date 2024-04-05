@@ -31,8 +31,8 @@ interface Props {
   setValue: UseFormSetValue<any>;
   getValues: UseFormGetValues<any>;
   isSubmitting: boolean;
-  // watch: UseFormWatch<FieldValues>;
   files: FileList;
+  activeTags: Array<string>;
 }
 
 export const SightForm: React.FC<Props> = ({
@@ -41,9 +41,9 @@ export const SightForm: React.FC<Props> = ({
   handleSubmit,
   reset,
   setValue,
-  // watch,
   isSubmitting,
   files,
+  activeTags,
 }) => {
   const { user } = useAuth();
   const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
@@ -67,8 +67,6 @@ export const SightForm: React.FC<Props> = ({
     // reset();
   };
 
-  // const files: FileList = watch("images");
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="row g-3" key={formKey}>
       <section className="col-12">
@@ -82,7 +80,7 @@ export const SightForm: React.FC<Props> = ({
           maxLength={60}
         />
       </section>
-      <TagsField collection="sights" register={register} setValue={setValue} />
+      <TagsField collection="sights" register={register} setValue={setValue} activeTags={activeTags} />
       <section className="col-12">
         <label className="form-label">Description</label>
         <DescriptionField register={register} setValue={setValue} />

@@ -5,7 +5,7 @@ interface Props {
   max: number;
 }
 
-export const PrimaryImageField: React.FC<Props> = ({ register, max }) => (
+export const PrimaryImageField: React.FC<Props> = ({ register, max = 1 }) => (
   <div className="row gx-3 gy-0">
     <label htmlFor="primary_image" className="col-auto col-form-label">
       Primary image index

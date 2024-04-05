@@ -29,6 +29,7 @@ export default function SightPage() {
     getValues,
     watch,
     files: sight.images,
+    activeTags: sight.tags,
   };
 
   useEffect(() => {
