@@ -13,7 +13,16 @@ export default function SightPage() {
     watch,
   } = useForm<Sight>();
 
-  const formProps = { register, handleSubmit, isSubmitting, reset, setValue, getValues };
+  const formProps = {
+    register,
+    handleSubmit,
+    isSubmitting,
+    reset,
+    setValue,
+    getValues,
+    watch,
+  };
+
   const sight = watch();
 
   return (
@@ -45,7 +54,11 @@ export default function SightPage() {
                       );
                     })}
                 </div>
-                <div id="preview-description" className="card-text"></div>
+                <div
+                  id="preview-description"
+                  className="card-text"
+                  dangerouslySetInnerHTML={{ __html: sight.description }}
+                ></div>
                 <footer
                   className="d-flex align-items-center gap-2"
                   id="preview-images"

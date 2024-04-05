@@ -8,6 +8,7 @@ import {
   UseFormRegister,
   UseFormReset,
   UseFormSetValue,
+  UseFormWatch,
 } from "react-hook-form";
 import {
   latitudeRegExp,
@@ -16,19 +17,19 @@ import {
   longitudeRegExpTitle,
 } from "../../data/RegExpData";
 import { Sight } from "../../models/SightModel";
-import { useEffect, useState } from "react";
 import { TagsField } from "./TagsField";
 import { InputField } from "./InputField";
 import { PrimaryImageField } from "./PrimaryImageField";
 
 interface Props {
   formKey: number;
-  register: UseFormRegister<Sight>;
+  register: UseFormRegister<FieldValues>;
   handleSubmit: UseFormHandleSubmit<Sight, undefined>;
   reset: UseFormReset<Sight>;
-  setValue: UseFormSetValue<Sight>;
-  getValues: UseFormGetValues<Sight>;
+  setValue: UseFormSetValue<FieldValues>;
+  getValues: UseFormGetValues<FieldValues>;
   isSubmitting: boolean;
+  watch: UseFormWatch<Sight>;
 }
 
 export const SightForm: React.FC<Props> = ({
@@ -37,6 +38,7 @@ export const SightForm: React.FC<Props> = ({
   handleSubmit,
   reset,
   setValue,
+  watch,
   isSubmitting,
 }) => {
   const onSubmit: SubmitHandler<Sight> = async (data: FieldValues) => {
@@ -61,7 +63,7 @@ export const SightForm: React.FC<Props> = ({
       <TagsField collection="sights" register={register} setValue={setValue} />
       <section className="col-12">
         <label className="form-label">Description</label>
-        <DescriptionField />
+        <DescriptionField register={register} setValue={setValue} />
       </section>
       <section className="col-12 d-flex gap-3">
         <label htmlFor="sight-images" style={{ cursor: "pointer" }}>

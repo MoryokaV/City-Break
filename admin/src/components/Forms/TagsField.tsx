@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { FieldValues, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { Tag } from "../../models/TagModel";
 import { useAuth } from "../../hooks/useAuth";
 
 interface Props {
   collection: string;
-  register: UseFormRegister<any>;
-  setValue: UseFormSetValue<any>;
+  register: UseFormRegister<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
 }
 
 type ButtonActionType = "Add" | "Remove";
-type ButtonhandlerType = (() => React.MouseEventHandler) | undefined;
+type ButtonHandlerType = (() => React.MouseEventHandler) | undefined;
 
 export const TagsField: React.FC<Props> = ({ collection, register, setValue }) => {
   const { user } = useAuth();
@@ -20,7 +20,7 @@ export const TagsField: React.FC<Props> = ({ collection, register, setValue }) =
   const [activeTags, setActiveTags] = useState<Array<string>>([]);
 
   const [buttonAction, setButtonAction] = useState<ButtonActionType>("Add");
-  const [buttonHandler, setButtonHandler] = useState<ButtonhandlerType>(undefined);
+  const [buttonHandler, setButtonHandler] = useState<ButtonHandlerType>(undefined);
 
   useEffect(() => {
     fetch(`/api/fetchTags/${collection}?city_id=${user?.city_id}`)
@@ -29,7 +29,7 @@ export const TagsField: React.FC<Props> = ({ collection, register, setValue }) =
 
     register("tags");
     setValue("tags", []);
-  }, [register]);
+  }, [register, setValue, collection, user?.city_id]);
 
   const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (!activeTags.includes(e.currentTarget.value)) {
