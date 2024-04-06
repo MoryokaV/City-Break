@@ -28,7 +28,8 @@ interface Props {
   setValue: UseFormSetValue<any>;
   resetForm: () => void;
   isSubmitting: boolean;
-  files: FileList;
+  images: Array<string>;
+  files: File[];
   activeTags: Array<string>;
 }
 
@@ -38,18 +39,17 @@ export const InsertSightForm: React.FC<Props> = ({
   resetForm,
   setValue,
   isSubmitting,
+  images,
   files,
   activeTags,
 }) => {
-  const { user } = useAuth();
-
   const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
     const formData = new FormData();
+    const { files, ...sight } = data;
 
-    // createImagesFormData(formData, data.images);
+    console.log(data);
 
-    // const images = getPathsFromFileList(data.images, user?.city_id!);
-    const sight: Sight = { ...data, images: images };
+    createImagesFormData(formData, files);
 
     await fetch("/api/uploadImages/sights", {
       method: "POST",
@@ -92,7 +92,13 @@ export const InsertSightForm: React.FC<Props> = ({
         <label className="form-label">Description</label>
         <DescriptionField register={register} setValue={setValue} />
       </section>
-      <ImagesField register={register} files={files} setValue={setValue} />
+      <ImagesField
+        register={register}
+        images={images}
+        files={files}
+        collection="sights"
+        setValue={setValue}
+      />
       <section className="col-12">
         <PrimaryImageField register={register} max={files && files.length} />
       </section>

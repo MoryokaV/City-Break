@@ -17,12 +17,6 @@ export default function SightPage() {
     watch,
   } = useForm<FormType<Sight>>();
 
-
-  // useEffect(() => {
-    
-  // })
-
-
   const sight = watch();
 
   const resetForm = () => {
@@ -37,18 +31,19 @@ export default function SightPage() {
     resetForm,
     setValue,
     watch,
-    files: sight.images,
+    files: sight.files,
+    images: sight.images,
     activeTags: sight.tags,
   };
   useEffect(() => {
-    if (sight.images) {
+    if (sight.files) {
       processPreviewImages();
     }
-  }, [sight.images]);
+  }, [sight.files]);
 
   const processPreviewImages = async () => {
     const blobs: Array<string> = await Promise.all(
-      Array.from(sight.images).map(image => getBase64(image)),
+      Array.from(sight.files).map(file => getBase64(file)),
     );
 
     setPreviewBlobs(blobs);
