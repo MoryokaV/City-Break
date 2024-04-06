@@ -1,79 +1,71 @@
-import "react-quill/dist/quill.snow.css";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { InputField } from "./Fields/InputField";
+import { FormType } from "../../models/FormModel";
+import { Sight } from "../../models/SightModel";
+import { createImagesFormData } from "../../utils/images";
+import { TagsField } from "./Fields/TagsField";
 import { DescriptionField } from "./Fields/DescriptionField";
-import {
-  SubmitHandler,
-  UseFormGetValues,
-  UseFormHandleSubmit,
-  UseFormRegister,
-  UseFormSetValue,
-} from "react-hook-form";
+import { ImagesField } from "./Fields/ImagesField";
+import { PrimaryImageField } from "./Fields/PrimaryImageField";
 import {
   latitudeRegExp,
   latitudeRegExpTitle,
   longitudeRegExp,
   longitudeRegExpTitle,
 } from "../../data/RegExpData";
-import { Sight } from "../../models/SightModel";
-import { TagsField } from "./Fields/TagsField";
-import { InputField } from "./Fields/InputField";
-import { PrimaryImageField } from "./Fields/PrimaryImageField";
-import { ImagesField } from "./Fields/ImagesField";
-import { useAuth } from "../../hooks/useAuth";
-import { FormType } from "../../models/FormModel";
-import { createImagesFormData, getPathsFromFileList } from "../../utils/images";
 
 interface Props {
-  register: UseFormRegister<any>;
-  handleSubmit: UseFormHandleSubmit<FormType<Sight>, undefined>;
-  setValue: UseFormSetValue<any>;
-  getValues: UseFormGetValues<any>;
-  resetForm: () => void;
-  isSubmitting: boolean;
-  files: FileList;
-  activeTags: Array<string>;
-  formKey?: number;
+  sight: Sight;
 }
 
-export const SightForm: React.FC<Props> = ({
-  formKey,
-  register,
-  handleSubmit,
-  resetForm,
-  setValue,
-  isSubmitting,
-  files,
-  activeTags,
-}) => {
-  const { user } = useAuth();
+export const EditSightForm: React.FC<Props> = ({ sight }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+    reset,
+    setValue,
+    watch,
+  } = useForm<FormType<Sight>>();
+
+  const files = watch("files", []);
+  const images = watch("images", sight.images);
+  const activeTags = watch("tags", sight.tags);
 
   const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
     const formData = new FormData();
+    const { files, ...updatedSight } = data;
 
-    createImagesFormData(formData, data.images);
+    console.log(data);
 
-    const images = getPathsFromFileList(data.images, user?.city_id!);
-    const sight: Sight = { ...data, images: images };
+    createImagesFormData(formData, files);
 
-    await fetch("/api/uploadImages/sights", {
-      method: "POST",
-      body: formData,
-    }).then(response => {
-      if (response.status === 413) {
-        alert("Files size should be less than 15MB");
-      }
-    });
+    if (files.length !== 0) {
+      await fetch("/api/uploadImages/sights", {
+        method: "POST",
+        body: formData,
+      }).then(response => {
+        if (response.status === 413) {
+          alert("Files size should be less than 15MB");
+        }
+      });
+    }
 
-    await fetch("/api/insertSight", {
-      method: "POST",
-      body: JSON.stringify(sight),
+    await fetch("/api/editSight", {
+      method: "PUT",
+      body: JSON.stringify({
+        images_to_delete: [],
+        _id: sight._id,
+        sight: updatedSight,
+      }),
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     });
 
-    resetForm();
+    // reset();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="row g-3" key={formKey}>
+    <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
       <section className="col-12">
         <InputField
           id="name"
@@ -83,6 +75,7 @@ export const SightForm: React.FC<Props> = ({
           required
           valueAsNumber={false}
           maxLength={60}
+          defaultValue={sight.name}
         />
       </section>
       <TagsField
@@ -93,11 +86,21 @@ export const SightForm: React.FC<Props> = ({
       />
       <section className="col-12">
         <label className="form-label">Description</label>
-        <DescriptionField register={register} setValue={setValue} />
+        <DescriptionField
+          register={register}
+          setValue={setValue}
+          defaultValue={sight.description}
+        />
       </section>
-      <ImagesField register={register} files={files} setValue={setValue} />
+      <ImagesField
+        register={register}
+        images={images}
+        files={files}
+        setValue={setValue}
+        collection="sights"
+      />
       <section className="col-12">
-        <PrimaryImageField register={register} max={files && files.length} />
+        <PrimaryImageField register={register} max={images && images.length} />
       </section>
       <section className="col-sm-6">
         <InputField
@@ -109,6 +112,7 @@ export const SightForm: React.FC<Props> = ({
           valueAsNumber={true}
           pattern={latitudeRegExp}
           title={latitudeRegExpTitle}
+          defaultValue={sight.latitude}
         />
       </section>
       <section className="col-sm-6">
@@ -121,6 +125,7 @@ export const SightForm: React.FC<Props> = ({
           valueAsNumber={true}
           pattern={longitudeRegExp}
           title={longitudeRegExpTitle}
+          defaultValue={sight.longitude}
         />
       </section>
       <section className="col-12">
@@ -131,6 +136,7 @@ export const SightForm: React.FC<Props> = ({
           type="url"
           required
           valueAsNumber={false}
+          defaultValue={sight.external_link}
         />
         <div className="form-text">Note: it must be a website URL</div>
       </section>

@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Sight } from "../models/SightModel";
-import { SightForm } from "../components/Forms/SightForm";
+import { InsertSightForm } from "../components/Forms/InsertSightForm";
 import { useEffect, useState } from "react";
 import { getBase64 } from "../utils/images";
 import { FormType } from "../models/FormModel";
@@ -13,10 +13,15 @@ export default function SightPage() {
     handleSubmit,
     formState: { isSubmitting },
     reset,
-    getValues,
     setValue,
     watch,
   } = useForm<FormType<Sight>>();
+
+
+  // useEffect(() => {
+    
+  // })
+
 
   const sight = watch();
 
@@ -24,19 +29,17 @@ export default function SightPage() {
     setPreviewBlobs([]);
     reset();
   };
-
+  
   const formProps = {
     register,
     handleSubmit,
     isSubmitting,
     resetForm,
     setValue,
-    getValues,
     watch,
     files: sight.images,
     activeTags: sight.tags,
   };
-
   useEffect(() => {
     if (sight.images) {
       processPreviewImages();
@@ -59,7 +62,7 @@ export default function SightPage() {
             <div className="card shadow-sm">
               <h5 className="card-header">Insert sight</h5>
               <div className="card-body">
-                <SightForm {...formProps} />
+                <InsertSightForm {...formProps} />
               </div>
             </div>
           </div>

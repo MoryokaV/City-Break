@@ -1,19 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import { FieldValues, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { Tag } from "../../../models/TagModel";
 import { useAuth } from "../../../hooks/useAuth";
 
 interface Props {
+  register: UseFormRegister<any>;
+  setValue: UseFormSetValue<any>;
   collection: string;
-  register: UseFormRegister<FieldValues>;
-  setValue: UseFormSetValue<FieldValues>;
-  activeTags: Array<string>;
+  activeTags?: Array<string>;
 }
 
 type ButtonActionType = "Add" | "Remove";
 type ButtonHandlerType = (() => React.MouseEventHandler) | undefined;
 
-export const TagsField: React.FC<Props> = ({ collection, register, setValue, activeTags = [] }) => {
+export const TagsField: React.FC<Props> = ({
+  register,
+  setValue,
+  collection,
+  activeTags = [],
+}) => {
   const { user } = useAuth();
   const selectRef = useRef<HTMLSelectElement>(null);
 
@@ -28,8 +33,8 @@ export const TagsField: React.FC<Props> = ({ collection, register, setValue, act
       .then(data => setTags(data));
 
     register("tags");
-    setValue("tags", []);
-  }, [register, setValue, collection, user?.city_id]);
+    setValue("tags", activeTags);
+  }, []);
 
   const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (!activeTags.includes(e.currentTarget.value)) {

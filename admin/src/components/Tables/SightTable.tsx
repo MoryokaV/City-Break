@@ -4,9 +4,10 @@ import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { Sight } from "../../models/SightModel";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
+import { EditSightForm } from "../Forms/EditSightForm";
 
 interface Props {
-  onEditClick: (content: React.ReactElement) => void;
+  onEditClick: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }
 
 export const SightTable: React.FC<Props> = ({ onEditClick }) => {
@@ -21,7 +22,7 @@ export const SightTable: React.FC<Props> = ({ onEditClick }) => {
         setSights(data);
         setLoading(false);
       });
-  }, [user?.city_id]);
+  }, []);
 
   const deleteSight = (id: string) => {
     if (confirm("Are you sure you want to delete the entry")) {
@@ -68,7 +69,7 @@ export const SightTable: React.FC<Props> = ({ onEditClick }) => {
                           className="btn-icon action-edit-sight"
                           data-bs-toggle="modal"
                           data-bs-target="#modal"
-                          // onClick={() => onEditClick(<SightForm formKey={Math.random()} />)}
+                          onClick={() => onEditClick(<EditSightForm sight={sight} />)}
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>
