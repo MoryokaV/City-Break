@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { IoCloseOutline, IoCloudUploadOutline } from "react-icons/io5";
+import { IoCloseOutline, IoCloudUploadOutline, IoImageOutline } from "react-icons/io5";
 import { getFilename } from "../../../utils/images";
 import { useAuth } from "../../../hooks/useAuth";
 
@@ -79,10 +79,18 @@ export const ImagesField: React.FC<Props> = ({
       </label>
       <ul className="img-container">
         {images.map((image, index) => {
+          let uploaded = true;
+          files.map(file => {
+            if (file.name === getFilename(image)) {
+              uploaded = false;
+              return;
+            }
+          });
+
           return (
             <li key={index} className="highlight-onhover">
-              <a className="group">
-                <IoCloudUploadOutline />
+              <a href={uploaded && image} target={uploaded && "_blank"} className="group">
+                {uploaded ? <IoImageOutline /> : <IoCloudUploadOutline />}
                 {getFilename(image)}
               </a>
               <button

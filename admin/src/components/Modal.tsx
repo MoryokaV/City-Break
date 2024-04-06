@@ -1,6 +1,12 @@
-export const Modal = ({ children }: { children: React.ReactNode }) => {
+export const Modal = ({
+  modalRef,
+  children,
+}: {
+  modalRef: React.RefObject<HTMLDivElement>;
+  children: React.ReactNode;
+}) => {
   return (
-    <div className="modal fade" id="modal" tabIndex={-1} aria-hidden="true">
+    <div ref={modalRef} className="modal fade" id="modal" tabIndex={-1} aria-hidden="true">
       <div className="modal-dialog modal-lg modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">

@@ -3,20 +3,20 @@ import { Modal } from "../components/Modal";
 import { SightTable } from "../components/Tables/SightTable";
 
 export default function Dashboard() {
-  // const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
   const [modalContent, setModalContent] = useState(<></>);
 
-  // const clearModal = () => {
-  //   setModalContent(<></>);
-  // };
+  const clearModal = () => {
+    setModalContent(<></>);
+  };
 
-  // useEffect(() => {
-  //   modalRef.current?.addEventListener("hidden.bs.modal", clearModal);
+  useEffect(() => {
+    modalRef.current?.addEventListener("hidden.bs.modal", clearModal);
 
-  //   return () => {
-  //     modalRef.current?.removeEventListener("hidden.bs.modal", clearModal);
-  //   };
-  // }, []);
+    return () => {
+      modalRef.current?.removeEventListener("hidden.bs.modal", clearModal);
+    };
+  }, []);
 
   return (
     <>
@@ -25,7 +25,7 @@ export default function Dashboard() {
           <SightTable onEditClick={setModalContent} />
         </div>
       </div>
-      <Modal >{modalContent}</Modal>
+      <Modal modalRef={modalRef} >{modalContent}</Modal>
     </>
   );
 }
