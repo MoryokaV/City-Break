@@ -7,10 +7,11 @@ import { useAuth } from "../../hooks/useAuth";
 import { EditSightForm } from "../Forms/EditSightForm";
 
 interface Props {
-  onEditClick: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  setModalContent: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  closeModal: () => void;
 }
 
-export const SightTable: React.FC<Props> = ({ onEditClick }) => {
+export const SightTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
   const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
   const [sights, setSights] = useState<Array<Sight>>([]);
@@ -29,6 +30,13 @@ export const SightTable: React.FC<Props> = ({ onEditClick }) => {
       fetch("/api/deleteSight/" + id, { method: "DELETE" });
       setSights(sights.filter(sight => sight._id !== id));
     }
+  };
+
+  const updateTable = (updatedSight: Sight) => {
+    const index = sights.findIndex(sight => sight._id === updatedSight._id);
+    sights[index] = updatedSight;
+
+    setSights(sights);
   };
 
   return (
@@ -69,7 +77,15 @@ export const SightTable: React.FC<Props> = ({ onEditClick }) => {
                           className="btn-icon action-edit-sight"
                           data-bs-toggle="modal"
                           data-bs-target="#modal"
-                          onClick={() => onEditClick(<EditSightForm sight={sight} />)}
+                          onClick={() =>
+                            setModalContent(
+                              <EditSightForm
+                                sight={sight}
+                                updateTable={updateTable}
+                                closeModal={closeModal}
+                              />,
+                            )
+                          }
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>

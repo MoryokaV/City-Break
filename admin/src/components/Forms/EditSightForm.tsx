@@ -16,9 +16,11 @@ import {
 
 interface Props {
   sight: Sight;
+  updateTable: (updatedSight: Sight) => void;
+  closeModal: () => void;
 }
 
-export const EditSightForm: React.FC<Props> = ({ sight }) => {
+export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal }) => {
   const {
     register,
     handleSubmit,
@@ -61,7 +63,12 @@ export const EditSightForm: React.FC<Props> = ({ sight }) => {
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     });
 
-    // reset();
+    updatedSight._id = sight._id;
+    updateTable(updatedSight);
+
+    closeModal();
+    
+    reset();
   };
 
   return (

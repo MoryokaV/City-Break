@@ -89,7 +89,11 @@ export const ImagesField: React.FC<Props> = ({
 
           return (
             <li key={index} className="highlight-onhover">
-              <a href={uploaded && image} target={uploaded && "_blank"} className="group">
+              <a
+                href={uploaded ? image : undefined}
+                target={uploaded ? "_blank" : undefined}
+                className="group"
+              >
                 {uploaded ? <IoImageOutline /> : <IoCloudUploadOutline />}
                 {getFilename(image)}
               </a>
