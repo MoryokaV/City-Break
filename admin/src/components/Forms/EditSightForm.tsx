@@ -67,7 +67,7 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
     updateTable(updatedSight);
 
     closeModal();
-    
+
     reset();
   };
 
@@ -107,7 +107,11 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
         collection="sights"
       />
       <section className="col-12">
-        <PrimaryImageField register={register} max={images && images.length} />
+        <PrimaryImageField
+          register={register}
+          max={images && images.length}
+          defaultValue={sight.primary_image}
+        />
       </section>
       <section className="col-sm-6">
         <InputField
