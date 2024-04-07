@@ -6,32 +6,27 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import {
-  latitudeRegExp,
-  latitudeRegExpTitle,
-  longitudeRegExp,
-  longitudeRegExpTitle,
-} from "../../data/RegExpData";
-import { Sight } from "../../models/SightModel";
-import { TagsField } from "./Fields/TagsField";
 import { InputField } from "./Fields/InputField";
 import { PrimaryImageField } from "./Fields/PrimaryImageField";
 import { ImagesField } from "./Fields/ImagesField";
 import { FormType } from "../../models/FormModel";
 import { createImagesFormData } from "../../utils/images";
+import { Tour } from "../../models/TourModel";
+import { LengthField } from "./Fields/LengthField";
+import { StagesField } from "./Fields/StagesField";
 
 interface Props {
   register: UseFormRegister<any>;
-  handleSubmit: UseFormHandleSubmit<FormType<Sight>, undefined>;
+  handleSubmit: UseFormHandleSubmit<FormType<Tour>, undefined>;
   setValue: UseFormSetValue<any>;
   resetForm: () => void;
   isSubmitting: boolean;
   images: Array<string>;
   files: File[];
-  activeTags: Array<string>;
+  stages: Array<Stage>;
 }
 
-export const InsertSightForm: React.FC<Props> = ({
+export const InsertTourForm: React.FC<Props> = ({
   register,
   handleSubmit,
   resetForm,
@@ -39,26 +34,26 @@ export const InsertSightForm: React.FC<Props> = ({
   isSubmitting,
   images,
   files,
-  activeTags,
+  stages,
 }) => {
-  const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
+  const onSubmit: SubmitHandler<FormType<Tour>> = async data => {
     const formData = new FormData();
-    const { files, ...sight } = data;
+    const { files, ...tour } = data;
 
     createImagesFormData(formData, files);
 
-    await fetch("/api/uploadImages/sights", {
+    await fetch("/api/uploadImages/tours", {
       method: "POST",
       body: formData,
-  }).then(response => {
+    }).then(response => {
       if (response.status === 413) {
         alert("Files size should be less than 15MB");
       }
     });
 
-    await fetch("/api/insertSight", {
+    await fetch("/api/insertTour", {
       method: "POST",
-      body: JSON.stringify(sight),
+      body: JSON.stringify(tour),
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     });
 
@@ -78,12 +73,7 @@ export const InsertSightForm: React.FC<Props> = ({
           maxLength={60}
         />
       </section>
-      <TagsField
-        collection="sights"
-        register={register}
-        setValue={setValue}
-        activeTags={activeTags}
-      />
+      <StagesField register={register} setValue={setValue} stages={stages} />
       <section className="col-12">
         <label className="form-label">Description</label>
         <DescriptionField register={register} setValue={setValue} />
@@ -92,36 +82,13 @@ export const InsertSightForm: React.FC<Props> = ({
         register={register}
         images={images}
         files={files}
-        collection="sights"
+        collection="tours"
         setValue={setValue}
       />
       <section className="col-12">
         <PrimaryImageField register={register} max={files && files.length} />
       </section>
-      <section className="col-sm-6">
-        <InputField
-          id="latitude"
-          label="Latitude"
-          register={register}
-          type="text"
-          required
-          valueAsNumber={true}
-          pattern={latitudeRegExp}
-          title={latitudeRegExpTitle}
-        />
-      </section>
-      <section className="col-sm-6">
-        <InputField
-          id="longitude"
-          label="Longitude"
-          register={register}
-          type="text"
-          required
-          valueAsNumber={true}
-          pattern={longitudeRegExp}
-          title={longitudeRegExpTitle}
-        />
-      </section>
+      <LengthField register={register} />
       <section className="col-12">
         <InputField
           id="external_link"

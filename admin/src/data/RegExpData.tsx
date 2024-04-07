@@ -13,10 +13,10 @@ export const latitudeRegExp =
 export const longitudeRegExp =
   "^(\\+|-)?(?:180(?:(?:\\.0{1,15})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,15})?))$";
 
-export const nameRegExpTitle =
-  "Name should start with a letter. Allowed characters: a-z A-Z 0-9 ,.\"'() -&";
-export const addressRegExpTitle =
-  "Name shouldn't start with a symbol. Allowed characters: a-z A-Z 0-9 ,.\"'() -&/";
+// export const nameRegExpTitle =
+//   "Name should start with a letter. Allowed characters: a-z A-Z 0-9 ,.\"'() -&";
+// export const addressRegExpTitle =
+//   "Name shouldn't start with a symbol. Allowed characters: a-z A-Z 0-9 ,.\"'() -&/";
 export const tagRegExpTitle =
   "Name should start with a capital letter. Allowed characters: a-z A-Z -&";
 export const idRegExpTitle = "Please enter a valid id";
