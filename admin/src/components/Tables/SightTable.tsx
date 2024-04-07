@@ -71,10 +71,10 @@ export const SightTable: React.FC<Props> = ({ setModalContent, closeModal }) => 
                         {sight.external_link}
                       </a>
                     </td>
-                    <td id={sight._id}>
+                    <td>
                       <div className="group">
                         <button
-                          className="btn-icon action-edit-sight"
+                          className="btn-icon"
                           data-bs-toggle="modal"
                           data-bs-target="#modal"
                           onClick={() =>
@@ -90,7 +90,7 @@ export const SightTable: React.FC<Props> = ({ setModalContent, closeModal }) => 
                           <IoCreateOutline className="edit-icon" />
                         </button>
                         <button
-                          className="btn-icon action-delete-sight"
+                          className="btn-icon"
                           onClick={() => deleteSight(sight._id)}
                         >
                           <IoRemoveCircleOutline className="edit-icon" />

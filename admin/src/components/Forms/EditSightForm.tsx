@@ -38,8 +38,6 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
     const formData = new FormData();
     const { files, ...updatedSight } = data;
 
-    console.log(data);
-
     createImagesFormData(formData, files);
 
     if (files.length !== 0) {

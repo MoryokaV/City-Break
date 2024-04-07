@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "../components/Modal";
 import { SightTable } from "../components/Tables/SightTable";
+import { TourTable } from "../components/Tables/TourTable";
 
 export default function Dashboard() {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -23,6 +24,7 @@ export default function Dashboard() {
       <div className="container-fluid p-3">
         <div className="row gy-3 gx-0">
           <SightTable setModalContent={setModalContent} closeModal={closeModal} />
+          <TourTable setModalContent={setModalContent} closeModal={closeModal} />
         </div>
       </div>
       <Modal modalRef={modalRef}>{modalContent}</Modal>

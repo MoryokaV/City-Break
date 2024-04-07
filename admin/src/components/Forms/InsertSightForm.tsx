@@ -17,10 +17,8 @@ import { TagsField } from "./Fields/TagsField";
 import { InputField } from "./Fields/InputField";
 import { PrimaryImageField } from "./Fields/PrimaryImageField";
 import { ImagesField } from "./Fields/ImagesField";
-import { useAuth } from "../../hooks/useAuth";
 import { FormType } from "../../models/FormModel";
 import { createImagesFormData } from "../../utils/images";
-import { useEffect } from "react";
 
 interface Props {
   register: UseFormRegister<any>;
@@ -47,14 +45,12 @@ export const InsertSightForm: React.FC<Props> = ({
     const formData = new FormData();
     const { files, ...sight } = data;
 
-    console.log(data);
-
     createImagesFormData(formData, files);
 
     await fetch("/api/uploadImages/sights", {
       method: "POST",
       body: formData,
-    }).then(response => {
+  }).then(response => {
       if (response.status === 413) {
         alert("Files size should be less than 15MB");
       }

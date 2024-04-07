@@ -1,5 +1,5 @@
 export type Tour = {
-  _id?: string;
+  _id: string;
   name: string;
   stages: Array<Stage>;
   description: string;

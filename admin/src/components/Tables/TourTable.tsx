@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import DashboardCard from "../DashboardCard";
 import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
-import { Tour } from "../../models/TourModel";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
+import { Tour } from "../../models/TourModel";
 
-export const TourTable = () => {
+interface Props {
+  setModalContent: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  closeModal: () => void;
+}
+
+export const TourTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
   const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
   const [tours, setTours] = useState<Array<Tour>>([]);
@@ -17,7 +22,21 @@ export const TourTable = () => {
         setTours(data);
         setLoading(false);
       });
-  }, [user?.city_id]);
+  }, []);
+
+  const deleteTour = (id: string) => {
+    if (confirm("Are you sure you want to delete the entry")) {
+      fetch("/api/deleteTour/" + id, { method: "DELETE" });
+      setTours(tours.filter(tour => tour._id !== id));
+    }
+  };
+
+  const updateTable = (updatedTour: Tour) => {
+    const index = tours.findIndex(sight => sight._id === updatedTour._id);
+    tours[index] = updatedTour;
+
+    setTours(tours);
+  };
 
   return (
     <DashboardCard title="Tours" records={tours.length}>
@@ -51,16 +70,25 @@ export const TourTable = () => {
                         {tour.external_link}
                       </a>
                     </td>
-                    <td id={tour._id}>
+                    <td>
                       <div className="group">
                         <button
-                          className="btn-icon action-edit-tour"
+                          className="btn-icon"
                           data-bs-toggle="modal"
-                          data-bs-target="#tour-modal"
+                          data-bs-target="#modal"
+                          // onClick={() =>
+                          //   setModalContent(
+                          //     <EditTourForm
+                          //       tour={tour}
+                          //       updateTable={updateTable}
+                          //       closeModal={closeModal}
+                          //     />,
+                          //   )
+                          // }
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>
-                        <button className="btn-icon action-delete-tour">
+                        <button className="btn-icon" onClick={() => deleteTour(tour._id)}>
                           <IoRemoveCircleOutline className="edit-icon" />
                         </button>
                       </div>
