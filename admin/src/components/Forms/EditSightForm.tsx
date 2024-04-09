@@ -7,12 +7,7 @@ import { TagsField } from "./Fields/TagsField";
 import { DescriptionField } from "./Fields/DescriptionField";
 import { ImagesField } from "./Fields/ImagesField";
 import { PrimaryImageField } from "./Fields/PrimaryImageField";
-import {
-  latitudeRegExp,
-  latitudeRegExpTitle,
-  longitudeRegExp,
-  longitudeRegExpTitle,
-} from "../../data/RegExpData";
+import { latitudeValidation, longitudeValidation } from "../../data/RegExpData";
 
 interface Props {
   sight: Sight;
@@ -119,9 +114,8 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           type="text"
           required
           valueAsNumber={true}
-          pattern={latitudeRegExp}
-          title={latitudeRegExpTitle}
           defaultValue={sight.latitude}
+          {...latitudeValidation}
         />
       </section>
       <section className="col-sm-6">
@@ -132,9 +126,8 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           type="text"
           required
           valueAsNumber={true}
-          pattern={longitudeRegExp}
-          title={longitudeRegExpTitle}
           defaultValue={sight.longitude}
+          {...longitudeValidation}
         />
       </section>
       <section className="col-12">

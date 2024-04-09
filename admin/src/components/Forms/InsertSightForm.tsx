@@ -6,12 +6,7 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import {
-  latitudeRegExp,
-  latitudeRegExpTitle,
-  longitudeRegExp,
-  longitudeRegExpTitle,
-} from "../../data/RegExpData";
+import { latitudeValidation, longitudeValidation } from "../../data/RegExpData";
 import { Sight } from "../../models/SightModel";
 import { TagsField } from "./Fields/TagsField";
 import { InputField } from "./Fields/InputField";
@@ -50,7 +45,7 @@ export const InsertSightForm: React.FC<Props> = ({
     await fetch("/api/uploadImages/sights", {
       method: "POST",
       body: formData,
-  }).then(response => {
+    }).then(response => {
       if (response.status === 413) {
         alert("Files size should be less than 15MB");
       }
@@ -106,8 +101,7 @@ export const InsertSightForm: React.FC<Props> = ({
           type="text"
           required
           valueAsNumber={true}
-          pattern={latitudeRegExp}
-          title={latitudeRegExpTitle}
+          {...latitudeValidation}
         />
       </section>
       <section className="col-sm-6">
@@ -118,8 +112,7 @@ export const InsertSightForm: React.FC<Props> = ({
           type="text"
           required
           valueAsNumber={true}
-          pattern={longitudeRegExp}
-          title={longitudeRegExpTitle}
+          {...longitudeValidation}
         />
       </section>
       <section className="col-12">
