@@ -1,7 +1,8 @@
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { IoAddOutline, IoLinkOutline } from "react-icons/io5";
 import { Fragment } from "react/jsx-runtime";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { idValidation } from "../../../data/RegExpData";
 
 interface Props {
   register: UseFormRegister<any>;
@@ -14,7 +15,7 @@ const emptyStage: Stage = {
   sight_link: "",
 };
 
-const defaultValue: Array<Stage> = [emptyStage, emptyStage];
+const defaultValue: Array<Stage> = [{ ...emptyStage }, { ...emptyStage }];
 
 const LinkInputElement = ({ link }: { link: string }) => {
   return (
@@ -24,9 +25,8 @@ const LinkInputElement = ({ link }: { link: string }) => {
       size={10}
       className="stage-link form-control text-primary"
       placeholder="Sight id"
-      //   pattern="${idRegExp}"
-      //   title="${idRegExpTitle}"
       required
+      {...idValidation}
     />
   );
 };
@@ -36,27 +36,43 @@ export const StagesField: React.FC<Props> = ({
   setValue,
   stages = defaultValue,
 }) => {
+  const [links, setLinks] = useState<Array<boolean>>([]);
+
   useEffect(() => {
     register("stages");
     setValue("stages", defaultValue);
   }, []);
 
   const addStage = () => {
-    stages.push(emptyStage);
+    stages.push({ ...emptyStage });
 
-    setValue("stages", stages);
+    setValue("stages", [...stages]);
   };
 
-  //   const setLink = (index: number) => {
-  //     console.log(stages);
-  //     if (stages[index].sight_link !== "") {
-  //       stages[index].sight_link = "";
-  //     } else {
-  //       stages[index].sight_link = " ";
-  //     }
+  const toggleLink = (index: number) => {
+    links[index] = !links[index];
+    stages[index].sight_link = "";
 
-  //     setValue("stages", stages);
-  //   };
+    setLinks([...links]);
+    setValue("stages", [...stages]);
+  };
+
+  const setStageTitle = (index: number, newTitle: string) => {
+    stages[index].text = newTitle;
+
+    setValue("stages", [...stages]);
+  };
+
+  const deleteInputIfEmpty = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    if (e.key === "Backspace" && stages.length > 2 && stages[index].text === "") {
+      e.preventDefault();
+      stages.splice(index, 1);
+      setValue("stages", [...stages]);
+    }
+  };
 
   return (
     <section className="col-12">
@@ -69,18 +85,23 @@ export const StagesField: React.FC<Props> = ({
                 <input
                   type="text"
                   size={stage.text.length}
+                  value={stage.text}
                   className="form-control"
                   maxLength={55}
+                  onChange={e => setStageTitle(index, e.currentTarget.value)}
+                  onKeyDown={e => deleteInputIfEmpty(e, index)}
                   required
                 />
                 <IoLinkOutline
                   className={`stage-input-icon ${
                     stage.sight_link !== "" ? "active" : ""
                   }`}
-                  //   onClick={() => setLink(index)}
+                  onClick={() => toggleLink(index)}
                 />
               </div>
-              {stage.sight_link !== "" && <LinkInputElement link={stage.sight_link} />}
+              {(stage.sight_link !== "" || links[index] === true) && (
+                <LinkInputElement link={stage.sight_link} />
+              )}
               {index !== stages.length - 1 && "-"}
             </Fragment>
           );

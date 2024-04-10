@@ -81,7 +81,7 @@ export default function TourPage() {
                           }`}
                         >
                           {stage.text}
-                          {index != tour.stages.length - 1 ? " &ndash; " : " "}
+                          {index != tour.stages.length - 1 ? " – " : " "}
                         </p>
                       );
                     })}
