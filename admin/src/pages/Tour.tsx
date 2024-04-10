@@ -4,6 +4,7 @@ import { getBase64 } from "../utils/images";
 import { FormType } from "../models/FormModel";
 import { Tour } from "../models/TourModel";
 import { InsertTourForm } from "../components/Forms/InsertTourForm";
+import Card from "../components/Card";
 
 export default function TourPage() {
   const [previewBlobs, setPreviewBlobs] = useState<Array<string>>([]);
@@ -54,12 +55,9 @@ export default function TourPage() {
       <div className="container-sm m-auto py-3">
         <div className="row justify-content-center gx-4 gy-3">
           <div className="col-lg-8">
-            <div className="card shadow-sm">
-              <h5 className="card-header">Insert tour</h5>
-              <div className="card-body">
-                <InsertTourForm {...formProps} />
-              </div>
-            </div>
+            <Card title="Insert tour">
+              <InsertTourForm {...formProps} />
+            </Card>
           </div>
           <div className="col-sm-10 col-lg-4">
             <p className="preview-title">Live preview</p>

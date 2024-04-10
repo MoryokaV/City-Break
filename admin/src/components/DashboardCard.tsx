@@ -1,9 +1,7 @@
-import { ReactNode } from "react";
-
 interface Props {
   title: string;
   records: number;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const DashboardCard: React.FC<Props> = ({ title, records, children }) => {

@@ -4,6 +4,7 @@ import { InsertSightForm } from "../components/Forms/InsertSightForm";
 import { useEffect, useState } from "react";
 import { getBase64 } from "../utils/images";
 import { FormType } from "../models/FormModel";
+import Card from "../components/Card";
 
 export default function SightPage() {
   const [previewBlobs, setPreviewBlobs] = useState<Array<string>>([]);
@@ -23,7 +24,7 @@ export default function SightPage() {
     setPreviewBlobs([]);
     reset();
   };
-  
+
   const formProps = {
     register,
     handleSubmit,
@@ -54,12 +55,9 @@ export default function SightPage() {
       <div className="container-sm m-auto py-3">
         <div className="row justify-content-center gx-4 gy-3">
           <div className="col-lg-8">
-            <div className="card shadow-sm">
-              <h5 className="card-header">Insert sight</h5>
-              <div className="card-body">
-                <InsertSightForm {...formProps} />
-              </div>
-            </div>
+            <Card title="Insert sight">
+              <InsertSightForm {...formProps} />
+            </Card>
           </div>
           <div className="col-sm-10 col-lg-4">
             <p className="preview-title">Live preview</p>
