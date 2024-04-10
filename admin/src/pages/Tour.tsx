@@ -68,17 +68,24 @@ export default function TourPage() {
               />
               <section className="card-body preview-body">
                 <h4 className="card-title">{tour.name}</h4>
-                {/* <div className="d-flex align-items-center flex-wrap">
-                  {tour.tags &&
-                    tour.tags.map((tag, index) => {
+                <div className="d-flex align-items-center flex-wrap">
+                  {tour.stages &&
+                    tour.stages.map((stage, index) => {
                       return (
-                        <p key={index}>
-                          {tag}
-                          {index != tour.tags.length - 1 ? ", " : " "}
+                        <p
+                          key={index}
+                          className={`${
+                            stage.sight_link !== ""
+                              ? "text-primary text-decoration-underline"
+                              : ""
+                          }`}
+                        >
+                          {stage.text}
+                          {index != tour.stages.length - 1 ? " &ndash; " : " "}
                         </p>
                       );
                     })}
-                </div> */}
+                </div>
                 <div
                   id="preview-description"
                   className="card-text"
