@@ -1,7 +1,6 @@
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { IoAddOutline, IoLinkOutline } from "react-icons/io5";
-import { Fragment } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { idValidation } from "../../../data/RegExpData";
 
 interface Props {
@@ -17,7 +16,13 @@ const emptyStage: Stage = {
 
 const defaultValue: Array<Stage> = [{ ...emptyStage }, { ...emptyStage }];
 
-const LinkInputElement = ({ link }: { link: string }) => {
+const LinkInputElement = ({
+  link,
+  onChange,
+}: {
+  link: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
   return (
     <input
       defaultValue={link}
@@ -25,6 +30,7 @@ const LinkInputElement = ({ link }: { link: string }) => {
       size={10}
       className="stage-link form-control text-primary"
       placeholder="Sight id"
+      onChange={onChange}
       required
       {...idValidation}
     />
@@ -57,6 +63,12 @@ export const StagesField: React.FC<Props> = ({
     setValue("stages", [...stages]);
   };
 
+  const setStageLink = (index: number, newLink: string) => {
+    stages[index].sight_link = newLink;
+
+    setValue("stages", [...stages]);
+  };
+
   const setStageTitle = (index: number, newTitle: string) => {
     stages[index].text = newTitle;
 
@@ -70,6 +82,10 @@ export const StagesField: React.FC<Props> = ({
     if (e.key === "Backspace" && stages.length > 2 && stages[index].text === "") {
       e.preventDefault();
       stages.splice(index, 1);
+
+      links[index] = false;
+      setLinks(links);
+
       setValue("stages", [...stages]);
     }
   };
@@ -94,13 +110,18 @@ export const StagesField: React.FC<Props> = ({
                 />
                 <IoLinkOutline
                   className={`stage-input-icon ${
-                    stage.sight_link !== "" ? "active" : ""
+                    stage.sight_link !== "" || links[index] ? "active" : ""
                   }`}
                   onClick={() => toggleLink(index)}
                 />
               </div>
-              {(stage.sight_link !== "" || links[index] === true) && (
-                <LinkInputElement link={stage.sight_link} />
+              {(stage.sight_link !== "" || links[index]) && (
+                <LinkInputElement
+                  link={stage.sight_link}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setStageLink(index, e.currentTarget.value)
+                  }
+                />
               )}
               {index !== stages.length - 1 && "-"}
             </Fragment>

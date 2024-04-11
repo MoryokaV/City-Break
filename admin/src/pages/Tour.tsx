@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { getBase64 } from "../utils/images";
 import { FormType } from "../models/FormModel";
 import { Tour } from "../models/TourModel";
@@ -72,17 +72,19 @@ export default function TourPage() {
                   {tour.stages &&
                     tour.stages.map((stage, index) => {
                       return (
-                        <p
-                          key={index}
-                          className={`${
-                            stage.sight_link !== ""
-                              ? "text-primary text-decoration-underline"
-                              : ""
-                          }`}
-                        >
-                          {stage.text}
+                        <Fragment key={index}>
+                          <p
+                            key={index}
+                            className={`${
+                              stage.sight_link !== ""
+                                ? "text-primary text-decoration-underline"
+                                : ""
+                            }`}
+                          >
+                            {stage.text}
+                          </p>
                           {index != tour.stages.length - 1 ? " – " : " "}
-                        </p>
+                        </Fragment>
                       );
                     })}
                 </div>
