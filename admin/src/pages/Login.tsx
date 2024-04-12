@@ -1,10 +1,11 @@
-import { IoEyeOffOutline } from "react-icons/io5";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import styles from "../assets/css/Login.module.css";
 import icon from "../assets/images/icon.png";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
   const [loginDetails, setLoginDetails] = useState({
     username: "",
     password: "",
@@ -31,6 +32,8 @@ export default function Login() {
       }
     });
   };
+
+  const toggleShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <div className={styles.background}>
@@ -69,7 +72,7 @@ export default function Login() {
 
               <section className="form-floating">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-control"
                   spellCheck="false"
                   autoCorrect="off"
@@ -89,8 +92,14 @@ export default function Login() {
                     setLoginDetails({ ...loginDetails, password: e.target.value })
                   }
                 />
-                <IoEyeOffOutline className={styles.eyeIcon} />
-                {/* <ion-icon name="eye-off-outline" class="eye-icon"></ion-icon> */}
+                {showPassword ? (
+                  <IoEyeOutline className={styles.eyeIcon} onClick={toggleShowPassword} />
+                ) : (
+                  <IoEyeOffOutline
+                    className={styles.eyeIcon}
+                    onClick={toggleShowPassword}
+                  />
+                )}
                 <label className="floatingInput">Password</label>
               </section>
 
