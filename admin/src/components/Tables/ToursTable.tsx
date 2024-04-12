@@ -1,52 +1,52 @@
 import { useEffect, useState } from "react";
 import DashboardCard from "../DashboardCard";
 import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
-import { Sight } from "../../models/SightModel";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
-import { EditSightForm } from "../Forms/EditSightForm";
+import { Tour } from "../../models/TourModel";
+import { EditTourForm } from "../Forms/EditTourForm";
 
 interface Props {
   setModalContent: React.Dispatch<React.SetStateAction<JSX.Element>>;
   closeModal: () => void;
 }
 
-export const SightTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
+export const ToursTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
   const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
-  const [sights, setSights] = useState<Array<Sight>>([]);
+  const [tours, setTours] = useState<Array<Tour>>([]);
 
   useEffect(() => {
-    fetch("/api/fetchSights?city_id=" + user?.city_id)
+    fetch("/api/fetchTours?city_id=" + user?.city_id)
       .then(response => response.json())
       .then(data => {
-        setSights(data);
+        setTours(data);
         setLoading(false);
       });
   }, []);
 
-  const deleteSight = (id: string) => {
+  const deleteTour = (id: string) => {
     if (confirm("Are you sure you want to delete the entry")) {
-      fetch("/api/deleteSight/" + id, { method: "DELETE" });
-      setSights(sights.filter(sight => sight._id !== id));
+      fetch("/api/deleteTour/" + id, { method: "DELETE" });
+      setTours(tours.filter(tour => tour._id !== id));
     }
   };
 
-  const updateTable = (updatedSight: Sight) => {
-    const index = sights.findIndex(sight => sight._id === updatedSight._id);
-    sights[index] = updatedSight;
+  const updateTable = (updatedTour: Tour) => {
+    const index = tours.findIndex(tour => tour._id === updatedTour._id);
+    tours[index] = updatedTour;
 
-    setSights(sights);
+    setTours(tours);
   };
 
   return (
-    <DashboardCard title="Sights" records={sights.length}>
+    <DashboardCard title="Tours" records={tours.length}>
       <table>
         <thead>
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Tags</th>
+            <th>Stages</th>
             <th>External link</th>
             <th>Actions</th>
           </tr>
@@ -60,15 +60,15 @@ export const SightTable: React.FC<Props> = ({ setModalContent, closeModal }) => 
             </tr>
           ) : (
             <>
-              {sights.map((sight, index) => {
+              {tours.map((tour, index) => {
                 return (
                   <tr key={index}>
-                    <td>{sight._id}</td>
-                    <td>{sight.name}</td>
-                    <td>{sight.tags.join(", ")}</td>
+                    <td>{tour._id}</td>
+                    <td>{tour.name}</td>
+                    <td>{tour.stages.map(stage => stage.text).join(" - ")}</td>
                     <td>
-                      <a href={sight.external_link} target="_blank">
-                        {sight.external_link}
+                      <a href={tour.external_link} target="_blank">
+                        {tour.external_link}
                       </a>
                     </td>
                     <td>
@@ -79,8 +79,8 @@ export const SightTable: React.FC<Props> = ({ setModalContent, closeModal }) => 
                           data-bs-target="#modal"
                           onClick={() =>
                             setModalContent(
-                              <EditSightForm
-                                sight={sight}
+                              <EditTourForm
+                                tour={tour}
                                 updateTable={updateTable}
                                 closeModal={closeModal}
                               />,
@@ -89,10 +89,7 @@ export const SightTable: React.FC<Props> = ({ setModalContent, closeModal }) => 
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>
-                        <button
-                          className="btn-icon"
-                          onClick={() => deleteSight(sight._id)}
-                        >
+                        <button className="btn-icon" onClick={() => deleteTour(tour._id)}>
                           <IoRemoveCircleOutline className="edit-icon" />
                         </button>
                       </div>

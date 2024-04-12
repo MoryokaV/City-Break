@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "../components/Modal";
-import { SightTable } from "../components/Tables/SightTable";
-import { TourTable } from "../components/Tables/TourTable";
-import { RestaurantTable } from "../components/Tables/RestaurantTable";
+import { SightsTable } from "../components/Tables/SightsTable";
+import { ToursTable } from "../components/Tables/ToursTable";
+import { RestaurantsTable } from "../components/Tables/RestaurantsTable";
 
 export default function Dashboard() {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -24,9 +24,9 @@ export default function Dashboard() {
     <>
       <div className="container-fluid p-3">
         <div className="row gy-3 gx-0">
-          <SightTable setModalContent={setModalContent} closeModal={closeModal} />
-          <TourTable setModalContent={setModalContent} closeModal={closeModal} />
-          <RestaurantTable setModalContent={setModalContent} closeModal={closeModal} />
+          <SightsTable setModalContent={setModalContent} closeModal={closeModal} />
+          <ToursTable setModalContent={setModalContent} closeModal={closeModal} />
+          <RestaurantsTable setModalContent={setModalContent} closeModal={closeModal} />
         </div>
       </div>
       <Modal modalRef={modalRef}>{modalContent}</Modal>

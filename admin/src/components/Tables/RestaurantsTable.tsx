@@ -11,7 +11,7 @@ interface Props {
   closeModal: () => void;
 }
 
-export const RestaurantTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
+export const RestaurantsTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
   const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
   const [restaurants, setRestaurants] = useState<Array<Restaurant>>([]);
