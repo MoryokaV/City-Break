@@ -3,50 +3,52 @@ import DashboardCard from "../DashboardCard";
 import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
-import { Tour } from "../../models/TourModel";
-import { EditTourForm } from "../Forms/EditTourForm";
+import { Restaurant } from "../../models/RestaurantModel";
+import { EditRestaurantForm } from "../Forms/EditRestaurantForm";
 
 interface Props {
   setModalContent: React.Dispatch<React.SetStateAction<JSX.Element>>;
   closeModal: () => void;
 }
 
-export const TourTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
+export const RestaurantTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
   const { user } = useAuth();
   const [isLoading, setLoading] = useState(true);
-  const [tours, setTours] = useState<Array<Tour>>([]);
+  const [restaurants, setRestaurants] = useState<Array<Restaurant>>([]);
 
   useEffect(() => {
-    fetch("/api/fetchTours?city_id=" + user?.city_id)
+    fetch("/api/fetchRestaurants?city_id=" + user?.city_id)
       .then(response => response.json())
       .then(data => {
-        setTours(data);
+        setRestaurants(data);
         setLoading(false);
       });
   }, []);
 
-  const deleteTour = (id: string) => {
+  const deleteRestaurant = (id: string) => {
     if (confirm("Are you sure you want to delete the entry")) {
-      fetch("/api/deleteTour/" + id, { method: "DELETE" });
-      setTours(tours.filter(tour => tour._id !== id));
+      fetch("/api/deleteRestaurant/" + id, { method: "DELETE" });
+      setRestaurants(restaurants.filter(restaurant => restaurant._id !== id));
     }
   };
 
-  const updateTable = (updatedTour: Tour) => {
-    const index = tours.findIndex(tour => tour._id === updatedTour._id);
-    tours[index] = updatedTour;
+  const updateTable = (updatedRestaurant: Restaurant) => {
+    const index = restaurants.findIndex(
+      restaurant => restaurant._id === updatedRestaurant._id,
+    );
+    restaurants[index] = updatedRestaurant;
 
-    setTours(tours);
+    setRestaurants(restaurants);
   };
 
   return (
-    <DashboardCard title="Tours" records={tours.length}>
+    <DashboardCard title="Restaurants" records={restaurants.length}>
       <table>
         <thead>
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Stages</th>
+            <th>Tags</th>
             <th>External link</th>
             <th>Actions</th>
           </tr>
@@ -60,15 +62,15 @@ export const TourTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
             </tr>
           ) : (
             <>
-              {tours.map((tour, index) => {
+              {restaurants.map((restaurant, index) => {
                 return (
                   <tr key={index}>
-                    <td>{tour._id}</td>
-                    <td>{tour.name}</td>
-                    <td>{tour.stages.map(stage => stage.text).join(" - ")}</td>
+                    <td>{restaurant._id}</td>
+                    <td>{restaurant.name}</td>
+                    <td>{restaurant.tags.join(", ")}</td>
                     <td>
-                      <a href={tour.external_link} target="_blank">
-                        {tour.external_link}
+                      <a href={restaurant.external_link} target="_blank">
+                        {restaurant.external_link}
                       </a>
                     </td>
                     <td>
@@ -79,8 +81,8 @@ export const TourTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
                           data-bs-target="#modal"
                           onClick={() =>
                             setModalContent(
-                              <EditTourForm
-                                tour={tour}
+                              <EditRestaurantForm
+                                restaurant={restaurant}
                                 updateTable={updateTable}
                                 closeModal={closeModal}
                               />,
@@ -89,7 +91,10 @@ export const TourTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>
-                        <button className="btn-icon" onClick={() => deleteTour(tour._id)}>
+                        <button
+                          className="btn-icon"
+                          onClick={() => deleteRestaurant(restaurant._id)}
+                        >
                           <IoRemoveCircleOutline className="edit-icon" />
                         </button>
                       </div>

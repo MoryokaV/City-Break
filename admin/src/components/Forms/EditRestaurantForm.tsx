@@ -2,20 +2,24 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "./Fields/InputField";
 import { FormType } from "../../models/FormType";
 import { createImagesFormData } from "../../utils/images";
+import { TagsField } from "./Fields/TagsField";
 import { DescriptionField } from "./Fields/DescriptionField";
 import { ImagesField } from "./Fields/ImagesField";
 import { PrimaryImageField } from "./Fields/PrimaryImageField";
-import { Tour } from "../../models/TourModel";
-import { StagesField } from "./Fields/StagesField";
-import { LengthField } from "./Fields/LengthField";
+import { latitudeValidation, longitudeValidation } from "../../data/RegExpData";
+import { Restaurant } from "../../models/RestaurantModel";
 
 interface Props {
-  tour: Tour;
-  updateTable: (updatedTour: Tour) => void;
+  restaurant: Restaurant;
+  updateTable: (updatedRestaurant: Restaurant) => void;
   closeModal: () => void;
 }
 
-export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal }) => {
+export const EditRestaurantForm: React.FC<Props> = ({
+  restaurant,
+  updateTable,
+  closeModal,
+}) => {
   const {
     register,
     handleSubmit,
@@ -23,20 +27,20 @@ export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal })
     reset,
     setValue,
     watch,
-  } = useForm<FormType<Tour>>();
+  } = useForm<FormType<Restaurant>>();
 
   const files = watch("files", []);
-  const images = watch("images", tour.images);
-  const stages = watch("stages", tour.stages);
+  const images = watch("images", restaurant.images);
+  const activeTags = watch("tags", restaurant.tags);
 
-  const onSubmit: SubmitHandler<FormType<Tour>> = async data => {
+  const onSubmit: SubmitHandler<FormType<Restaurant>> = async data => {
     const formData = new FormData();
-    const { files, ...updatedTour } = data;
+    const { files, ...updatedRestaurant } = data;
 
     createImagesFormData(formData, files);
 
     if (files.length !== 0) {
-      await fetch("/api/uploadImages/tours", {
+      await fetch("/api/uploadImages/restaurants", {
         method: "POST",
         body: formData,
       }).then(response => {
@@ -46,18 +50,18 @@ export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal })
       });
     }
 
-    await fetch("/api/editTour", {
+    await fetch("/api/editRestaurant", {
       method: "PUT",
       body: JSON.stringify({
         images_to_delete: [],
-        _id: tour._id,
-        tour: updatedTour,
+        _id: restaurant._id,
+        restaurant: updatedRestaurant,
       }),
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     });
 
-    updatedTour._id = tour._id;
-    updateTable(updatedTour);
+    updatedRestaurant._id = restaurant._id;
+    updateTable(updatedRestaurant);
 
     closeModal();
 
@@ -75,33 +79,61 @@ export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal })
           required
           valueAsNumber={false}
           maxLength={60}
-          defaultValue={tour.name}
+          defaultValue={restaurant.name}
         />
       </section>
-      <StagesField register={register} setValue={setValue} stages={stages} />
+      <TagsField
+        collection="restaurants"
+        register={register}
+        setValue={setValue}
+        activeTags={activeTags}
+      />
       <section className="col-12">
         <label className="form-label">Description</label>
         <DescriptionField
           register={register}
           setValue={setValue}
-          value={tour.description}
+          value={restaurant.description}
         />
       </section>
       <ImagesField
         register={register}
         images={images}
         files={files}
-        collection="tours"
         setValue={setValue}
+        collection="restaurants"
       />
       <section className="col-12">
         <PrimaryImageField
           register={register}
           max={images && images.length}
-          defaultValue={tour.primary_image}
+          defaultValue={restaurant.primary_image}
         />
       </section>
-      <LengthField register={register} defaultValue={tour.length} />
+      <section className="col-sm-6">
+        <InputField
+          id="latitude"
+          label="Latitude"
+          register={register}
+          type="text"
+          required
+          valueAsNumber={true}
+          defaultValue={restaurant.latitude}
+          {...latitudeValidation}
+        />
+      </section>
+      <section className="col-sm-6">
+        <InputField
+          id="longitude"
+          label="Longitude"
+          register={register}
+          type="text"
+          required
+          valueAsNumber={true}
+          defaultValue={restaurant.longitude}
+          {...longitudeValidation}
+        />
+      </section>
       <section className="col-12">
         <InputField
           id="external_link"
@@ -110,7 +142,7 @@ export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal })
           type="url"
           required
           valueAsNumber={false}
-          defaultValue={tour.external_link}
+          defaultValue={restaurant.external_link}
         />
         <div className="form-text">Note: it must be a website URL</div>
       </section>
