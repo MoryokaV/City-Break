@@ -5,16 +5,9 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<any>;
   label: string;
   id: string;
-  valueAsNumber?: boolean;
 }
 
-export const InputField: React.FC<Props> = ({
-  register,
-  label,
-  id,
-  valueAsNumber = false,
-  ...inputProps
-}) => {
+export const DateField: React.FC<Props> = ({ register, label, id, ...inputProps }) => {
   return (
     <>
       <label htmlFor={id} className="form-label">
@@ -23,7 +16,8 @@ export const InputField: React.FC<Props> = ({
       <input
         id={id}
         className="form-control"
-        {...register(id, { valueAsNumber })}
+        type="datetime-local"
+        {...register(id, { valueAsDate: true })}
         {...inputProps}
       />
     </>

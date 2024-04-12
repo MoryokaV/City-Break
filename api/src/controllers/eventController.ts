@@ -68,7 +68,6 @@ router.post("/insertEvent", requiresAuth, async (req: Request, res: Response) =>
       req.session.city_id,
       req.session.city_name,
     );
-    console.log("SendNewEventNotification");
   }
 
   return res.status(200).send("New entry has been inserted");

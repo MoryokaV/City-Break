@@ -6,32 +6,26 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import {
-  latitudeValidation,
-  longitudeValidation,
-  phoneValidation,
-} from "../../data/RegExpData";
-import { TagsField } from "./Fields/TagsField";
 import { InputField } from "./Fields/InputField";
 import { PrimaryImageField } from "./Fields/PrimaryImageField";
 import { ImagesField } from "./Fields/ImagesField";
-import { FormType } from "../../models/FormType";
 import { createImagesFormData } from "../../utils/images";
-import { Hotel } from "../../models/HotelModel";
+import { useState } from "react";
+import { DateField } from "./Fields/DateField";
+import { EventFormType } from "../../models/EventFormType";
 
 interface Props {
   register: UseFormRegister<any>;
-  handleSubmit: UseFormHandleSubmit<FormType<Hotel>, undefined>;
+  handleSubmit: UseFormHandleSubmit<EventFormType, undefined>;
   setValue: UseFormSetValue<any>;
   resetForm: () => void;
   isSubmitting: boolean;
   images: Array<string>;
   files: File[];
-  activeTags: Array<string>;
   description: string;
 }
 
-export const InsertHotelForm: React.FC<Props> = ({
+export const InsertEventForm: React.FC<Props> = ({
   register,
   handleSubmit,
   resetForm,
@@ -39,16 +33,17 @@ export const InsertHotelForm: React.FC<Props> = ({
   isSubmitting,
   images,
   files,
-  activeTags,
   description,
 }) => {
-  const onSubmit: SubmitHandler<FormType<Hotel>> = async data => {
+  const [multipleDays, setMultipleDays] = useState(false);
+
+  const onSubmit: SubmitHandler<EventFormType> = async data => {
     const formData = new FormData();
-    const { files, ...hotel } = data;
+    const { files, notify, ...event } = data;
 
     createImagesFormData(formData, files);
 
-    await fetch("/api/uploadImages/hotels", {
+    await fetch("/api/uploadImages/events", {
       method: "POST",
       body: formData,
     }).then(response => {
@@ -57,13 +52,22 @@ export const InsertHotelForm: React.FC<Props> = ({
       }
     });
 
-    await fetch("/api/insertHotel", {
+    await fetch("/api/insertEvent", {
       method: "POST",
-      body: JSON.stringify(hotel),
+      body: JSON.stringify({ notify, event }),
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     });
 
     resetForm();
+  };
+
+  const toggleMultipleDays = (checked: boolean) => {
+    if (checked) {
+      setMultipleDays(true);
+    } else {
+      setMultipleDays(false);
+      setValue("end_date_time", null);
+    }
   };
 
   return (
@@ -79,36 +83,33 @@ export const InsertHotelForm: React.FC<Props> = ({
           maxLength={60}
         />
       </section>
-      <section className="col-sm-6">
-        <InputField
-          id="stars"
-          label="Stars"
-          register={register}
-          type="number"
-          required
-          valueAsNumber={true}
-          defaultValue={1}
-          min={1}
-          max={5}
-        />
+      <section className="col-12">
+        <DateField id="date_time" label="Date & time" register={register} required />
       </section>
-      <section className="col-sm-6">
-        <InputField
-          id="phone"
-          label="Phone number"
-          register={register}
-          type="text"
-          required
-          valueAsNumber={false}
-          {...phoneValidation}
-        />
+      <section className="col-12">
+        <div className="form-check">
+          <input
+            id="multiple-days"
+            className="form-check-input"
+            type="checkbox"
+            name="multiple-days"
+            onChange={e => toggleMultipleDays(e.target.checked)}
+          />
+          <label htmlFor="multiple-days" className="form-check-label">
+            Multiple days
+          </label>
+        </div>
       </section>
-      <TagsField
-        collection="hotels"
-        register={register}
-        setValue={setValue}
-        activeTags={activeTags}
-      />
+      {multipleDays && (
+        <section className="col-12">
+          <DateField
+            id="end_date_time"
+            label="End date & time"
+            register={register}
+            required
+          />
+        </section>
+      )}
       <section className="col-12">
         <label className="form-label">Description</label>
         <DescriptionField register={register} setValue={setValue} value={description} />
@@ -117,33 +118,11 @@ export const InsertHotelForm: React.FC<Props> = ({
         register={register}
         images={images}
         files={files}
-        collection="hotels"
+        collection="events"
         setValue={setValue}
       />
       <section className="col-12">
         <PrimaryImageField register={register} max={files && files.length} />
-      </section>
-      <section className="col-sm-6">
-        <InputField
-          id="latitude"
-          label="Latitude"
-          register={register}
-          type="text"
-          required
-          valueAsNumber={true}
-          {...latitudeValidation}
-        />
-      </section>
-      <section className="col-sm-6">
-        <InputField
-          id="longitude"
-          label="Longitude"
-          register={register}
-          type="text"
-          required
-          valueAsNumber={true}
-          {...longitudeValidation}
-        />
       </section>
       <section className="col-12">
         <InputField
@@ -156,6 +135,20 @@ export const InsertHotelForm: React.FC<Props> = ({
         />
         <div className="form-text">Note: it must be a website URL</div>
       </section>
+      <section className="col-12">
+        <div className="form-check">
+          <input
+            id="notify"
+            className="form-check-input"
+            type="checkbox"
+            {...register("notify")}
+          />
+          <label htmlFor="notify" className="form-check-label">
+            Send push notification now
+          </label>
+        </div>
+      </section>
+
       <section className="col-12">
         <button
           type="submit"

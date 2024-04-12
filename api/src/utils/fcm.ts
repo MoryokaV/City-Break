@@ -95,7 +95,7 @@ export const sendNewEventNotification = (
   city_name: string,
 ) => {
   const H18inMS: number = 64800000; // 18 hours in ms
-  const appleTTL: number = Date.now() + H18inMS; // apns-expiration should be in UNIX epoch time format
+  const appleTTL = dayjs().add(18, "hours").unix(); // apns-expiration should be in UNIX epoch time format
 
   const message = {
     notification: {
