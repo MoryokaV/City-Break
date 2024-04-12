@@ -14,6 +14,7 @@ import SightPage from "./pages/Sight";
 import TourPage from "./pages/Tour";
 import RestaurantPage from "./pages/Restaurant";
 import HotelPage from "./pages/Hotel";
+import TagsPage from "./pages/Tags";
 
 window.bootstrap = bootstrap;
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Dashboard />,
+          },
+          {
+            path: "tags",
+            element: <TagsPage />,
           },
           {
             path: "sight",
