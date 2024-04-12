@@ -44,22 +44,22 @@ export const InsertTourForm: React.FC<Props> = ({
 
     console.log(files, tour);
 
-    // await fetch("/api/uploadImages/tours", {
-    //   method: "POST",
-    //   body: formData,
-    // }).then(response => {
-    //   if (response.status === 413) {
-    //     alert("Files size should be less than 15MB");
-    //   }
-    // });
+    await fetch("/api/uploadImages/tours", {
+      method: "POST",
+      body: formData,
+    }).then(response => {
+      if (response.status === 413) {
+        alert("Files size should be less than 15MB");
+      }
+    });
 
-    // await fetch("/api/insertTour", {
-    //   method: "POST",
-    //   body: JSON.stringify(tour),
-    //   headers: { "Content-Type": "application/json; charset=UTF-8" },
-    // });
+    await fetch("/api/insertTour", {
+      method: "POST",
+      body: JSON.stringify(tour),
+      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    });
 
-    // resetForm();
+    resetForm();
   };
 
   return (

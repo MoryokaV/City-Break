@@ -4,6 +4,7 @@ import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
 import { Tour } from "../../models/TourModel";
+import { EditTourForm } from "../Forms/EditTourForm";
 
 interface Props {
   setModalContent: React.Dispatch<React.SetStateAction<JSX.Element>>;
@@ -76,15 +77,15 @@ export const TourTable: React.FC<Props> = ({ setModalContent, closeModal }) => {
                           className="btn-icon"
                           data-bs-toggle="modal"
                           data-bs-target="#modal"
-                          // onClick={() =>
-                          //   setModalContent(
-                          //     <EditTourForm
-                          //       tour={tour}
-                          //       updateTable={updateTable}
-                          //       closeModal={closeModal}
-                          //     />,
-                          //   )
-                          // }
+                          onClick={() =>
+                            setModalContent(
+                              <EditTourForm
+                                tour={tour}
+                                updateTable={updateTable}
+                                closeModal={closeModal}
+                              />,
+                            )
+                          }
                         >
                           <IoCreateOutline className="edit-icon" />
                         </button>

@@ -46,7 +46,7 @@ export const StagesField: React.FC<Props> = ({
 
   useEffect(() => {
     register("stages");
-    setValue("stages", defaultValue);
+    setValue("stages", stages);
   }, []);
 
   const addStage = () => {
