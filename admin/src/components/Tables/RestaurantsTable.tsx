@@ -43,7 +43,7 @@ export const RestaurantsTable: React.FC<Props> = ({ setModalContent, closeModal 
 
   return (
     <DashboardCard title="Restaurants" records={restaurants.length}>
-      <table>
+      <table className={`${isLoading && "h-100"}`}>
         <thead>
           <tr>
             <th>ID</th>

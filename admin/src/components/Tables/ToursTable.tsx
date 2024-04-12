@@ -41,7 +41,7 @@ export const ToursTable: React.FC<Props> = ({ setModalContent, closeModal }) => 
 
   return (
     <DashboardCard title="Tours" records={tours.length}>
-      <table>
+      <table className={`${isLoading && "h-100"}`}>
         <thead>
           <tr>
             <th>ID</th>
