@@ -24,6 +24,7 @@ interface Props {
   images: Array<string>;
   files: File[];
   stages: Array<Stage>;
+  description: string;
 }
 
 export const InsertTourForm: React.FC<Props> = ({
@@ -35,6 +36,7 @@ export const InsertTourForm: React.FC<Props> = ({
   images,
   files,
   stages,
+  description,
 }) => {
   const onSubmit: SubmitHandler<FormType<Tour>> = async data => {
     const formData = new FormData();
@@ -78,7 +80,7 @@ export const InsertTourForm: React.FC<Props> = ({
       <StagesField register={register} setValue={setValue} stages={stages} />
       <section className="col-12">
         <label className="form-label">Description</label>
-        <DescriptionField register={register} setValue={setValue} />
+        <DescriptionField register={register} setValue={setValue} value={description} />
       </section>
       <ImagesField
         register={register}

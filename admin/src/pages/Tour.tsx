@@ -34,6 +34,7 @@ export default function TourPage() {
     files: tour.files,
     images: tour.images,
     stages: tour.stages,
+    description: tour.description,
   };
 
   useEffect(() => {

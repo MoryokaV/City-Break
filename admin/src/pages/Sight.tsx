@@ -34,8 +34,9 @@ export default function SightPage() {
     files: sight.files,
     images: sight.images,
     activeTags: sight.tags,
+    description: sight.description,
   };
-  
+
   useEffect(() => {
     if (sight.files) {
       processPreviewImages();
