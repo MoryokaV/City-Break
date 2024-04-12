@@ -79,7 +79,6 @@ export const InsertEventForm: React.FC<Props> = ({
           register={register}
           type="text"
           required
-          valueAsNumber={false}
           maxLength={60}
         />
       </section>
@@ -131,7 +130,6 @@ export const InsertEventForm: React.FC<Props> = ({
           register={register}
           type="url"
           required
-          valueAsNumber={false}
         />
         <div className="form-text">Note: it must be a website URL</div>
       </section>

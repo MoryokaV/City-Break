@@ -84,7 +84,6 @@ export default function TagsPage() {
                     label="Name"
                     register={register}
                     type="text"
-                    valueAsNumber={false}
                     required
                     maxLength={30}
                     {...tagValidation}

@@ -79,7 +79,6 @@ export const EditHotelForm: React.FC<Props> = ({ hotel, updateTable, closeModal 
           register={register}
           type="text"
           required
-          valueAsNumber={false}
           maxLength={60}
           defaultValue={hotel.name}
         />
@@ -168,7 +167,6 @@ export const EditHotelForm: React.FC<Props> = ({ hotel, updateTable, closeModal 
           register={register}
           type="url"
           required
-          valueAsNumber={false}
           defaultValue={hotel.external_link}
         />
         <div className="form-text">Note: it must be a website URL</div>

@@ -75,7 +75,6 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           register={register}
           type="text"
           required
-          valueAsNumber={false}
           maxLength={60}
           defaultValue={sight.name}
         />
@@ -139,7 +138,6 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           register={register}
           type="url"
           required
-          valueAsNumber={false}
           defaultValue={sight.external_link}
         />
         <div className="form-text">Note: it must be a website URL</div>

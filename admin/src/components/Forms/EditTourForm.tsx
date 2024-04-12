@@ -74,7 +74,6 @@ export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal })
           register={register}
           type="text"
           required
-          valueAsNumber={false}
           maxLength={60}
           defaultValue={tour.name}
         />
@@ -110,7 +109,6 @@ export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal })
           register={register}
           type="url"
           required
-          valueAsNumber={false}
           defaultValue={tour.external_link}
         />
         <div className="form-text">Note: it must be a website URL</div>
