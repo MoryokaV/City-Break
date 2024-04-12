@@ -13,6 +13,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import SightPage from "./pages/Sight";
 import TourPage from "./pages/Tour";
 import RestaurantPage from "./pages/Restaurant";
+import HotelPage from "./pages/Hotel";
 
 window.bootstrap = bootstrap;
 
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
           {
             path: "restaurant",
             element: <RestaurantPage />,
+          },
+          {
+            path: "hotel",
+            element: <HotelPage />,
           },
         ],
       },
