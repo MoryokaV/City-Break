@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ show, sidebarRef }) => {
     >
       <header>
         <IoPersonCircle size="2rem" className="col-2" />
-        <p id="user-fullname" className="col mb-0 fw-normal fs-5 text-truncate">
+        <p className="col mb-0 fw-normal fs-5 text-truncate">
           {user?.fullname}
         </p>
       </header>

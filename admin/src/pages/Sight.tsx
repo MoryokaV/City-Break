@@ -81,7 +81,6 @@ export default function SightPage() {
                     })}
                 </div>
                 <div
-                  id="preview-description"
                   className="card-text"
                   dangerouslySetInnerHTML={{ __html: sight.description }}
                 ></div>

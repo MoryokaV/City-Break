@@ -90,7 +90,6 @@ export default function HotelPage() {
                 </div>
 
                 <div
-                  id="preview-description"
                   className="card-text"
                   dangerouslySetInnerHTML={{ __html: hotel.description }}
                 ></div>

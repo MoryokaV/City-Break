@@ -81,7 +81,6 @@ export default function RestaurantPage() {
                     })}
                 </div>
                 <div
-                  id="preview-description"
                   className="card-text"
                   dangerouslySetInnerHTML={{ __html: restaurant.description }}
                 ></div>

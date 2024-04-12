@@ -90,7 +90,6 @@ export default function TourPage() {
                     })}
                 </div>
                 <div
-                  id="preview-description"
                   className="card-text"
                   dangerouslySetInnerHTML={{ __html: tour.description }}
                 ></div>

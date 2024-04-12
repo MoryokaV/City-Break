@@ -101,12 +101,11 @@ export const TagsField: React.FC<Props> = ({
         className={`btn btn-text text-primary ${
           buttonAction === "Remove" && "text-danger"
         }`}
-        id="tag-btn"
         onClick={buttonHandler}
       >
         {buttonAction}
       </a>
-      <div id="active-tags" className="d-flex align-items-center flex-wrap gap-2">
+      <div className="d-flex align-items-center flex-wrap gap-2">
         {activeTags.map((tag, index) => {
           return (
             <span key={index} className="badge bg-primary">
