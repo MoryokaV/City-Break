@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "./Fields/InputField";
 import { FormType } from "../../models/FormType";
 import { Sight } from "../../models/SightModel";
-import { createImagesFormData } from "../../utils/images";
+import { createImagesFormData, getImagesToDelete } from "../../utils/images";
 import { TagsField } from "./Fields/TagsField";
 import { DescriptionField } from "./Fields/DescriptionField";
 import { ImagesField } from "./Fields/ImagesField";
@@ -26,8 +26,8 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
   } = useForm<FormType<Sight>>();
 
   const files = watch("files", []);
-  const images = watch("images", sight.images);
-  const activeTags = watch("tags", sight.tags);
+  const images = watch("images", [...sight.images]);
+  const activeTags = watch("tags", [...sight.tags]);
 
   const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
     const formData = new FormData();
@@ -46,10 +46,12 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
       });
     }
 
+    const images_to_delete = getImagesToDelete(sight.images, updatedSight.images);
+
     await fetch("/api/editSight", {
       method: "PUT",
       body: JSON.stringify({
-        images_to_delete: [],
+        images_to_delete,
         _id: sight._id,
         sight: updatedSight,
       }),

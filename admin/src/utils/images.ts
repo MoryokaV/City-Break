@@ -17,3 +17,18 @@ export const createImagesFormData = (formData: FormData, images: File[]) => {
     formData.append("files[]", file);
   });
 };
+
+export const getImagesToDelete = (
+  oldImages: Array<string>,
+  currentImages: Array<string>,
+): Array<string> => {
+  const images_to_delete: Array<string> = [];
+
+  oldImages.map(image => {
+    if (currentImages.includes(image) === false) {
+      images_to_delete.push(image);
+    }
+  });
+
+  return images_to_delete;
+};

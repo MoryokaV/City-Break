@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "./Fields/InputField";
 import { FormType } from "../../models/FormType";
-import { createImagesFormData } from "../../utils/images";
+import { createImagesFormData, getImagesToDelete } from "../../utils/images";
 import { DescriptionField } from "./Fields/DescriptionField";
 import { ImagesField } from "./Fields/ImagesField";
 import { PrimaryImageField } from "./Fields/PrimaryImageField";
@@ -26,8 +26,8 @@ export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal })
   } = useForm<FormType<Tour>>();
 
   const files = watch("files", []);
-  const images = watch("images", tour.images);
-  const stages = watch("stages", tour.stages);
+  const images = watch("images", [...tour.images]);
+  const stages = watch("stages", [...tour.stages]);
 
   const onSubmit: SubmitHandler<FormType<Tour>> = async data => {
     const formData = new FormData();
@@ -45,11 +45,12 @@ export const EditTourForm: React.FC<Props> = ({ tour, updateTable, closeModal })
         }
       });
     }
+    const images_to_delete = getImagesToDelete(tour.images, updatedTour.images);
 
     await fetch("/api/editTour", {
       method: "PUT",
       body: JSON.stringify({
-        images_to_delete: [],
+        images_to_delete: images_to_delete,
         _id: tour._id,
         tour: updatedTour,
       }),

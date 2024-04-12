@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "./Fields/InputField";
 import { FormType } from "../../models/FormType";
-import { createImagesFormData } from "../../utils/images";
+import { createImagesFormData, getImagesToDelete } from "../../utils/images";
 import { TagsField } from "./Fields/TagsField";
 import { DescriptionField } from "./Fields/DescriptionField";
 import { ImagesField } from "./Fields/ImagesField";
@@ -30,8 +30,8 @@ export const EditRestaurantForm: React.FC<Props> = ({
   } = useForm<FormType<Restaurant>>();
 
   const files = watch("files", []);
-  const images = watch("images", restaurant.images);
-  const activeTags = watch("tags", restaurant.tags);
+  const images = watch("images", [...restaurant.images]);
+  const activeTags = watch("tags", [...restaurant.tags]);
 
   const onSubmit: SubmitHandler<FormType<Restaurant>> = async data => {
     const formData = new FormData();
@@ -50,10 +50,15 @@ export const EditRestaurantForm: React.FC<Props> = ({
       });
     }
 
+    const images_to_delete = getImagesToDelete(
+      restaurant.images,
+      updatedRestaurant.images,
+    );
+
     await fetch("/api/editRestaurant", {
       method: "PUT",
       body: JSON.stringify({
-        images_to_delete: [],
+        images_to_delete: images_to_delete,
         _id: restaurant._id,
         restaurant: updatedRestaurant,
       }),
