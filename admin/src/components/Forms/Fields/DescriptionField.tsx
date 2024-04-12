@@ -5,20 +5,16 @@ import ReactQuill from "react-quill";
 interface Props {
   register: UseFormRegister<any>;
   setValue: UseFormSetValue<any>;
-  defaultValue?: string;
+  value?: string;
 }
 
-export const DescriptionField: React.FC<Props> = ({
-  register,
-  setValue,
-  defaultValue = "",
-}) => {
+export const DescriptionField: React.FC<Props> = ({ register, setValue, value = "" }) => {
   const theme = "snow";
   const placeholder = "Type something here...";
 
   useEffect(() => {
     register("description");
-    setValue("description", defaultValue);
+    setValue("description", value);
   }, [register, setValue]);
 
   const onEditorStateChanged = (editorState: string) => {
@@ -27,7 +23,7 @@ export const DescriptionField: React.FC<Props> = ({
 
   return (
     <ReactQuill
-      defaultValue={defaultValue}
+      value={value}
       theme={theme}
       placeholder={placeholder}
       onChange={onEditorStateChanged}

@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "./Fields/InputField";
-import { FormType } from "../../models/FormModel";
+import { FormType } from "../../models/FormType";
 import { createImagesFormData } from "../../utils/images";
 import { DescriptionField } from "./Fields/DescriptionField";
 import { ImagesField } from "./Fields/ImagesField";

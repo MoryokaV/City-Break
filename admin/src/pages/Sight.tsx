@@ -3,7 +3,7 @@ import { Sight } from "../models/SightModel";
 import { InsertSightForm } from "../components/Forms/InsertSightForm";
 import { useEffect, useState } from "react";
 import { getBase64 } from "../utils/images";
-import { FormType } from "../models/FormModel";
+import { FormType } from "../models/FormType";
 import Card from "../components/Card";
 
 export default function SightPage() {
@@ -31,11 +31,11 @@ export default function SightPage() {
     isSubmitting,
     resetForm,
     setValue,
-    watch,
     files: sight.files,
     images: sight.images,
     activeTags: sight.tags,
   };
+  
   useEffect(() => {
     if (sight.files) {
       processPreviewImages();

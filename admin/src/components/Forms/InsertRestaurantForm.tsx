@@ -1,67 +1,65 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { InputField } from "./Fields/InputField";
-import { FormType } from "../../models/FormType";
-import { Sight } from "../../models/SightModel";
-import { createImagesFormData } from "../../utils/images";
-import { TagsField } from "./Fields/TagsField";
+import "react-quill/dist/quill.snow.css";
 import { DescriptionField } from "./Fields/DescriptionField";
-import { ImagesField } from "./Fields/ImagesField";
-import { PrimaryImageField } from "./Fields/PrimaryImageField";
+import {
+  SubmitHandler,
+  UseFormHandleSubmit,
+  UseFormRegister,
+  UseFormSetValue,
+} from "react-hook-form";
 import { latitudeValidation, longitudeValidation } from "../../data/RegExpData";
+import { TagsField } from "./Fields/TagsField";
+import { InputField } from "./Fields/InputField";
+import { PrimaryImageField } from "./Fields/PrimaryImageField";
+import { ImagesField } from "./Fields/ImagesField";
+import { FormType } from "../../models/FormType";
+import { createImagesFormData } from "../../utils/images";
+import { Restaurant } from "../../models/RestaurantModel";
 
 interface Props {
-  sight: Sight;
-  updateTable: (updatedSight: Sight) => void;
-  closeModal: () => void;
+  register: UseFormRegister<any>;
+  handleSubmit: UseFormHandleSubmit<FormType<Restaurant>, undefined>;
+  setValue: UseFormSetValue<any>;
+  resetForm: () => void;
+  isSubmitting: boolean;
+  images: Array<string>;
+  files: File[];
+  activeTags: Array<string>;
+  description: string;
 }
 
-export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-    reset,
-    setValue,
-    watch,
-  } = useForm<FormType<Sight>>();
-
-  const files = watch("files", []);
-  const images = watch("images", sight.images);
-  const activeTags = watch("tags", sight.tags);
-
-  const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
+export const InsertRestaurantForm: React.FC<Props> = ({
+  register,
+  handleSubmit,
+  resetForm,
+  setValue,
+  isSubmitting,
+  images,
+  files,
+  activeTags,
+  description,
+}) => {
+  const onSubmit: SubmitHandler<FormType<Restaurant>> = async data => {
     const formData = new FormData();
-    const { files, ...updatedSight } = data;
+    const { files, ...restaurant } = data;
 
     createImagesFormData(formData, files);
 
-    if (files.length !== 0) {
-      await fetch("/api/uploadImages/sights", {
-        method: "POST",
-        body: formData,
-      }).then(response => {
-        if (response.status === 413) {
-          alert("Files size should be less than 15MB");
-        }
-      });
-    }
+    await fetch("/api/uploadImages/restaurants", {
+      method: "POST",
+      body: formData,
+    }).then(response => {
+      if (response.status === 413) {
+        alert("Files size should be less than 15MB");
+      }
+    });
 
-    await fetch("/api/editSight", {
-      method: "PUT",
-      body: JSON.stringify({
-        images_to_delete: [],
-        _id: sight._id,
-        sight: updatedSight,
-      }),
+    await fetch("/api/insertRestaurant", {
+      method: "POST",
+      body: JSON.stringify(restaurant),
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     });
 
-    updatedSight._id = sight._id;
-    updateTable(updatedSight);
-
-    closeModal();
-
-    reset();
+    resetForm();
   };
 
   return (
@@ -75,36 +73,27 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           required
           valueAsNumber={false}
           maxLength={60}
-          defaultValue={sight.name}
         />
       </section>
       <TagsField
-        collection="sights"
+        collection="restaurants"
         register={register}
         setValue={setValue}
         activeTags={activeTags}
       />
       <section className="col-12">
         <label className="form-label">Description</label>
-        <DescriptionField
-          register={register}
-          setValue={setValue}
-          defaultValue={sight.description}
-        />
+        <DescriptionField register={register} setValue={setValue} value={description} />
       </section>
       <ImagesField
         register={register}
         images={images}
         files={files}
+        collection="restaurants"
         setValue={setValue}
-        collection="sights"
       />
       <section className="col-12">
-        <PrimaryImageField
-          register={register}
-          max={images && images.length}
-          defaultValue={sight.primary_image}
-        />
+        <PrimaryImageField register={register} max={files && files.length} />
       </section>
       <section className="col-sm-6">
         <InputField
@@ -114,7 +103,6 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           type="text"
           required
           valueAsNumber={true}
-          defaultValue={sight.latitude}
           {...latitudeValidation}
         />
       </section>
@@ -126,7 +114,6 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           type="text"
           required
           valueAsNumber={true}
-          defaultValue={sight.longitude}
           {...longitudeValidation}
         />
       </section>
@@ -138,7 +125,6 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           type="url"
           required
           valueAsNumber={false}
-          defaultValue={sight.external_link}
         />
         <div className="form-text">Note: it must be a website URL</div>
       </section>
@@ -147,7 +133,7 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
           type="submit"
           className={`btn btn-primary ${isSubmitting && "loading-btn"}`}
         >
-          <span>Save</span>
+          <span>Insert</span>
         </button>
       </section>
     </form>

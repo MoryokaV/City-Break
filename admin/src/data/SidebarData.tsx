@@ -40,7 +40,7 @@ export const SidebarData: Array<SidebarItem> = [
   },
   {
     name: "Restaurants",
-    path: "/restauant",
+    path: "/restaurant",
     icon: <IoRestaurantOutline />,
   },
   {

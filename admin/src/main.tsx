@@ -12,6 +12,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import SightPage from "./pages/Sight";
 import TourPage from "./pages/Tour";
+import RestaurantPage from "./pages/Restaurant";
 
 window.bootstrap = bootstrap;
 
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
           {
             path: "tour",
             element: <TourPage />,
+          },
+          {
+            path: "restaurant",
+            element: <RestaurantPage />,
           },
         ],
       },
