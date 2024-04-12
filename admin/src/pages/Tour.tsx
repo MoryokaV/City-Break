@@ -51,7 +51,7 @@ export default function TourPage() {
   };
 
   return (
-    <div className="d-flex">
+    <div className="d-flex h-100">
       <div className="container-sm m-auto py-3">
         <div className="row justify-content-center gx-4 gy-3">
           <div className="col-lg-8">
