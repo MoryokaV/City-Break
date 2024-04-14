@@ -16,6 +16,7 @@ import RestaurantPage from "./pages/Restaurant";
 import HotelPage from "./pages/Hotel";
 import TagsPage from "./pages/Tags";
 import EventPage from "./pages/Event";
+import TrendingPage from "./pages/Trending";
 
 window.bootstrap = bootstrap;
 
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
           {
             path: "event",
             element: <EventPage />,
+          },
+          {
+            path: "trending",
+            element: <TrendingPage />,
           },
         ],
       },

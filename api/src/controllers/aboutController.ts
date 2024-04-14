@@ -23,8 +23,8 @@ router.put("/updateHeader", requiresAuth, async (req: Request, res: Response) =>
 
   const about = await aboutCollection.findOne({ city_id: req.session.city_id });
 
-  if (about) {
-    deleteImages([about.header_image], "about");
+  if (about!.header_image !== header.header_image) {
+    deleteImages([about!.header_image], "about");
   }
 
   await aboutCollection.updateOne({ city_id: req.session.city_id }, { $set: header });
