@@ -17,6 +17,7 @@ export default function EventPage() {
     formState: { isSubmitting },
     reset,
     setValue,
+    getValues,
     watch,
   } = useForm<EventFormType>();
 
@@ -33,6 +34,7 @@ export default function EventPage() {
     isSubmitting,
     resetForm,
     setValue,
+    getValues,
     files: event.files,
     images: event.images,
     description: event.description,

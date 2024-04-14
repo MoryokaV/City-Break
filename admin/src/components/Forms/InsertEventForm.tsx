@@ -2,6 +2,7 @@ import "react-quill/dist/quill.snow.css";
 import { DescriptionField } from "./Fields/DescriptionField";
 import {
   SubmitHandler,
+  UseFormGetValues,
   UseFormHandleSubmit,
   UseFormRegister,
   UseFormSetValue,
@@ -14,6 +15,7 @@ import { useState } from "react";
 import { DateField } from "./Fields/DateField";
 import { FormType } from "../../models/FormType";
 import { Event } from "../../models/EventModel";
+import { convert2LocalDate, getMinEndDate, isValidDate } from "../../utils/dates";
 
 type EventFormType = { notify: boolean } & FormType<Event>;
 
@@ -21,6 +23,7 @@ interface Props {
   register: UseFormRegister<any>;
   handleSubmit: UseFormHandleSubmit<EventFormType, undefined>;
   setValue: UseFormSetValue<any>;
+  getValues: UseFormGetValues<any>;
   resetForm: () => void;
   isSubmitting: boolean;
   images: Array<string>;
@@ -33,6 +36,7 @@ export const InsertEventForm: React.FC<Props> = ({
   handleSubmit,
   resetForm,
   setValue,
+  getValues,
   isSubmitting,
   images,
   files,
@@ -86,7 +90,13 @@ export const InsertEventForm: React.FC<Props> = ({
         />
       </section>
       <section className="col-12">
-        <DateField id="date_time" label="Date & time" register={register} required />
+        <DateField
+          id="date_time"
+          label="Date & time"
+          register={register}
+          min={convert2LocalDate(new Date())}
+          required
+        />
       </section>
       <section className="col-12">
         <div className="form-check">
@@ -108,6 +118,11 @@ export const InsertEventForm: React.FC<Props> = ({
             id="end_date_time"
             label="End date & time"
             register={register}
+            min={
+              isValidDate(getValues("date_time"))
+                ? getMinEndDate(getValues("date_time"))
+                : undefined
+            }
             required
           />
         </section>

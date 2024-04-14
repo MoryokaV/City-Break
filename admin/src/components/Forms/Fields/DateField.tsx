@@ -1,5 +1,6 @@
 import { InputHTMLAttributes } from "react";
 import { UseFormRegister } from "react-hook-form";
+import { convert2LocalDate } from "../../../utils/dates";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<any>;
@@ -15,13 +16,6 @@ export const DateField: React.FC<Props> = ({
   defaultDate,
   ...inputProps
 }) => {
-  const convert2LocalDate = (iso_date: Date) => {
-    const date = new Date(iso_date);
-    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 1000 * 60);
-
-    return localDate.toISOString().slice(0, 16);
-  };
-
   return (
     <>
       <label htmlFor={id} className="form-label">

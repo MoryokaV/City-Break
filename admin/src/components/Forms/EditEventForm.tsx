@@ -8,6 +8,7 @@ import { Event } from "../../models/EventModel";
 import { DateField } from "./Fields/DateField";
 import { useState } from "react";
 import { FormType } from "../../models/FormType";
+import { convert2LocalDate, getMinEndDate } from "../../utils/dates";
 
 interface Props {
   event: Event;
@@ -28,6 +29,7 @@ export const EditEventForm: React.FC<Props> = ({ event, updateTable, closeModal 
 
   const files = watch("files", []);
   const images = watch("images", [...event.images]);
+  const date_time = watch("date_time", event.date_time);
 
   const onSubmit: SubmitHandler<FormType<Event>> = async data => {
     const formData = new FormData();
@@ -95,6 +97,7 @@ export const EditEventForm: React.FC<Props> = ({ event, updateTable, closeModal 
           register={register}
           required
           defaultDate={event.date_time}
+          min={convert2LocalDate(new Date())}
         />
       </section>
       <section className="col-12">
@@ -120,6 +123,7 @@ export const EditEventForm: React.FC<Props> = ({ event, updateTable, closeModal 
             register={register}
             required
             defaultDate={event.end_date_time ? event.end_date_time : undefined}
+            min={getMinEndDate(date_time)}
           />
         </section>
       )}
