@@ -1,67 +1,69 @@
-import "react-quill/dist/quill.snow.css";
-import { DescriptionField } from "./Fields/DescriptionField";
-import {
-  SubmitHandler,
-  UseFormHandleSubmit,
-  UseFormRegister,
-  UseFormSetValue,
-} from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "./Fields/InputField";
-import { PrimaryImageField } from "./Fields/PrimaryImageField";
+import { createImagesFormData, getImagesToDelete } from "../../utils/images";
+import { DescriptionField } from "./Fields/DescriptionField";
 import { ImagesField } from "./Fields/ImagesField";
-import { createImagesFormData } from "../../utils/images";
-import { useState } from "react";
-import { DateField } from "./Fields/DateField";
-import { FormType } from "../../models/FormType";
+import { PrimaryImageField } from "./Fields/PrimaryImageField";
 import { Event } from "../../models/EventModel";
-
-type EventFormType = { notify: boolean } & FormType<Event>;
+import { DateField } from "./Fields/DateField";
+import { useState } from "react";
+import { FormType } from "../../models/FormType";
 
 interface Props {
-  register: UseFormRegister<any>;
-  handleSubmit: UseFormHandleSubmit<EventFormType, undefined>;
-  setValue: UseFormSetValue<any>;
-  resetForm: () => void;
-  isSubmitting: boolean;
-  images: Array<string>;
-  files: File[];
-  description: string;
+  event: Event;
+  updateTable: (updatedEvent: Event) => void;
+  closeModal: () => void;
 }
 
-export const InsertEventForm: React.FC<Props> = ({
-  register,
-  handleSubmit,
-  resetForm,
-  setValue,
-  isSubmitting,
-  images,
-  files,
-  description,
-}) => {
-  const [multipleDays, setMultipleDays] = useState(false);
+export const EditEventForm: React.FC<Props> = ({ event, updateTable, closeModal }) => {
+  const [multipleDays, setMultipleDays] = useState(event.end_date_time !== null);
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+    reset,
+    setValue,
+    watch,
+  } = useForm<FormType<Event>>();
 
-  const onSubmit: SubmitHandler<EventFormType> = async data => {
+  const files = watch("files", []);
+  const images = watch("images", [...event.images]);
+
+  const onSubmit: SubmitHandler<FormType<Event>> = async data => {
     const formData = new FormData();
-    const { files, notify, ...event } = data;
+    const { files, ...updatedEvent } = data;
 
     createImagesFormData(formData, files);
 
-    await fetch("/api/uploadImages/events", {
-      method: "POST",
-      body: formData,
-    }).then(response => {
-      if (response.status === 413) {
-        alert("Files size should be less than 15MB");
-      }
-    });
+    if (files.length !== 0) {
+      await fetch("/api/uploadImages/events", {
+        method: "POST",
+        body: formData,
+      }).then(response => {
+        if (response.status === 413) {
+          alert("Files size should be less than 15MB");
+        }
+      });
+    }
 
-    await fetch("/api/insertEvent", {
-      method: "POST",
-      body: JSON.stringify({ notify, event }),
+    const images_to_delete = getImagesToDelete(event.images, updatedEvent.images);
+
+    await fetch("/api/editEvent", {
+      method: "PUT",
+      body: JSON.stringify({
+        images_to_delete,
+        _id: event._id,
+        event: updatedEvent,
+      }),
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     });
 
-    resetForm();
+    updatedEvent._id = event._id;
+    updateTable(updatedEvent);
+
+    closeModal();
+
+    reset();
   };
 
   const toggleMultipleDays = (checked: boolean) => {
@@ -83,10 +85,17 @@ export const InsertEventForm: React.FC<Props> = ({
           type="text"
           required
           maxLength={60}
+          defaultValue={event.name}
         />
       </section>
       <section className="col-12">
-        <DateField id="date_time" label="Date & time" register={register} required />
+        <DateField
+          id="date_time"
+          label="Date & time"
+          register={register}
+          required
+          defaultDate={event.date_time}
+        />
       </section>
       <section className="col-12">
         <div className="form-check">
@@ -96,6 +105,7 @@ export const InsertEventForm: React.FC<Props> = ({
             type="checkbox"
             name="multiple-days"
             onChange={e => toggleMultipleDays(e.target.checked)}
+            checked={multipleDays}
           />
           <label htmlFor="multiple-days" className="form-check-label">
             Multiple days
@@ -109,22 +119,31 @@ export const InsertEventForm: React.FC<Props> = ({
             label="End date & time"
             register={register}
             required
+            defaultDate={event.end_date_time ? event.end_date_time : undefined}
           />
         </section>
       )}
       <section className="col-12">
         <label className="form-label">Description</label>
-        <DescriptionField register={register} setValue={setValue} value={description} />
+        <DescriptionField
+          register={register}
+          setValue={setValue}
+          value={event.description}
+        />
       </section>
       <ImagesField
         register={register}
         images={images}
         files={files}
-        collection="events"
         setValue={setValue}
+        collection="events"
       />
       <section className="col-12">
-        <PrimaryImageField register={register} max={files && files.length} />
+        <PrimaryImageField
+          register={register}
+          max={images && images.length}
+          defaultValue={event.primary_image}
+        />
       </section>
       <section className="col-12">
         <InputField
@@ -133,29 +152,16 @@ export const InsertEventForm: React.FC<Props> = ({
           register={register}
           type="url"
           required
+          defaultValue={event.external_link}
         />
         <div className="form-text">Note: it must be a website URL</div>
       </section>
-      <section className="col-12">
-        <div className="form-check">
-          <input
-            id="notify"
-            className="form-check-input"
-            type="checkbox"
-            {...register("notify")}
-          />
-          <label htmlFor="notify" className="form-check-label">
-            Send push notification now
-          </label>
-        </div>
-      </section>
-
       <section className="col-12">
         <button
           type="submit"
           className={`btn btn-primary ${isSubmitting && "loading-btn"}`}
         >
-          <span>Insert</span>
+          <span>Save</span>
         </button>
       </section>
     </form>

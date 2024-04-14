@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 import { getBase64 } from "../utils/images";
 import Card from "../components/Card";
 import { InsertEventForm } from "../components/Forms/InsertEventForm";
-import { EventFormType } from "../models/EventFormType";
+import { FormType } from "../models/FormType";
+import { Event } from "../models/EventModel";
+
+type EventFormType = { notify: boolean } & FormType<Event>;
 
 export default function EventPage() {
   const [previewBlobs, setPreviewBlobs] = useState<Array<string>>([]);

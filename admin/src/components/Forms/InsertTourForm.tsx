@@ -44,8 +44,6 @@ export const InsertTourForm: React.FC<Props> = ({
 
     createImagesFormData(formData, files);
 
-    console.log(files, tour);
-
     await fetch("/api/uploadImages/tours", {
       method: "POST",
       body: formData,
