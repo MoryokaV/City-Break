@@ -11,6 +11,7 @@ import { Trending } from "../models/TrendingModel";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FormType } from "../models/FormType";
 import { getFilename } from "../utils/images";
+import Sortable from "sortablejs";
 
 type RefItemType = {
   name: string;
@@ -23,11 +24,47 @@ export default function TrendingPage() {
   const [refItems, setRefItems] = useState<Array<RefItemType>>([]);
   const [showForm, setShowForm] = useState(false);
   const [newItemId, setNewItemId] = useState("");
+  const [loadingItems, setLoadingItems] = useState(false);
 
   useEffect(() => {
     fetchTrending();
 
     document.addEventListener("click", dismissForm);
+
+    const list = document.querySelector<HTMLElement>(".trending-container")!;
+
+    new Sortable(list, {
+      animation: 150,
+      easing: "cubic-bezier(0.65, 0, 0.35, 1)",
+      delay: 200,
+      delayOnTouchOnly: true,
+      onEnd: async function (e) {
+        setLoadingItems(true);
+
+        let items: Array<string> = [];
+        for (
+          let i = Math.min(e.oldIndex!, e.newIndex!);
+          i <= Math.max(e.oldIndex!, e.newIndex!);
+          i++
+        ) {
+          items.push(document.querySelectorAll(".trending-container article")![i].id);
+        }
+
+        await fetch("/api/updateTrendingItemIndex", {
+          method: "PUT",
+          body: JSON.stringify({
+            oldIndex: e.oldIndex,
+            newIndex: e.newIndex,
+            items: items,
+          }),
+          headers: { "Content-Type": "application/json; charset=UTF-8" },
+        });
+
+        setTimeout(() => {
+          setLoadingItems(false);
+        }, 250);
+      },
+    });
 
     return () => {
       document.removeEventListener("click", dismissForm);
@@ -48,11 +85,11 @@ export default function TrendingPage() {
       response => response.json(),
     );
 
-    setTrendingItems(trending);
-
-    Promise.all(trending.map((item: Trending) => getNameImageItem(item))).then(data =>
-      setRefItems(data),
+    await Promise.all(trending.map((item: Trending) => getNameImageItem(item))).then(
+      data => setRefItems(data),
     );
+
+    setTrendingItems(trending);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -101,6 +138,7 @@ export default function TrendingPage() {
       });
     }
 
+    await fetchTrending();
     setNewItemId("");
     setShowForm(false);
   };
@@ -129,27 +167,49 @@ export default function TrendingPage() {
     return { name: "", image: "" };
   };
 
+  const removeItem = async (id: string, index: number) => {
+    await fetch("/api/deleteTrendingItem?_id=" + id + "&index=" + index, {
+      method: "DELETE",
+    });
+
+    await fetchTrending();
+  };
+
   return (
     <div className="d-flex h-100">
       <div className="container-md m-auto py-3 d-flex flex-column align-items-center">
         <h2 className="tab-title">Trending items</h2>
 
-        <div className="d-flex align-items-center trending-container">
-          {refItems.map((item, index) => {
-            return (
-              <article className="trending-item" key={index}>
-                <img src={item.image} alt={item.name} />
-                <footer>
-                  <p>{item.name}</p>
-                  <div className="loading-spinner"></div>
-                  <IoHeartOutline />
-                  <button className="btn btn-icon remove-item">
-                    <IoCloseOutline />
-                  </button>
-                </footer>
-              </article>
-            );
-          })}
+        <div
+          className={`d-flex align-items-center trending-container ${
+            trendingItems.length === 0 && "empty"
+          }`}
+        >
+          {trendingItems.length > 0 ? (
+            <>
+              {trendingItems.map((item, index) => {
+                const { name, image } = refItems[index];
+                return (
+                  <article className="trending-item" key={index} id={item._id}>
+                    <img src={image} alt={name} />
+                    <footer className={`${loadingItems && "loading"}`}>
+                      <p>{name}</p>
+                      <div className="loading-spinner"></div>
+                      <IoHeartOutline className="icon" />
+                      <button
+                        className="btn btn-icon remove-item icon"
+                        onClick={() => removeItem(item._id, item.index)}
+                      >
+                        <IoCloseOutline />
+                      </button>
+                    </footer>
+                  </article>
+                );
+              })}
+            </>
+          ) : (
+            <p>No items in list</p>
+          )}
         </div>
 
         <button
@@ -177,6 +237,7 @@ export default function TrendingPage() {
               className="form-control"
               name="item-id"
               placeholder="id"
+              value={newItemId}
               onChange={e => setNewItemId(e.target.value)}
               required
             />

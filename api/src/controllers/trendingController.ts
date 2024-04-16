@@ -26,19 +26,22 @@ router.post("/insertTrendingItem", requiresAuth, async (req: Request, res: Respo
 });
 
 interface UpdateIndexRequestBody {
-  _id: string;
+  oldIndex: number;
   newIndex: number;
+  items: Array<string>;
 }
 
-router.put("/updateTrendingItemIndex", async (req: Request, res: Response) => {
-  const { _id, newIndex } = req.body as UpdateIndexRequestBody;
+router.put("/updateTrendingItemIndex", (req: Request, res: Response) => {
+  const { oldIndex, newIndex, items } = req.body as UpdateIndexRequestBody;
 
-  await trendingCollection.updateOne(
-    { _id: new ObjectId(_id) },
-    { $set: { index: newIndex } },
-  );
+  console.log(oldIndex, newIndex, items);
+  let j = 0;
+  for (let i = Math.min(oldIndex, newIndex); i <= Math.max(oldIndex, newIndex); i++) {
+    trendingCollection.updateOne({ _id: new ObjectId(items[j]) }, { $set: { index: i } });
+    j++;
+  }
 
-  return res.status(200).send("Entry has been updated");
+  return res.status(200).send("Trending order has been updated");
 });
 
 interface DeleteItemQueryParams {
