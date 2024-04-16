@@ -13,6 +13,14 @@ router.get("/fetchAboutData", async (req: Request, res: Response) => {
   return res.status(200).send(aboutData);
 });
 
+router.put("/updateAbout", async (req: Request, res: Response) => {
+  const about = req.body;
+
+  await aboutCollection.updateOne({ city_id: req.session.city_id }, { $set: about });
+
+  return res.status(200).send("Entry has been updated");
+});
+
 interface HeaderRequestBody {
   header_title: string;
   header_image: string;

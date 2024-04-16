@@ -284,6 +284,7 @@ const UpdateHeaderForm = ({
     handleSubmit,
     setValue,
     watch,
+    resetField,
   } = useForm<FormType<AboutHeader>>();
 
   const files = watch("files", []);
@@ -338,9 +339,6 @@ const UpdateHeaderForm = ({
           }
         });
       }
-
-      const filename = "/static/media/about/" + city_id + "/" + data.files[0].name;
-      data = { ...data, header_image: filename };
     }
 
     const { files, ...updatedHeader } = data;
@@ -351,7 +349,7 @@ const UpdateHeaderForm = ({
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     });
 
-    setValue("files", []);
+    resetField("files");
     setHeader(updatedHeader);
   };
 
@@ -381,7 +379,7 @@ const UpdateHeaderForm = ({
                 className="hidden-input"
                 id="header-image"
                 accept="image/*"
-                required={false}
+                required={!image}
                 onChange={addImage}
               />
             </label>
