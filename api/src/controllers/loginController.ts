@@ -24,7 +24,16 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     req.session.admin = user.admin;
 
     if (username === "master") {
-      return res.status(200).send({ url: "/master" });
+      return res.status(200).send({
+        user: {
+          fullname: req.session.fullname,
+          username: req.session.username,
+          admin: req.session.admin,
+          city_id: "",
+          city_name: "",
+        },
+        url: "/master",
+      });
     }
 
     req.session.city_id = user.city_id;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DashboardCard from "../DashboardCard";
+import TableCard from "../TableCard";
 import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useAuth } from "../../hooks/useAuth";
@@ -40,7 +40,7 @@ export const ToursTable: React.FC<Props> = ({ setModalContent, closeModal }) => 
   };
 
   return (
-    <DashboardCard title="Tours" records={tours.length}>
+    <TableCard title="Tours" records={tours.length}>
       <table className={`${isLoading && "h-100"}`}>
         <thead>
           <tr>
@@ -101,6 +101,6 @@ export const ToursTable: React.FC<Props> = ({ setModalContent, closeModal }) => 
           )}
         </tbody>
       </table>
-    </DashboardCard>
+    </TableCard>
   );
 };

@@ -4,7 +4,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const DashboardCard: React.FC<Props> = ({ title, records, children }) => {
+const TableCard: React.FC<Props> = ({ title, records, children }) => {
   return (
     <div className="card shadow-sm dashboard-card">
       <h5 className="card-header d-flex justify-content-between align-items-baseline">
@@ -16,4 +16,4 @@ const DashboardCard: React.FC<Props> = ({ title, records, children }) => {
   );
 };
 
-export default DashboardCard;
+export default TableCard;

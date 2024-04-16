@@ -93,10 +93,10 @@ export default function Login() {
                   }
                 />
                 {showPassword ? (
-                  <IoEyeOutline className={styles.eyeIcon} onClick={toggleShowPassword} />
+                  <IoEyeOutline className="eye-icon" onClick={toggleShowPassword} />
                 ) : (
                   <IoEyeOffOutline
-                    className={styles.eyeIcon}
+                    className="eye-icon"
                     onClick={toggleShowPassword}
                   />
                 )}

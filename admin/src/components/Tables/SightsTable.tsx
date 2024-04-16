@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DashboardCard from "../DashboardCard";
+import TableCard from "../TableCard";
 import { IoCreateOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { Sight } from "../../models/SightModel";
 import { LoadingSpinner } from "../LoadingSpinner";
@@ -40,7 +40,7 @@ export const SightsTable: React.FC<Props> = ({ setModalContent, closeModal }) =>
   };
 
   return (
-    <DashboardCard title="Sights" records={sights.length}>
+    <TableCard title="Sights" records={sights.length}>
       <table className={`${isLoading && "h-100"}`}>
         <thead>
           <tr>
@@ -104,6 +104,6 @@ export const SightsTable: React.FC<Props> = ({ setModalContent, closeModal }) =>
           )}
         </tbody>
       </table>
-    </DashboardCard>
+    </TableCard>
   );
 };

@@ -62,16 +62,6 @@
   z-index: 2;
 }
 
-.eyeIcon {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  right: 0.5rem;
-  font-size: 1.2rem;
-  cursor: pointer;
-  z-index: 5;
-}
-
 .trackingWide {
   letter-spacing: 1.2px;
 }
