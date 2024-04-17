@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import apiRouter from "./routes/apiRoutes";
-import adminRouter from "./routes/adminRoutes";
 import loginRouter from "./routes/loginRoutes";
 import { connectToDatabase } from "./db";
 import path from "path";
@@ -55,7 +54,6 @@ app.use("/static", express.static(path.join(__dirname, "..", "/static")));
 app.use(express.static("templates"));
 
 app.use("/api", apiRouter);
-// app.use("/admin", adminRouter);
 app.use("/api", loginRouter);
 
 app.get("/", (_, res: Response) => {
