@@ -36,7 +36,7 @@ export const InsertSightForm: React.FC<Props> = ({
   images,
   files,
   activeTags,
-  description
+  description,
 }) => {
   const onSubmit: SubmitHandler<FormType<Sight>> = async data => {
     const formData = new FormData();
@@ -82,7 +82,7 @@ export const InsertSightForm: React.FC<Props> = ({
       />
       <section className="col-12">
         <label className="form-label">Description</label>
-        <DescriptionField register={register} setValue={setValue} value={description}/>
+        <DescriptionField register={register} setValue={setValue} value={description} />
       </section>
       <ImagesField
         register={register}

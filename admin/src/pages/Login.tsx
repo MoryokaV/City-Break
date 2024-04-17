@@ -13,10 +13,10 @@ export default function Login() {
 
   const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    fetch("/api/login", {
+    await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -95,10 +95,7 @@ export default function Login() {
                 {showPassword ? (
                   <IoEyeOutline className="eye-icon" onClick={toggleShowPassword} />
                 ) : (
-                  <IoEyeOffOutline
-                    className="eye-icon"
-                    onClick={toggleShowPassword}
-                  />
+                  <IoEyeOffOutline className="eye-icon" onClick={toggleShowPassword} />
                 )}
                 <label className="floatingInput">Password</label>
               </section>
