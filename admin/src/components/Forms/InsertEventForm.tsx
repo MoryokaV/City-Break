@@ -45,6 +45,7 @@ export const InsertEventForm: React.FC<Props> = ({
   const [multipleDays, setMultipleDays] = useState(false);
 
   const onSubmit: SubmitHandler<EventFormType> = async data => {
+    console.log(data);
     const formData = new FormData();
     const { files, notify, ...event } = data;
 
@@ -120,8 +121,10 @@ export const InsertEventForm: React.FC<Props> = ({
             label="End date & time"
             register={register}
             min={
-              isValidDate(getValues("date_time"))
-                ? getMinEndDate(getValues("date_time"))
+              getValues("date_time")
+                ? isValidDate(getValues("date_time"))
+                  ? getMinEndDate(getValues("date_time"))
+                  : undefined
                 : undefined
             }
             required
