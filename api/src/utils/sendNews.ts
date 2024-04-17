@@ -1,5 +1,3 @@
 import { sendDailyNotification } from "./fcm";
 
-sendDailyNotification();
-
-process.exit();
+sendDailyNotification().then(() => process.exit(0));
