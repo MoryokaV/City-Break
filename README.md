@@ -96,9 +96,9 @@ Admin panel used by app owners to manage database entries. This custom tool is a
   - HTTP server: uWSGI & NGINX
   
 - CMS Frontend:
-  - HTML & CSS
+  - Vite + React
   - Bootstrap 5
-  - JavaScript + jQuery 3.6.0 (AJAX calls, manipulate DOM)
+  - TypeScript
   
 - Mobile App
   - Dart
