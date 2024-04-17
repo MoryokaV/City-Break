@@ -5,6 +5,7 @@ import {
   IoBookmarksOutline,
   IoBusinessOutline,
   IoCalendarOutline,
+  IoPeopleOutline,
   IoRestaurantOutline,
   IoSpeedometerOutline,
   IoTrendingUpOutline,
@@ -63,5 +64,9 @@ export const SidebarData: Array<SidebarItem> = [
     path: "/about",
     icon: <IoBookOutline />,
   },
+  {
+    name: "Users",
+    path: "/users",
+    icon: <IoPeopleOutline />,
+  },
 ];
-

@@ -20,13 +20,14 @@ const Sidebar: React.FC<SidebarProps> = ({ show, sidebarRef }) => {
     >
       <header>
         <IoPersonCircle size="2rem" className="col-2" />
-        <p className="col mb-0 fw-normal fs-5 text-truncate">
-          {user?.fullname}
-        </p>
+        <p className="col mb-0 fw-normal fs-5 text-truncate">{user?.fullname}</p>
       </header>
       <hr />
       <nav>
         {SidebarData.map((item, index) => {
+          if (item.path === "/users" && !user?.admin) {
+            return;
+          }
           return (
             <NavItem path={item.path} icon={item.icon} key={index}>
               {item.name}

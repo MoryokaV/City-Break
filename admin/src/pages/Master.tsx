@@ -47,7 +47,6 @@ export default function MasterPage() {
   };
 
   const deleteCity = async (id: string) => {
-    console.log("/api/deleteCity/" + id);
     if (confirm("Are you sure you want to delete the city")) {
       await fetch("/api/deleteCity/" + id, { method: "DELETE" });
       await fetchCities();
@@ -297,12 +296,13 @@ const EditPasswordModal: React.FC<EditPasswordModalProps> = ({ modalRef }) => {
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
-  const closeModal = () => window.bootstrap.Modal.getInstance(modalRef.current!)?.hide();
+  const closeModal = () => {
+    window.bootstrap.Modal.getInstance(modalRef.current!)?.hide();
+    setNewPassword("");
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log(newPassword);
 
     await fetch("/api/editUserPassword/" + modalRef.current!.dataset.user_id, {
       method: "PUT",
@@ -313,9 +313,6 @@ const EditPasswordModal: React.FC<EditPasswordModalProps> = ({ modalRef }) => {
     });
 
     closeModal();
-
-    const form = e.target as HTMLFormElement;
-    form.reset();
   };
 
   return (

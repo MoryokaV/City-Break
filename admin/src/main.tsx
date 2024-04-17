@@ -19,6 +19,7 @@ import EventPage from "./pages/Event";
 import TrendingPage from "./pages/Trending";
 import AboutPage from "./pages/About";
 import MasterPage from "./pages/Master";
+import UsersPage from "./pages/Users";
 
 window.bootstrap = bootstrap;
 
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
           {
             path: "about",
             element: <AboutPage />,
+          },
+          {
+            path: "users",
+            element: <UsersPage />,
           },
         ],
       },
