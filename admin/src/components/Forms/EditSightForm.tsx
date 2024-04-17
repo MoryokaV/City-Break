@@ -42,7 +42,7 @@ export const EditSightForm: React.FC<Props> = ({ sight, updateTable, closeModal 
       }).then(response => {
         if (response.status === 413) {
           alert("Files size should be less than 15MB");
-          return;
+          throw new Error();
         }
       });
     }

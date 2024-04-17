@@ -336,6 +336,7 @@ const UpdateHeaderForm = ({
         }).then(response => {
           if (response.status === 413) {
             alert("Files size should be less than 15MB");
+            throw new Error();
           }
         });
       }
