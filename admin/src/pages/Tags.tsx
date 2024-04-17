@@ -7,6 +7,7 @@ import { tagValidation } from "../data/RegExpData";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { useAuth } from "../hooks/useAuth";
 import { IoCloseOutline } from "react-icons/io5";
+import TableCard from "../components/TableCard";
 
 export default function TagsPage() {
   const { user } = useAuth();
@@ -154,52 +155,49 @@ export default function TagsPage() {
             </Card>
           </div>
           <div className="col-sm-6 col-lg-4">
-            <div className="card shadow-sm">
-              <h5 className="card-header">Tags list</h5>
-              <div className="card-body table-card-body">
-                <table>
-                  <thead>
+            <TableCard title="Tags list" records={tags.length}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {isLoading ? (
                     <tr>
-                      <th>#</th>
-                      <th>Name</th>
+                      <td colSpan={100} className="my-auto text-center">
+                        <LoadingSpinner />
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {isLoading ? (
-                      <tr>
-                        <td colSpan={100} className="my-auto text-center">
-                          <LoadingSpinner />
-                        </td>
-                      </tr>
-                    ) : (
-                      <>
-                        {tags.map((tag, index) => {
-                          return (
-                            <tr key={index}>
-                              <td className="small-cell">{index + 1}</td>
-                              <td>
-                                <div className="highlight-onhover">
-                                  <p className={`dot ${getDotColor(tag.used_for)}`}>
-                                    {tag.name}
-                                  </p>
-                                  <button
-                                    type="button"
-                                    className="btn btn-icon"
-                                    onClick={() => deleteTag(tag._id)}
-                                  >
-                                    <IoCloseOutline />
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                  ) : (
+                    <>
+                      {tags.map((tag, index) => {
+                        return (
+                          <tr key={index}>
+                            <td className="small-cell">{index + 1}</td>
+                            <td>
+                              <div className="highlight-onhover">
+                                <p className={`dot ${getDotColor(tag.used_for)}`}>
+                                  {tag.name}
+                                </p>
+                                <button
+                                  type="button"
+                                  className="btn btn-icon"
+                                  onClick={() => deleteTag(tag._id)}
+                                >
+                                  <IoCloseOutline />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </>
+                  )}
+                </tbody>
+              </table>
+            </TableCard>
           </div>
         </div>
       </div>

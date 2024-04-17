@@ -6,6 +6,7 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 import { About } from "../models/AboutModel";
 import { IoCloseOutline, IoCloudUploadOutline, IoImageOutline } from "react-icons/io5";
 import { getFilename } from "../utils/images";
+import Card from "../components/Card";
 
 export default function AboutPage() {
   const { user } = useAuth();
@@ -83,13 +84,8 @@ const HelpCard: React.FC<HelpCardProps> = ({ heading1, paragraph1 }) => {
 
   return (
     <div className="col-xl-6">
-      <div className="card shadow-sm">
-        <h5 className="card-header">Help</h5>
-        <form
-          id="paragraphs-form"
-          className="card-body row g-3"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+      <Card title="Help">
+        <form id="paragraphs-form" className="row g-3" onSubmit={handleSubmit(onSubmit)}>
           <section className="col-12">
             <label htmlFor="paragraph-1-heading" className="form-label">
               Who are you?
@@ -122,7 +118,7 @@ const HelpCard: React.FC<HelpCardProps> = ({ heading1, paragraph1 }) => {
             </button>
           </section>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -158,13 +154,8 @@ const ContanctCard: React.FC<ContanctCardProps> = ({
 
   return (
     <div className="col-xl-6">
-      <div className="card shadow-sm">
-        <h5 className="card-header">Contact</h5>
-        <form
-          id="contact-form"
-          className="card-body row g-3"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+      <Card title="Contact">
+        <form id="contact-form" className="row g-3" onSubmit={handleSubmit(onSubmit)}>
           <section className="col-12">
             <div className="row gx-3 gy-0">
               <label htmlFor="organization" className="col-sm-3 form-label">
@@ -259,7 +250,7 @@ const ContanctCard: React.FC<ContanctCardProps> = ({
             </button>
           </section>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -335,13 +326,8 @@ const CoverImageCard: React.FC<CoverImageCardProps> = ({ defaultValue }) => {
 
   return (
     <div className="col-xl-6">
-      <div className="card shadow-sm">
-        <h5 className="card-header">Cover</h5>
-        <form
-          id="cover-form"
-          className="card-body row g-3"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+      <Card title="Cover">
+        <form id="cover-form" className="row g-3" onSubmit={handleSubmit(onSubmit)}>
           <section className="col-12">
             <div className="d-flex gap-3">
               <label htmlFor="cover-image" style={{ cursor: "pointer" }}>
@@ -391,7 +377,7 @@ const CoverImageCard: React.FC<CoverImageCardProps> = ({ defaultValue }) => {
             </button>
           </section>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };

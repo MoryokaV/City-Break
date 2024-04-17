@@ -12,6 +12,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { FormType } from "../models/FormType";
 import { getFilename } from "../utils/images";
 import Sortable from "sortablejs";
+import Card from "../components/Card";
 
 type RefItemType = {
   name: string;
@@ -250,10 +251,9 @@ export default function TrendingPage() {
         </form>
 
         <div className="col-10 col-xl-6 mt-4">
-          <div className="card shadow-sm">
-            <h5 className="card-header">Home screen header</h5>
+          <Card title="Home screen header">
             <UpdateHeaderForm city_id={user?.city_id!} city_name={user?.city_name!} />
-          </div>
+          </Card>
         </div>
       </div>
     </div>
@@ -355,7 +355,7 @@ const UpdateHeaderForm = ({
 
   return (
     !loading && (
-      <form className="card-body row g-3" onSubmit={handleSubmit(onSubmit)}>
+      <form className="row g-3" onSubmit={handleSubmit(onSubmit)}>
         <section className="col-12">
           <label htmlFor="header-title" className="form-label">
             Title
