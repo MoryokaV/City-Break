@@ -51,21 +51,12 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/static", express.static(path.join(__dirname, "..", "/static")));
-app.use(express.static("templates"));
 
 app.use("/api", apiRouter);
 app.use("/api", loginRouter);
 
 app.get("/", (_, res: Response) => {
   return res.redirect("/admin");
-});
-
-app.get("/favicon.ico", (_, res: Response) => {
-  return res.sendFile(path.join(__dirname, "..", "/static/favicon.ico"));
-});
-
-app.get("/apple-touch-icon.png", (_, res: Response) => {
-  return res.sendFile(path.join(__dirname, "..", "/static/apple-touch-icon.png"));
 });
 
 connectToDatabase(client).then(() => {
