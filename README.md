@@ -92,8 +92,9 @@ Admin panel used by app owners to manage database entries. This custom tool is a
 ## Tech Stack
 - Backend:
   - MongoDB
-  - Python3 + Flask
-  - HTTP server: uWSGI & NGINX
+  - Express.js
+  - TypeScript
+  - HTTP server: NGINX
   
 - CMS Frontend:
   - Vite + React
