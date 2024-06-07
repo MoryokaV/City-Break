@@ -50,8 +50,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
 
-app.use("/static", express.static(path.join(__dirname, "..", "/static")));
-
 app.use("/api", apiRouter);
 app.use("/api", loginRouter);
 
