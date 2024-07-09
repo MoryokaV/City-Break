@@ -45,7 +45,6 @@ export const InsertEventForm: React.FC<Props> = ({
   const [multipleDays, setMultipleDays] = useState(false);
 
   const onSubmit: SubmitHandler<EventFormType> = async data => {
-    console.log(data);
     const formData = new FormData();
     const { files, notify, ...event } = data;
 

@@ -34,7 +34,6 @@ interface UpdateIndexRequestBody {
 router.put("/updateTrendingItemIndex", (req: Request, res: Response) => {
   const { oldIndex, newIndex, items } = req.body as UpdateIndexRequestBody;
 
-  console.log(oldIndex, newIndex, items);
   let j = 0;
   for (let i = Math.min(oldIndex, newIndex); i <= Math.max(oldIndex, newIndex); i++) {
     trendingCollection.updateOne({ _id: new ObjectId(items[j]) }, { $set: { index: i } });
