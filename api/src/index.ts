@@ -8,7 +8,6 @@ import cors from "cors";
 import apiRouter from "./routes/apiRoutes";
 import loginRouter from "./routes/loginRoutes";
 import { connectToDatabase } from "./db";
-import path from "path";
 import * as ServerStorage from "./utils/storage";
 
 dotenv.config();
