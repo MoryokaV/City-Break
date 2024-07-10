@@ -12,7 +12,10 @@ const router: Router = Router();
 
 router.get("/fetchEvents", async (req: Request, res: Response) => {
   const { city_id } = req.query;
-  const events = await eventsCollection.find({ city_id: city_id }).toArray();
+  const events = await eventsCollection
+    .find({ city_id: city_id })
+    .sort("date_time", 1)
+    .toArray();
 
   return res.status(200).send(events);
 });
