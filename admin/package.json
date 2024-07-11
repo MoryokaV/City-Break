@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/sortablejs": "^1.15.8",
     "bootstrap": "^5.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -21,6 +20,7 @@
     "sortablejs": "^1.15.2"
   },
   "devDependencies": {
+    "@types/sortablejs": "^1.15.8",
     "@types/bootstrap": "^5.2.10",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
