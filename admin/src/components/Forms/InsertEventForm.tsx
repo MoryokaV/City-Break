@@ -145,16 +145,6 @@ export const InsertEventForm: React.FC<Props> = ({
         <PrimaryImageField register={register} max={files && files.length} />
       </section>
       <section className="col-12">
-        <InputField
-          id="external_link"
-          label="External link"
-          register={register}
-          type="url"
-          required
-        />
-        <div className="form-text">Note: it must be a website URL</div>
-      </section>
-      <section className="col-12">
         <div className="form-check">
           <input
             id="notify"

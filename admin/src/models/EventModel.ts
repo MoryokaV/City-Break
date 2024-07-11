@@ -4,7 +4,6 @@ export type Event = {
   description: string;
   images: Array<string>;
   primary_image: number;
-  external_link: string;
   primary_image_blurhash: string;
   date_time: Date;
   end_date_time: Date | null;

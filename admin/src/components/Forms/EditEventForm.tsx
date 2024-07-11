@@ -151,17 +151,6 @@ export const EditEventForm: React.FC<Props> = ({ event, updateTable, closeModal 
         />
       </section>
       <section className="col-12">
-        <InputField
-          id="external_link"
-          label="External link"
-          register={register}
-          type="url"
-          required
-          defaultValue={event.external_link}
-        />
-        <div className="form-text">Note: it must be a website URL</div>
-      </section>
-      <section className="col-12">
         <button
           type="submit"
           className={`btn btn-primary ${isSubmitting && "loading-btn"}`}

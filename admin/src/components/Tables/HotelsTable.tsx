@@ -40,7 +40,7 @@ export const HotelsTable: React.FC<Props> = ({ setModalContent, closeModal }) =>
   };
 
   return (
-    <TableCard title="Hotels" records={hotels.length}>
+    <TableCard title="Accommodation" records={hotels.length}>
       <table className={`${isLoading && "h-100"}`}>
         <thead>
           <tr>

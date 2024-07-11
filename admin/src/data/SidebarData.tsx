@@ -45,7 +45,7 @@ export const SidebarData: Array<SidebarItem> = [
     icon: <IoRestaurantOutline />,
   },
   {
-    name: "Hotels",
+    name: "Accommodation",
     path: "/hotel",
     icon: <IoBedOutline />,
   },
