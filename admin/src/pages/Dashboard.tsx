@@ -5,6 +5,7 @@ import { ToursTable } from "../components/Tables/ToursTable";
 import { RestaurantsTable } from "../components/Tables/RestaurantsTable";
 import { HotelsTable } from "../components/Tables/HotelsTable";
 import { EventsTable } from "../components/Tables/EventsTable";
+import "react-quill/dist/quill.snow.css";
 
 export default function Dashboard() {
   const modalRef = useRef<HTMLDivElement>(null);
