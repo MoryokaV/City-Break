@@ -9,7 +9,10 @@ const router: Router = Router();
 
 router.get("/fetchTours", async (req: Request, res: Response) => {
   const { city_id } = req.query;
-  const tours = await toursCollection.find({ city_id: city_id }).toArray();
+  const tours = await toursCollection
+    .find({ city_id: city_id })
+    .sort("index", 1)
+    .toArray();
 
   return res.status(200).send(tours);
 });
@@ -33,6 +36,9 @@ router.get("/findTour/:id", async (req: Request, res: Response) => {
 router.post("/insertTour", requiresAuth, async (req: Request, res: Response) => {
   const tour = req.body as Tour;
   tour.city_id = req.session.city_id;
+  tour.index = (
+    await toursCollection.find({ city_id: req.session.city_id }).toArray()
+  ).length;
 
   await toursCollection.insertOne(tour);
 

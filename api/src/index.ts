@@ -1,13 +1,20 @@
 import express, { Express, Response } from "express";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import apiRouter from "./routes/apiRoutes";
 import loginRouter from "./routes/loginRoutes";
-import { connectToDatabase } from "./db";
+import {
+  citiesCollection,
+  connectToDatabase,
+  hotelsCollection,
+  restaurantsCollection,
+  sightsCollection,
+  toursCollection,
+} from "./db";
 import * as ServerStorage from "./utils/storage";
 
 dotenv.config();

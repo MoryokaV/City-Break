@@ -10,7 +10,10 @@ const router: Router = Router();
 
 router.get("/fetchHotels", async (req: Request, res: Response) => {
   const { city_id } = req.query;
-  const hotels = await hotelsCollection.find({ city_id: city_id }).toArray();
+  const hotels = await hotelsCollection
+    .find({ city_id: city_id })
+    .sort("index", 1)
+    .toArray();
 
   return res.status(200).send(hotels);
 });
@@ -37,6 +40,9 @@ router.post("/insertHotel", requiresAuth, async (req: Request, res: Response) =>
     hotel.images[hotel.primary_image - 1],
   );
   hotel.city_id = req.session.city_id;
+  hotel.index = (
+    await hotelsCollection.find({ city_id: req.session.city_id }).toArray()
+  ).length;
 
   await hotelsCollection.insertOne(hotel);
 

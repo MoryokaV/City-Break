@@ -10,6 +10,7 @@ export type Tour = {
   length: number;
   external_link: string;
   city_id: string;
+  index: number;
 };
 
 type Stage = {

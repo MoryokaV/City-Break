@@ -12,4 +12,5 @@ export type Sight = {
   external_link: string;
   primary_image_blurhash: string;
   city_id: string;
+  index: number;
 };

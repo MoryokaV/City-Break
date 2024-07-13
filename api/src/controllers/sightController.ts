@@ -10,7 +10,10 @@ const router: Router = Router();
 
 router.get("/fetchSights", async (req: Request, res: Response) => {
   const { city_id } = req.query;
-  const sights = await sightsCollection.find({ city_id: city_id }).toArray();
+  const sights = await sightsCollection
+    .find({ city_id: city_id })
+    .sort("index", 1)
+    .toArray();
 
   return res.status(200).send(sights);
 });
@@ -37,6 +40,9 @@ router.post("/insertSight", requiresAuth, async (req: Request, res: Response) =>
     sight.images[sight.primary_image - 1],
   );
   sight.city_id = req.session.city_id;
+  sight.index = (
+    await sightsCollection.find({ city_id: req.session.city_id }).toArray()
+  ).length;
 
   await sightsCollection.insertOne(sight);
 

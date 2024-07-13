@@ -10,4 +10,5 @@ export type Restaurant = {
   external_link: string;
   primary_image_blurhash: string;
   city_id: string;
+  index: number;
 };

@@ -10,7 +10,10 @@ const router: Router = Router();
 
 router.get("/fetchRestaurants", async (req: Request, res: Response) => {
   const { city_id } = req.query;
-  const restaurants = await restaurantsCollection.find({ city_id: city_id }).toArray();
+  const restaurants = await restaurantsCollection
+    .find({ city_id: city_id })
+    .sort("index", 1)
+    .toArray();
 
   return res.status(200).send(restaurants);
 });
@@ -39,6 +42,9 @@ router.post("/insertRestaurant", requiresAuth, async (req: Request, res: Respons
     restaurant.images[restaurant.primary_image - 1],
   );
   restaurant.city_id = req.session.city_id;
+  restaurant.index = (
+    await restaurantsCollection.find({ city_id: req.session.city_id }).toArray()
+  ).length;
 
   await restaurantsCollection.insertOne(restaurant);
 
