@@ -7,6 +7,7 @@ import { About } from "../models/AboutModel";
 import { IoCloseOutline, IoCloudUploadOutline, IoImageOutline } from "react-icons/io5";
 import { getFilename } from "../utils/images";
 import Card from "../components/Card";
+import { phoneValidation } from "../data/RegExpData";
 
 export default function AboutPage() {
   const { user } = useAuth();
@@ -66,12 +67,12 @@ const HelpCard: React.FC<HelpCardProps> = ({ heading1, paragraph1 }) => {
   } = useForm();
 
   useEffect(() => {
-    register("description");
-    setValue("description", paragraph1);
+    register("paragraph1");
+    setValue("paragraph1", paragraph1);
   }, [register, setValue]);
 
   const onEditorStateChanged = (editorState: string) => {
-    setValue("description", editorState);
+    setValue("paragraph1", editorState);
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async data => {
@@ -92,7 +93,7 @@ const HelpCard: React.FC<HelpCardProps> = ({ heading1, paragraph1 }) => {
             </label>
             <input
               className="form-control"
-              id="headin1"
+              id="heading1"
               defaultValue={heading1}
               required
               {...register("heading1")}
@@ -185,6 +186,7 @@ const ContanctCard: React.FC<ContanctCardProps> = ({
                   className="form-control"
                   defaultValue={phone}
                   required
+                  {...phoneValidation}
                   {...register("phone")}
                 />
               </div>
