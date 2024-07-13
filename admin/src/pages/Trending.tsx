@@ -42,7 +42,8 @@ export default function TrendingPage() {
       onEnd: async function (e) {
         setLoadingItems(true);
 
-        let items: Array<string> = [];
+        const items: Array<string> = [];
+
         for (
           let i = Math.min(e.oldIndex!, e.newIndex!);
           i <= Math.max(e.oldIndex!, e.newIndex!);
