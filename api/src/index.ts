@@ -63,6 +63,24 @@ app.get("/", (_, res: Response) => {
   return res.redirect("/admin");
 });
 
+// const addIndex = async () => {
+//   const cities = await citiesCollection.find().toArray();
+
+//   for (const city of cities) {
+//     const items = await toursCollection.find({ city_id: city.city_id }).toArray();
+//     console.log(city.city_id);
+
+//     for (let i = 0; i < items.length; i++) {
+//       await toursCollection.updateOne(
+//         { _id: new ObjectId(items[i]._id) },
+//         { $set: { index: i } },
+//       );
+//     }
+//   }
+
+//   console.log("finished");
+// };
+
 connectToDatabase(client).then(() => {
   ServerStorage.initMediaDirs();
 
