@@ -42,6 +42,7 @@ export const InsertEventForm: React.FC<Props> = ({
   files,
   description,
 }) => {
+  const [key, setKey] = useState(0);
   const [multipleDays, setMultipleDays] = useState(false);
 
   const onSubmit: SubmitHandler<EventFormType> = async data => {
@@ -67,6 +68,7 @@ export const InsertEventForm: React.FC<Props> = ({
     });
 
     resetForm();
+    setKey(key + 1);
   };
 
   const toggleMultipleDays = (checked: boolean) => {
@@ -79,7 +81,7 @@ export const InsertEventForm: React.FC<Props> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
+    <form onSubmit={handleSubmit(onSubmit)} className="row g-3" key={key}>
       <section className="col-12">
         <InputField
           id="name"

@@ -97,7 +97,7 @@ export const SightsTable: React.FC<Props> = ({ setModalContent, closeModal }) =>
                   <tr id={sight._id} key={index}>
                     <td>{sight._id}</td>
                     <td>{sight.name}</td>
-                    <td>{sight.tags.join(", ")}</td>
+                    <td>{sight.tags?.join(", ")}</td>
                     <td>
                       <a href={sight.external_link} target="_blank">
                         {sight.external_link}
