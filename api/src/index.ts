@@ -7,15 +7,9 @@ import morgan from "morgan";
 import cors from "cors";
 import apiRouter from "./routes/apiRoutes";
 import loginRouter from "./routes/loginRoutes";
-import {
-  citiesCollection,
-  connectToDatabase,
-  hotelsCollection,
-  restaurantsCollection,
-  sightsCollection,
-  toursCollection,
-} from "./db";
+import { connectToDatabase } from "./db";
 import * as ServerStorage from "./utils/storage";
+import path from "path";
 
 dotenv.config();
 
@@ -56,30 +50,14 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
 
+app.use("/static", express.static(path.join(__dirname, "..", "/static")));
+
 app.use("/api", apiRouter);
 app.use("/api", loginRouter);
 
 app.get("/", (_, res: Response) => {
   return res.redirect("/admin");
 });
-
-// const addIndex = async () => {
-//   const cities = await citiesCollection.find().toArray();
-
-//   for (const city of cities) {
-//     const items = await toursCollection.find({ city_id: city.city_id }).toArray();
-//     console.log(city.city_id);
-
-//     for (let i = 0; i < items.length; i++) {
-//       await toursCollection.updateOne(
-//         { _id: new ObjectId(items[i]._id) },
-//         { $set: { index: i } },
-//       );
-//     }
-//   }
-
-//   console.log("finished");
-// };
 
 connectToDatabase(client).then(() => {
   ServerStorage.initMediaDirs();
