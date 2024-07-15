@@ -65,7 +65,7 @@ export const logout: RequestHandler = (
     if (error) {
       next(error);
     } else {
-      return res.status(200).redirect("/login");
+      return res.status(200).redirect("/admin/login");
     }
   });
 };
