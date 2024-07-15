@@ -55,9 +55,7 @@ app.use("/static", express.static(path.join(__dirname, "..", "/static")));
 app.use("/api", apiRouter);
 app.use("/api", loginRouter);
 
-app.get("/", (_, res: Response) => {
-  return res.redirect("/admin");
-});
+app.get("/", (_, res: Response) => res.redirect("/admin"));
 
 connectToDatabase(client).then(() => {
   ServerStorage.initMediaDirs();
