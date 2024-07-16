@@ -18,11 +18,8 @@ const app: Express = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.CB_MONGODB_URL || "";
 const SESSION_SECRET = process.env.SESSION_SECRET || "";
-const NODE_ENV = process.env.NODE_ENV || "development";
 
 const client: MongoClient = new MongoClient(MONGO_URL);
-
-app.set("trust proxy", 1);
 
 const sessionConfig = {
   secret: SESSION_SECRET,
@@ -37,10 +34,11 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: NODE_ENV === "production",
+    secure: false, // works only for http
   },
 };
 
+app.set("trust proxy", 1);
 app.use(session(sessionConfig));
 
 app.use(morgan("dev"));
