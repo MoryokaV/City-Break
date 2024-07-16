@@ -22,6 +22,8 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 
 const client: MongoClient = new MongoClient(MONGO_URL);
 
+app.set("trust proxy", 1);
+
 const sessionConfig = {
   secret: SESSION_SECRET,
   store: MongoStore.create({
@@ -35,14 +37,9 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
+    secure: NODE_ENV === "production",
   },
 };
-
-if (NODE_ENV === "production") {
-  app.set("trust proxy", 1);
-  sessionConfig.cookie.secure = true;
-}
 
 app.use(session(sessionConfig));
 
