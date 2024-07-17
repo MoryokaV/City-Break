@@ -1,7 +1,7 @@
 import express, { Express, Response } from "express";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
